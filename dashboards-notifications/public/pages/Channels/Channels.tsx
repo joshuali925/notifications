@@ -32,7 +32,7 @@ import {
   EuiHorizontalRule,
   EuiLink,
   EuiTableFieldDataColumnType,
-  EuiTableSortingType,
+  EuiTableSortingType
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
@@ -43,7 +43,7 @@ import { SORT_DIRECTION } from '../../../common';
 import { ChannelItemType, TableState } from '../../../models/interfaces';
 import {
   ContentPanel,
-  ContentPanelActions,
+  ContentPanelActions
 } from '../../components/ContentPanel';
 import { CoreServicesContext } from '../../components/coreServices';
 import { NotificationService } from '../../services';
@@ -51,18 +51,21 @@ import {
   BREADCRUMBS,
   CHANNEL_TYPE,
   NOTIFICATION_SOURCE,
-  ROUTES,
+  ROUTES
 } from '../../utils/constants';
 import { getErrorMessage } from '../../utils/helpers';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../Notifications/utils/constants';
 import { ChannelActions } from './components/ChannelActions';
 import { ChannelControls } from './components/ChannelControls';
+import { ChannelFiltersType } from './types';
 
 interface ChannelsProps extends RouteComponentProps {
   notificationService: NotificationService;
 }
 
-interface ChannelsState extends TableState<ChannelItemType> {}
+interface ChannelsState extends TableState<ChannelItemType> {
+  filters: ChannelFiltersType;
+}
 
 export class Channels extends Component<ChannelsProps, ChannelsState> {
   static contextType = CoreServicesContext;
@@ -76,6 +79,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
       from: 0,
       size: 5,
       search: '',
+      filters: {},
       sortField: 'name',
       sortDirection: SORT_DIRECTION.ASC,
       items: [],
@@ -147,6 +151,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         from: this.state.from,
         size: this.state.size,
         search: this.state.search,
+        filters: this.state.filters,
         sortField: this.state.sortField,
         sortDirection: this.state.sortDirection,
       };
@@ -177,6 +182,10 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
 
   onSearchChange = (search: string): void => {
     this.setState({ from: 0, search });
+  };
+
+  onFiltersChange = (filters: ChannelFiltersType): void => {
+    this.setState({ from: 0, filters });
   };
 
   onPageChange = (page: number): void => {
@@ -246,6 +255,8 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
           <ChannelControls
             search={search}
             onSearchChange={this.onSearchChange}
+            filters={this.state.filters}
+            onFiltersChange={this.onFiltersChange}
           />
           <EuiHorizontalRule margin="s" />
 
