@@ -113,17 +113,21 @@ export function ChannelDetails(props: ChannelDetailsProps) {
         gutterSize="m"
         style={{ maxWidth: 1316 }}
       >
-        <EuiFlexItem grow={false}>
-          <EuiTitle size="l">
-            <h1>{channel?.name || '-'}</h1>
-          </EuiTitle>
-        </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          {channel?.enabled === undefined ? null : channel.enabled ? (
-            <EuiHealth color="success">Active</EuiHealth>
-          ) : (
-            <EuiHealth color="subdued">Muted</EuiHealth>
-          )}
+      <EuiFlexItem grow={false}>
+        <EuiFlexGroup gutterSize="m" alignItems="flexEnd">
+          <EuiFlexItem grow={false}>
+            <EuiTitle size="l">
+              <h1>{channel?.name || '-'}</h1>
+            </EuiTitle>
+          </EuiFlexItem>
+          <EuiFlexItem grow={false} style={{paddingBottom: 5}}>
+            {channel?.enabled === undefined ? null : channel.enabled ? (
+              <EuiHealth color="success">Active</EuiHealth>
+            ) : (
+              <EuiHealth color="subdued">Muted</EuiHealth>
+            )}
+          </EuiFlexItem>
+        </EuiFlexGroup>
         </EuiFlexItem>
         <EuiFlexItem />
         <EuiFlexItem grow={false}>
@@ -149,11 +153,6 @@ export function ChannelDetails(props: ChannelDetailsProps) {
               </EuiButton>
             )}
           </ModalConsumer>
-        </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          <EuiButton href={`#${ROUTES.EDIT_CHANNEL}/${id}?from=details`}>
-            Edit
-          </EuiButton>
         </EuiFlexItem>
       </EuiFlexGroup>
 
