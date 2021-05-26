@@ -25,7 +25,8 @@
  */
 
 import { HttpSetup } from '../../../../src/core/public';
-import { NotificationItem } from '../../models/interfaces';
+import { NODE_API } from '../../common';
+import { ChannelItemType, NotificationItem } from '../../models/interfaces';
 import {
   MOCK_CHANNELS,
   MOCK_GET_HISTOGRAM,
@@ -47,12 +48,6 @@ export default class NotificationService {
   }
 
   getNotifications = async (queryObject: object): Promise<any> => {
-    //TODO: add it back
-    // let url = `..${NODE_API.NOTIFICATIONS}`;
-    // const response = await this.httpClient.get(url, {
-    //   query: queryObject,
-    // });
-    // return response;
     return MOCK_NOTIFICATIONS;
   };
 
@@ -60,8 +55,16 @@ export default class NotificationService {
     return MOCK_GET_HISTOGRAM();
   };
 
-  getChannels = async (queryObject: object) => {
-    return MOCK_CHANNELS;
+  getChannels = async (
+    queryObject: object
+  ): Promise<{ items: ChannelItemType[]; total: number }> => {
+    const response = await this.httpClient.get(`..${NODE_API.GET_CHANNELS}`, {
+      query: queryObject,
+    });
+    return {
+      items: response.config_list || [],
+      total: response.total_hits || 0,
+    };
   };
 
   getChannel = async (id: string) => {

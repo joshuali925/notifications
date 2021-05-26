@@ -32,21 +32,16 @@ export enum SORT_DIRECTION {
   DESC = 'desc',
 }
 
-export const BASE_API_PATH = '/api/notifications';
+const NODE_API_BASE_PATH = '/api/notifications';
 export const NODE_API = Object.freeze({
-  NOTIFICATIONS: `${BASE_API_PATH}/notifications`,
-  _SEARCH: `${BASE_API_PATH}/_search`,
-  _INDICES: `${BASE_API_PATH}/_indices`,
-  _MAPPINGS: `${BASE_API_PATH}/_mappings`,
-  APPLY_POLICY: `${BASE_API_PATH}/applyPolicy`,
-  EDIT_ROLLOVER_ALIAS: `${BASE_API_PATH}/editRolloverAlias`,
-  POLICIES: `${BASE_API_PATH}/policies`,
-  ROLLUPS: `${BASE_API_PATH}/rollups`,
-  MANAGED_INDICES: `${BASE_API_PATH}/managedIndices`,
-  RETRY: `${BASE_API_PATH}/retry`,
-  CHANGE_POLICY: `${BASE_API_PATH}/changePolicy`,
-  REMOVE_POLICY: `${BASE_API_PATH}/removePolicy`,
+  GET_CHANNELS: `${NODE_API_BASE_PATH}/configs`,
 });
+
+// TODO change to _plugins when backend updates
+const OPENSEARCH_API_BASE_PATH = '/_opensearch/_notifications'
+export const OPENSEARCH_API = Object.freeze({
+  CONFIGS: `${OPENSEARCH_API_BASE_PATH}/configs`
+})
 
 export const REQUEST = Object.freeze({
   PUT: 'PUT',

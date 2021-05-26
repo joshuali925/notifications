@@ -32,7 +32,7 @@ import {
   EuiHorizontalRule,
   EuiLink,
   EuiTableFieldDataColumnType,
-  EuiTableSortingType
+  EuiTableSortingType,
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
@@ -43,15 +43,17 @@ import { SORT_DIRECTION } from '../../../common';
 import { ChannelItemType, TableState } from '../../../models/interfaces';
 import {
   ContentPanel,
-  ContentPanelActions
+  ContentPanelActions,
 } from '../../components/ContentPanel';
 import { CoreServicesContext } from '../../components/coreServices';
 import { NotificationService } from '../../services';
 import {
   BREADCRUMBS,
   CHANNEL_TYPE,
+  CONFIG_TYPES,
+  FEATURE_TYPES,
   NOTIFICATION_SOURCE,
-  ROUTES
+  ROUTES,
 } from '../../utils/constants';
 import { getErrorMessage } from '../../utils/helpers';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../Notifications/utils/constants';
@@ -89,18 +91,18 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
 
     this.columns = [
       {
-        field: 'name',
+        field: 'config.name',
         name: 'Name',
         sortable: true,
         truncateText: true,
         render: (name: string, item: ChannelItemType) => (
-          <EuiLink href={`#${ROUTES.CHANNEL_DETAILS}/${item.id}`}>
+          <EuiLink href={`#${ROUTES.CHANNEL_DETAILS}/${item.config_id}`}>
             {name}
           </EuiLink>
         ),
       },
       {
-        field: 'enabled',
+        field: 'config.is_enabled',
         name: 'Notification status',
         sortable: true,
         render: (enabled: boolean) => {
@@ -110,24 +112,27 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         },
       },
       {
-        field: 'type',
+        field: 'config.config_type',
         name: 'Type',
         sortable: true,
         truncateText: false,
-        render: (type: string) => _.get(CHANNEL_TYPE, type, '-'),
+        render: (type: keyof typeof CONFIG_TYPES) =>
+          _.get(CHANNEL_TYPE, CONFIG_TYPES[type], '-'),
       },
       {
-        field: 'allowedFeatures',
+        field: 'config.feature_list',
         name: 'Notification source',
         sortable: true,
         truncateText: true,
-        render: (features: string[]) =>
+        render: (features: Array<keyof typeof FEATURE_TYPES>) =>
           features
-            .map((feature) => _.get(NOTIFICATION_SOURCE, feature, '-'))
+            .map((feature) =>
+              _.get(NOTIFICATION_SOURCE, FEATURE_TYPES[feature], '-')
+            )
             .join(', '),
       },
       {
-        field: 'description',
+        field: 'config.description',
         name: 'Description',
         sortable: true,
         truncateText: true,
@@ -144,21 +149,36 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
     await this.getChannels();
   }
 
+  async componentDidUpdate(prevProps: ChannelsProps, prevState: ChannelsState) {
+    const prevQuery = Channels.getQueryObjectFromState(prevState);
+    const currQuery = Channels.getQueryObjectFromState(this.state);
+    if (!_.isEqual(prevQuery, currQuery)) {
+      await this.getChannels();
+    }
+  }
+
+  static getQueryObjectFromState(state: ChannelsState) {
+    const backendField = state.sortField.replace(/^config\./, '');
+    return {
+      from_index: state.from,
+      max_items: state.size,
+      search: state.search,
+      filters: state.filters,
+      sort_field: backendField,
+      sort_order: state.sortDirection,
+    };
+  }
+
   async getChannels() {
     this.setState({ loading: true });
     try {
-      const queryObject = {
-        from: this.state.from,
-        size: this.state.size,
-        search: this.state.search,
-        filters: this.state.filters,
-        sortField: this.state.sortField,
-        sortDirection: this.state.sortDirection,
-      };
+      const queryObject = Channels.getQueryObjectFromState(this.state);
       const channels = await this.props.notificationService.getChannels(
         queryObject
       );
-      this.setState({ items: channels, total: channels.length });
+      console.log('queryObject', queryObject);
+      console.log('channels', channels);
+      this.setState({ items: channels.items, total: channels.total });
     } catch (error) {
       this.context.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading channels.')
@@ -186,11 +206,6 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
 
   onFiltersChange = (filters: ChannelFiltersType): void => {
     this.setState({ from: 0, filters });
-  };
-
-  onPageChange = (page: number): void => {
-    const { size } = this.state;
-    this.setState({ from: page * size });
   };
 
   render() {
@@ -263,7 +278,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
           <EuiBasicTable
             columns={this.columns}
             items={items}
-            itemId="name"
+            itemId="config_id"
             isSelectable={true}
             selection={selection}
             noItemsMessage={
