@@ -63,32 +63,16 @@ export const NOTIFICATION_STATUS = Object.freeze({
 });
 
 export const NOTIFICATION_SOURCE = Object.freeze({
-  ALERTING: 'Alerting',
-  ISM: 'ISM',
-  REPORTING: 'Reporting',
-});
-
-// mapping from opensearch backend data modal to UI data modal
-export const FEATURE_TYPES = Object.freeze({
-  alerting: 'ALERTING',
+  alerting: 'Alerting',
   index_management: 'ISM',
-  reports: 'REPORTING',
-});
-export const CONFIG_TYPES = Object.freeze({
-  alerting: 'ALERTING',
-  index_management: 'ISM',
-  reports: 'REPORTING',
-  slack: 'SLACK',
-  email: 'EMAIL',
-  chime: 'CHIME',
-  webhook: 'CUSTOM_WEBHOOK',
+  reports: 'Reporting',
 });
 
 export const CHANNEL_TYPE = Object.freeze({
-  SLACK: 'Slack',
-  EMAIL: 'Email',
-  CHIME: 'Chime',
-  CUSTOM_WEBHOOK: 'Custom webhook',
+  slack: 'Slack',
+  email: 'Email',
+  chime: 'Chime',
+  webhook: 'Custom webhook',
   SES: 'Amazon SES',
   SNS: 'Amazon SNS',
 });

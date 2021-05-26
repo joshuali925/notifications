@@ -50,8 +50,6 @@ import { NotificationService } from '../../services';
 import {
   BREADCRUMBS,
   CHANNEL_TYPE,
-  CONFIG_TYPES,
-  FEATURE_TYPES,
   NOTIFICATION_SOURCE,
   ROUTES,
 } from '../../utils/constants';
@@ -116,19 +114,16 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         name: 'Type',
         sortable: true,
         truncateText: false,
-        render: (type: keyof typeof CONFIG_TYPES) =>
-          _.get(CHANNEL_TYPE, CONFIG_TYPES[type], '-'),
+        render: (type: string) => _.get(CHANNEL_TYPE, type, '-'),
       },
       {
         field: 'config.feature_list',
         name: 'Notification source',
         sortable: true,
         truncateText: true,
-        render: (features: Array<keyof typeof FEATURE_TYPES>) =>
+        render: (features: string[]) =>
           features
-            .map((feature) =>
-              _.get(NOTIFICATION_SOURCE, FEATURE_TYPES[feature], '-')
-            )
+            .map((feature) => _.get(NOTIFICATION_SOURCE, feature, '-'))
             .join(', '),
       },
       {

@@ -92,12 +92,12 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
   };
 
   const type = props.channel.type as keyof typeof CHANNEL_TYPE;
-  if (type === 'SLACK') {
+  if (type === 'slack') {
     settingsList.push(
       ...[
         {
           title: 'Channel type',
-          description: CHANNEL_TYPE.SLACK,
+          description: CHANNEL_TYPE.slack,
         },
         {
           title: 'Webhook URL',
@@ -105,12 +105,12 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
       ]
     );
-  } else if (type === 'CHIME') {
+  } else if (type === 'chime') {
     settingsList.push(
       ...[
         {
           title: 'Channel type',
-          description: CHANNEL_TYPE.CHIME,
+          description: CHANNEL_TYPE.chime,
         },
         {
           title: 'Webhook URL',
@@ -135,7 +135,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
       ]
     );
-  } else if (type === 'EMAIL') {
+  } else if (type === 'email') {
     const recipientsDescription = getModalComponent(
       props.channel.destination.email.recipients,
       'Default recipients',
@@ -145,7 +145,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
       ...[
         {
           title: 'Channel type',
-          description: CHANNEL_TYPE.EMAIL,
+          description: CHANNEL_TYPE.email,
         },
         {
           title: 'Sender',
@@ -169,7 +169,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
       ]
     );
-  } else if (type === 'CUSTOM_WEBHOOK') {
+  } else if (type === 'webhook') {
     const parametersDescription = getModalComponent(
       Object.entries(props.channel.destination.custom_webhook.parameters).map(
         ([key, value]) => ({ key, value } as HeaderItemType)
@@ -192,7 +192,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
       ...[
         {
           title: 'Channel type',
-          description: CHANNEL_TYPE.CUSTOM_WEBHOOK,
+          description: CHANNEL_TYPE.webhook,
         },
         {
           title: 'Host',

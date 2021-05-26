@@ -25,7 +25,6 @@
  */
 
 import { Direction } from '@elastic/eui';
-import { CONFIG_TYPES, FEATURE_TYPES } from '../public/utils/constants';
 
 export interface NotificationItem {
   id: string;
@@ -59,14 +58,14 @@ export interface ChannelItemType {
   config_id: string;
   config: {
     name: string;
-    config_type: keyof typeof CONFIG_TYPES;
+    config_type: string;
     description?: string;
-    feature_list: Array<keyof typeof FEATURE_TYPES>;
+    feature_list: string[];
     is_enabled: boolean; // active or muted
   }
   created_time_ms: number;
   last_updated_time_ms: number;
-  [config_type: keyof typeof CONFIG_TYPES]: any;
+  [config_type: string]: any;
   description?: string;
 }
 

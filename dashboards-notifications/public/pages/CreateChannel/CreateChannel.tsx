@@ -190,14 +190,14 @@ export function CreateChannel(props: CreateChannelsProps) {
 
     if (!response.destination) return;
 
-    if (type === 'SLACK') {
+    if (type === 'slack') {
       setSlackWebhook(response.destination.slack?.url || '');
-    } else if (type === 'CHIME') {
+    } else if (type === 'chime') {
       setChimeWebhook(response.destination.chime?.url || '');
     } else if (type === 'SNS') {
       setTopicArn(response.destination.sns?.topic_arn || '');
       setRoleArn(response.destination.sns?.role_arn || '');
-    } else if (type === 'EMAIL') {
+    } else if (type === 'email') {
       setSender(response.destination.email?.email_account_id || '');
       setSelectedRecipientGroupOptions(
         response.destination.email?.recipients.map((recipient) => ({
@@ -210,7 +210,7 @@ export function CreateChannel(props: CreateChannelsProps) {
       });
       setEmailHeader(response.destination.email?.header || '');
       setEmailFooter(response.destination.email?.footer || '');
-    } else if (type === 'CUSTOM_WEBHOOK') {
+    } else if (type === 'webhook') {
       // TODO
     } else if (type === 'SES') {
       // TODO
@@ -231,14 +231,14 @@ export function CreateChannel(props: CreateChannelsProps) {
       roleArn: [],
       sesSender: [],
     };
-    if (channelType === 'SLACK') {
+    if (channelType === 'slack') {
       errors.slackWebhook = validateWebhookURL(slackWebhook);
-    } else if (channelType === 'CHIME') {
+    } else if (channelType === 'chime') {
       errors.chimeWebhook = validateWebhookURL(chimeWebhook);
-    } else if (channelType === 'EMAIL') {
+    } else if (channelType === 'email') {
       errors.sender = validateEmailSender(sender);
       errors.recipients = validateRecipients(selectedRecipientGroupOptions);
-    } else if (channelType === 'CUSTOM_WEBHOOK') {
+    } else if (channelType === 'webhook') {
       if (webhookTypeIdSelected === 'WEBHOOK_URL') {
         errors.webhookURL = validateWebhookURL(webhookURL);
       } else {
@@ -296,17 +296,17 @@ export function CreateChannel(props: CreateChannelsProps) {
               </>
             )}
           </EuiFormRow>
-          {channelType === 'SLACK' ? (
+          {channelType === 'slack' ? (
             <SlackSettings
               slackWebhook={slackWebhook}
               setSlackWebhook={setSlackWebhook}
             />
-          ) : channelType === 'CHIME' ? (
+          ) : channelType === 'chime' ? (
             <ChimeSettings
               chimeWebhook={chimeWebhook}
               setChimeWebhook={setChimeWebhook}
             />
-          ) : channelType === 'EMAIL' || channelType === 'SES' ? (
+          ) : channelType === 'email' || channelType === 'SES' ? (
             <EmailSettings
               isAmazonSES={channelType === 'SES'}
               headerFooterCheckboxIdToSelectedMap={
@@ -328,7 +328,7 @@ export function CreateChannel(props: CreateChannelsProps) {
               sesSender={sesSender}
               setSesSender={setSesSender}
             />
-          ) : channelType === 'CUSTOM_WEBHOOK' ? (
+          ) : channelType === 'webhook' ? (
             <CustomWebhookSettings
               webhookTypeIdSelected={webhookTypeIdSelected}
               setWebhookTypeIdSelected={setWebhookTypeIdSelected}
