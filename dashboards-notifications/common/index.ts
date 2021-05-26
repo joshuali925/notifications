@@ -32,9 +32,13 @@ export enum SORT_DIRECTION {
   DESC = 'desc',
 }
 
+// after delete operation returns, a delay is needed before the change reflects in another request
+export const SERVER_DELAY = 1000;
+
 const NODE_API_BASE_PATH = '/api/notifications';
 export const NODE_API = Object.freeze({
-  GET_CHANNELS: `${NODE_API_BASE_PATH}/configs`,
+  GET_CHANNELS: `${NODE_API_BASE_PATH}/get_channels`,
+  GET_CHANNEL: `${NODE_API_BASE_PATH}/get_channel`,
   DELETE_CHANNELS: `${NODE_API_BASE_PATH}/delete_channels`,
   UPDATE_CHANNEL: `${NODE_API_BASE_PATH}/update_channel`,
 });

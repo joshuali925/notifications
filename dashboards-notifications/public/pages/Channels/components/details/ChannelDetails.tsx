@@ -40,11 +40,7 @@ import { ContentPanel } from '../../../../components/ContentPanel';
 import { CoreServicesContext } from '../../../../components/coreServices';
 import { ModalConsumer } from '../../../../components/Modal';
 import { ServicesContext } from '../../../../services';
-import {
-  BREADCRUMBS,
-  NOTIFICATION_SOURCE,
-  ROUTES,
-} from '../../../../utils/constants';
+import { BREADCRUMBS, NOTIFICATION_SOURCE } from '../../../../utils/constants';
 import { renderTime } from '../../../../utils/helpers';
 import { ListItemType } from '../../types';
 import { MuteChannelModal } from '../modals/MuteChannelModal';
@@ -69,16 +65,25 @@ export function ChannelDetails(props: ChannelDetailsProps) {
   }, []);
 
   const refresh = async () => {
-    const response = await servicesContext.notificationService.getChannel(id);
-    setChannel(response);
-    coreContext.chrome.setBreadcrumbs([
-      BREADCRUMBS.NOTIFICATIONS,
-      BREADCRUMBS.CHANNELS,
-      {
-        text: response?.name || '',
-        href: `${BREADCRUMBS.CHANNEL_DETAILS.href}/${id}`,
-      },
-    ]);
+    servicesContext.notificationService
+      .getChannel(id)
+      .then((response) => {
+        console.log('response', response);
+        setChannel(response);
+        coreContext.chrome.setBreadcrumbs([
+          BREADCRUMBS.NOTIFICATIONS,
+          BREADCRUMBS.CHANNELS,
+          {
+            text: response?.name || '',
+            href: `${BREADCRUMBS.CHANNEL_DETAILS.href}/${id}`,
+          },
+        ]);
+      })
+      .catch((error) =>
+        coreContext.notifications.toasts.addError(error, {
+          title: 'There was a problem loading channel.',
+        })
+      );
   };
 
   const nameList: Array<ListItemType> = [
@@ -92,7 +97,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
     },
     {
       title: 'Last updated',
-      description: renderTime(channel?.lastUpdatedTime || -1),
+      description: renderTime(channel?.last_updated_time_ms || -1),
     },
   ];
 
@@ -100,7 +105,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
     {
       title: 'Notification sources',
       description:
-        channel?.allowedFeatures
+        channel?.feature_list
           .map((source) => _.get(NOTIFICATION_SOURCE, source, '-'))
           .join(', ') || '-',
     },
@@ -113,21 +118,21 @@ export function ChannelDetails(props: ChannelDetailsProps) {
         gutterSize="m"
         style={{ maxWidth: 1316 }}
       >
-      <EuiFlexItem grow={false}>
-        <EuiFlexGroup gutterSize="m" alignItems="flexEnd">
-          <EuiFlexItem grow={false}>
-            <EuiTitle size="l">
-              <h1>{channel?.name || '-'}</h1>
-            </EuiTitle>
-          </EuiFlexItem>
-          <EuiFlexItem grow={false} style={{paddingBottom: 5}}>
-            {channel?.enabled === undefined ? null : channel.enabled ? (
-              <EuiHealth color="success">Active</EuiHealth>
-            ) : (
-              <EuiHealth color="subdued">Muted</EuiHealth>
-            )}
-          </EuiFlexItem>
-        </EuiFlexGroup>
+        <EuiFlexItem grow={false}>
+          <EuiFlexGroup gutterSize="m" alignItems="flexEnd">
+            <EuiFlexItem grow={false}>
+              <EuiTitle size="l">
+                <h1>{channel?.name || '-'}</h1>
+              </EuiTitle>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false} style={{ paddingBottom: 5 }}>
+              {channel?.is_enabled === undefined ? null : channel.is_enabled ? (
+                <EuiHealth color="success">Active</EuiHealth>
+              ) : (
+                <EuiHealth color="subdued">Muted</EuiHealth>
+              )}
+            </EuiFlexItem>
+          </EuiFlexGroup>
         </EuiFlexItem>
         <EuiFlexItem />
         <EuiFlexItem grow={false}>
@@ -137,19 +142,29 @@ export function ChannelDetails(props: ChannelDetailsProps) {
           <ModalConsumer>
             {({ onShow }) => (
               <EuiButton
-                iconType={channel?.enabled ? 'bellSlash' : 'bell'}
+                iconType={channel?.is_enabled ? 'bellSlash' : 'bell'}
                 onClick={() => {
                   if (!channel) return;
-                  if (channel.enabled) {
-                    onShow(MuteChannelModal, { selected: [channel] });
+                  if (channel.is_enabled) {
+                    onShow(MuteChannelModal, {
+                      selected: [channel],
+                      setSelected: (selected: ChannelItemType[]) =>
+                        setChannel(selected[0]),
+                    });
                   } else {
-                    coreContext.notifications.toasts.addSuccess(
-                      `Channel ${channel.name} successfully unmuted.`
-                    );
+                    const newChannel = { ...channel, is_enabled: true };
+                    servicesContext.notificationService
+                      .updateChannel(channel.config_id, newChannel)
+                      .then((resp) => {
+                        coreContext.notifications.toasts.addSuccess(
+                          `Channel ${channel.name} successfully unmuted.`
+                        );
+                        setChannel(newChannel);
+                      });
                   }
                 }}
               >
-                {channel?.enabled ? 'Mute channel' : 'Unmute channel'}
+                {channel?.is_enabled ? 'Mute channel' : 'Unmute channel'}
               </EuiButton>
             )}
           </ModalConsumer>

@@ -40,13 +40,14 @@ import {
   EuiText,
 } from '@elastic/eui';
 import React, { useContext, useState } from 'react';
+import { SERVER_DELAY } from '../../../../../common';
 import { ChannelItemType } from '../../../../../models/interfaces';
 import { CoreServicesContext } from '../../../../components/coreServices';
 import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
 
 interface DeleteChannelModalProps extends ModalRootProps {
   selected: ChannelItemType[];
-  refresh: () => void;
+  refresh?: () => void;
   href?: string;
   onClose: () => void;
 }
@@ -117,9 +118,14 @@ export const DeleteChannelModal = (props: DeleteChannelModalProps) => {
                             : 'Channel ' + props.selected[0].name
                         } successfully deleted.`
                       );
-                      setTimeout(() => props.refresh(), 1000);
                       props.onClose();
-                      if (props.href) location.assign(props.href);
+                      if (props.href)
+                        setTimeout(
+                          () => location.assign(props.href!),
+                          SERVER_DELAY
+                        );
+                      else if (props.refresh)
+                        setTimeout(() => props.refresh!(), SERVER_DELAY);
                     })
                     .catch((error) => {
                       coreContext.notifications.toasts.addError(error, {

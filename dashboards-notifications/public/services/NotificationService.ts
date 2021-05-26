@@ -28,12 +28,12 @@ import { HttpSetup } from '../../../../src/core/public';
 import { NODE_API } from '../../common';
 import { ChannelItemType, NotificationItem } from '../../models/interfaces';
 import {
-  MOCK_CHANNELS,
   MOCK_GET_HISTOGRAM,
   MOCK_NOTIFICATIONS,
   MOCK_RECIPIENT_GROUPS,
   MOCK_SENDERS,
 } from './mockData';
+import { configToChannel } from './utils/helper';
 
 export interface GetNotificationsResponse {
   totalNotifications: number;
@@ -63,10 +63,7 @@ export default class NotificationService {
     });
     return {
       items:
-        response.config_list.map((config) => ({
-          ...config.config,
-          config_id: config.config_id,
-        })) || [],
+        response.config_list.map((config) => configToChannel(config)) || [],
       total: response.total_hits || 0,
     };
   };
@@ -82,7 +79,6 @@ export default class NotificationService {
   };
 
   deleteChannels = async (ids: string[]) => {
-    console.log('ids', ids);
     const response = await this.httpClient.delete(NODE_API.DELETE_CHANNELS, {
       query: {
         config_id_list: ids,
@@ -92,7 +88,8 @@ export default class NotificationService {
   };
 
   getChannel = async (id: string) => {
-    return MOCK_CHANNELS[parseInt(id)];
+    const response = await this.httpClient.get(`${NODE_API.GET_CHANNEL}/${id}`);
+    return configToChannel(response.config_list[0]);
   };
 
   getSenders = async (queryObject: object) => {

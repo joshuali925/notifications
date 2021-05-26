@@ -115,7 +115,7 @@ export function ChannelDetailsActions(props: ChannelDetailsActionsProps) {
                 setIsPopoverOpen(false);
                 if (params.modal) {
                   onShow(params.modal, {
-                    channels: [props.channel],
+                    selected: [props.channel],
                     ...(params.modalParams || {}),
                   });
                 }

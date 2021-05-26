@@ -91,7 +91,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
     );
   };
 
-  const type = props.channel.type as keyof typeof CHANNEL_TYPE;
+  const type = props.channel.config_type as keyof typeof CHANNEL_TYPE;
   if (type === 'slack') {
     settingsList.push(
       ...[
@@ -101,7 +101,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Webhook URL',
-          description: props.channel.destination.slack.url || '-',
+          description: props.channel.slack.url || '-',
         },
       ]
     );
@@ -114,7 +114,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Webhook URL',
-          description: props.channel.destination.chime.url || '-',
+          description: props.channel.chime.url || '-',
         },
       ]
     );

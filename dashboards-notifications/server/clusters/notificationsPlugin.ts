@@ -55,18 +55,18 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
     needBody: true,
   });
 
-  // notifications.getConfigById = clientAction({
-  //   url: {
-  //     fmt: `${OPENSEARCH_API.CONFIGS}/<%=configId%>`,
-  //     req: {
-  //       configId: {
-  //         type: 'string',
-  //         required: true,
-  //       },
-  //     },
-  //   },
-  //   method: 'GET',
-  // });
+  notifications.getConfigById = clientAction({
+    url: {
+      fmt: `${OPENSEARCH_API.CONFIGS}/<%=configId%>`,
+      req: {
+        configId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  });
 
   notifications.deleteConfigs = clientAction({
     url: {

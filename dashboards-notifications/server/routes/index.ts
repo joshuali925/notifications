@@ -57,6 +57,38 @@ export function defineRoutes(router: IRouter) {
     }
   );
 
+  router.get(
+    {
+      path: `${NODE_API.GET_CHANNEL}/{configId}`,
+      validate: {
+        params: schema.object({
+          configId: schema.string()
+        })
+      },
+    },
+    async (context, request, response) => {
+      const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
+        request
+      );
+      try {
+        const resp = await client.callAsCurrentUser(
+          'notifications.getConfigById',
+          {
+            configId: request.params.configId,
+          }
+        );
+        return response.ok({
+          body: resp,
+        });
+      } catch (error) {
+        return response.custom({
+          statusCode: error.statusCode || 500,
+          body: error.message,
+        });
+      }
+    }
+  );
+
   router.put(
     {
       path: `${NODE_API.UPDATE_CHANNEL}/{configId}`,
@@ -68,7 +100,6 @@ export function defineRoutes(router: IRouter) {
       },
     },
     async (context, request, response) => {
-      console.log('request', request);
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );

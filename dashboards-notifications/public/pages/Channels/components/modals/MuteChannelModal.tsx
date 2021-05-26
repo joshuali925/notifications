@@ -45,8 +45,8 @@ import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
 interface MuteChannelModalProps extends ModalRootProps {
   selected: ChannelItemType[];
   setSelected: (items: ChannelItemType[]) => void;
-  items: ChannelItemType[];
-  setItems: (items: ChannelItemType[]) => void;
+  items?: ChannelItemType[];
+  setItems?: (items: ChannelItemType[]) => void;
   onClose: () => void;
 }
 
@@ -82,14 +82,16 @@ export const MuteChannelModal = (props: MuteChannelModalProps) => {
                       coreContext.notifications.toasts.addSuccess(
                         `Channel ${channel.name} successfully muted.`
                       );
-                      const newItems = [...props.items];
-                      const index = newItems.findIndex(
-                        (item) => item.config_id === channel.config_id
-                      );
-                      if (index !== -1) {
-                        newItems.splice(index, 1, channel);
-                        props.setItems(newItems);
-                        props.setSelected([channel]);
+                      props.setSelected([channel]);
+                      if (props.items && props.setItems) {
+                        const newItems = [...props.items];
+                        const index = newItems.findIndex(
+                          (item) => item.config_id === channel.config_id
+                        );
+                        if (index !== -1) {
+                          newItems.splice(index, 1, channel);
+                          props.setItems(newItems);
+                        }
                       }
                     })
                     .catch((error) => {
