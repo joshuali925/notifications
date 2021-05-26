@@ -102,7 +102,7 @@ export function defineRoutes(router: IRouter) {
 
   router.post(
     {
-      path: NODE_API.CREATE_CHANNEL,
+      path: NODE_API.CREATE_CONFIG,
       validate: {
         body: schema.any(),
       },
@@ -133,7 +133,7 @@ export function defineRoutes(router: IRouter) {
 
   router.put(
     {
-      path: `${NODE_API.UPDATE_CHANNEL}/{configId}`,
+      path: `${NODE_API.UPDATE_CONFIG}/{configId}`,
       validate: {
         body: schema.any(),
         params: schema.object({

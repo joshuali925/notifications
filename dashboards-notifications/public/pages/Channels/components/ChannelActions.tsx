@@ -81,7 +81,7 @@ export function ChannelActions(props: ChannelActionsProps) {
       action: async () => {
         const channel = { ...props.selected[0], is_enabled: true };
         servicesContext.notificationService
-          .updateChannel(channel.config_id, channel)
+          .updateConfig(channel.config_id, channel)
           .then((resp) => {
             coreContext.notifications.toasts.addSuccess(
               `Channel ${channel.name} successfully unmuted.`

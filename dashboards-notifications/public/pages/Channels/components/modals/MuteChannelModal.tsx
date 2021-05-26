@@ -77,7 +77,7 @@ export const MuteChannelModal = (props: MuteChannelModalProps) => {
                 onClick={async () => {
                   const channel = { ...props.selected[0], is_enabled: false };
                   await props.services.notificationService
-                    .updateChannel(channel.config_id, channel)
+                    .updateConfig(channel.config_id, channel)
                     .then((resp) => {
                       coreContext.notifications.toasts.addSuccess(
                         `Channel ${channel.name} successfully muted.`

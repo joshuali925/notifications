@@ -154,7 +154,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
                   } else {
                     const newChannel = { ...channel, is_enabled: true };
                     servicesContext.notificationService
-                      .updateChannel(channel.config_id, newChannel)
+                      .updateConfig(channel.config_id, newChannel)
                       .then((resp) => {
                         coreContext.notifications.toasts.addSuccess(
                           `Channel ${channel.name} successfully unmuted.`

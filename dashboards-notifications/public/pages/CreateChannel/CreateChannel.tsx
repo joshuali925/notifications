@@ -426,13 +426,12 @@ export function CreateChannel(props: CreateChannelsProps) {
                   return;
                 }
                 const config = createConfigObject();
-                console.log('config', config);
                 const request = props.edit
-                  ? servicesContext.notificationService.updateChannel(
+                  ? servicesContext.notificationService.updateConfig(
                       id!,
                       config
                     )
-                  : servicesContext.notificationService.createChannel(config);
+                  : servicesContext.notificationService.createConfig(config);
                 await request
                   .then((response) => {
                     coreContext.notifications.toasts.addSuccess(
@@ -444,7 +443,9 @@ export function CreateChannel(props: CreateChannelsProps) {
                   })
                   .catch((error) => {
                     coreContext.notifications.toasts.addError(error, {
-                      title: 'Failed to create channel.',
+                      title: `Failed to ${
+                        props.edit ? 'update' : 'create'
+                      } channel.`,
                     });
                   });
               }}

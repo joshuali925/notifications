@@ -31,12 +31,12 @@ import {
   MOCK_GET_HISTOGRAM,
   MOCK_NOTIFICATIONS,
   MOCK_RECIPIENT_GROUPS,
-  MOCK_SENDERS,
 } from './mockData';
 import {
   configListToChannels,
   configListToSenders,
   configToChannel,
+  configToSender,
 } from './utils/helper';
 
 export interface GetNotificationsResponse {
@@ -71,18 +71,18 @@ export default class NotificationService {
     };
   };
 
-  createChannel = async (config: any) => {
-    const response = await this.httpClient.post(NODE_API.CREATE_CHANNEL, {
+  createConfig = async (config: any) => {
+    const response = await this.httpClient.post(NODE_API.CREATE_CONFIG, {
       body: JSON.stringify({ config: config }),
     });
     return response;
   };
 
-  updateChannel = async (id: string, config: ChannelItemType) => {
+  updateConfig = async (id: string, config: any) => {
     const response = await this.httpClient.put(
-      `${NODE_API.UPDATE_CHANNEL}/${id}`,
+      `${NODE_API.UPDATE_CONFIG}/${id}`,
       {
-        body: JSON.stringify({ config: config }),
+        body: JSON.stringify({ config }),
       }
     );
     return response;
@@ -115,7 +115,8 @@ export default class NotificationService {
   };
 
   getSender = async (id: string) => {
-    return MOCK_SENDERS[parseInt(id)];
+    const response = await this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
+    return configToSender(response.config_list[0]);
   };
 
   getRecipientGroups = async (queryObject: object) => {
