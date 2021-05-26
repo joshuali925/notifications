@@ -167,7 +167,7 @@ export function defineRoutes(router: IRouter) {
 
   router.delete(
     {
-      path: NODE_API.DELETE_CHANNELS,
+      path: NODE_API.DELETE_CONFIGS,
       validate: {
         query: schema.object({
           config_id_list: schema.oneOf([

@@ -118,6 +118,7 @@ export class SendersTable extends Component<
         render: (method: ENCRYPTION_METHOD) => method.toUpperCase(),
       },
     ];
+    this.refresh = this.refresh.bind(this);
   }
 
   async componentDidMount() {
@@ -217,6 +218,7 @@ export class SendersTable extends Component<
                           onClick={() =>
                             onShow(DeleteSenderModal, {
                               senders: this.state.selectedItems,
+                              refresh: this.refresh,
                             })
                           }
                         >

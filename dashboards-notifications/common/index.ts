@@ -40,7 +40,7 @@ export const NODE_API = Object.freeze({
   GET_CONFIGS: `${NODE_API_BASE_PATH}/get_configs`,
   GET_CONFIG: `${NODE_API_BASE_PATH}/get_config`,
   CREATE_CHANNEL: `${NODE_API_BASE_PATH}/create_channel`,
-  DELETE_CHANNELS: `${NODE_API_BASE_PATH}/delete_channels`,
+  DELETE_CONFIGS: `${NODE_API_BASE_PATH}/delete_configs`,
   UPDATE_CHANNEL: `${NODE_API_BASE_PATH}/update_channel`,
 });
 

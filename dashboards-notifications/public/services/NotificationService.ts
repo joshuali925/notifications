@@ -88,8 +88,8 @@ export default class NotificationService {
     return response;
   };
 
-  deleteChannels = async (ids: string[]) => {
-    const response = await this.httpClient.delete(NODE_API.DELETE_CHANNELS, {
+  deleteConfigs = async (ids: string[]) => {
+    const response = await this.httpClient.delete(NODE_API.DELETE_CONFIGS, {
       query: {
         config_id_list: ids,
       },

@@ -107,7 +107,7 @@ export const DeleteChannelModal = (props: DeleteChannelModalProps) => {
                 color="danger"
                 onClick={async () => {
                   props.services.notificationService
-                    .deleteChannels(
+                    .deleteConfigs(
                       props.selected.map((channel) => channel.config_id)
                     )
                     .then((resp) => {
@@ -129,7 +129,7 @@ export const DeleteChannelModal = (props: DeleteChannelModalProps) => {
                     })
                     .catch((error) => {
                       coreContext.notifications.toasts.addError(error, {
-                        title: 'Failed to delete one or more channels',
+                        title: 'Failed to delete one or more channels.',
                       });
                       props.onClose();
                     });
