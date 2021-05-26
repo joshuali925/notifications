@@ -26,7 +26,12 @@
 
 import { HttpSetup } from '../../../../src/core/public';
 import { NODE_API } from '../../common';
-import { ChannelItemType, NotificationItem } from '../../models/interfaces';
+import {
+  ChannelItemType,
+  NotificationItem,
+  RecipientGroupItemType,
+  SenderItemType,
+} from '../../models/interfaces';
 import {
   MOCK_GET_HISTOGRAM,
   MOCK_NOTIFICATIONS,
@@ -34,6 +39,7 @@ import {
 } from './mockData';
 import {
   configListToChannels,
+  configListToRecipientGroups,
   configListToSenders,
   configToChannel,
   configToSender,
@@ -57,18 +63,6 @@ export default class NotificationService {
 
   getHistogram = async (queryObject: object) => {
     return MOCK_GET_HISTOGRAM();
-  };
-
-  getChannels = async (
-    queryObject: object
-  ): Promise<{ items: ChannelItemType[]; total: number }> => {
-    const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
-      query: queryObject,
-    });
-    return {
-      items: configListToChannels(response.config_list),
-      total: response.total_hits || 0,
-    };
   };
 
   createConfig = async (config: any) => {
@@ -97,33 +91,53 @@ export default class NotificationService {
     return response;
   };
 
-  getChannel = async (id: string) => {
+  getChannels = async (
+    queryObject: object
+  ): Promise<{ items: ChannelItemType[]; total: number }> => {
+    const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
+      query: queryObject,
+    });
+    return {
+      items: configListToChannels(response.config_list),
+      total: response.total_hits || 0,
+    };
+  };
+
+  getChannel = async (id: string): Promise<ChannelItemType> => {
     const response = await this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
     return configToChannel(response.config_list[0]);
   };
 
-  getSenders = async (queryObject: object) => {
-    console.log('queryObject', queryObject);
+  getSenders = async (
+    queryObject: object
+  ): Promise<{ items: SenderItemType[]; total: number }> => {
     const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,
     });
-    console.log('response', response);
     return {
       items: configListToSenders(response.config_list),
       total: response.total_hits || 0,
     };
   };
 
-  getSender = async (id: string) => {
+  getSender = async (id: string): Promise<SenderItemType> => {
     const response = await this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
     return configToSender(response.config_list[0]);
   };
 
-  getRecipientGroups = async (queryObject: object) => {
-    return MOCK_RECIPIENT_GROUPS;
+  getRecipientGroups = async (
+    queryObject: object
+  ): Promise<{ items: RecipientGroupItemType[]; total: number }> => {
+    const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
+      query: queryObject,
+    });
+    return {
+      items: configListToRecipientGroups(response.config_list),
+      total: response.total_hits || 0,
+    };
   };
 
-  getRecipientGroup = async (id: string) => {
+  getRecipientGroup = async (id: string): Promise<RecipientGroupItemType> => {
     return MOCK_RECIPIENT_GROUPS[parseInt(id)];
   };
 }

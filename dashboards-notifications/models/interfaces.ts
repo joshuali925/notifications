@@ -78,11 +78,10 @@ export interface SenderItemType extends ConfigType {
   };
 }
 
-export interface RecipientGroupItemType {
-  id: string;
-  name: string;
-  email: Array<{ email: string }>;
-  description?: string;
+export interface RecipientGroupItemType extends ConfigType {
+  email_group: {
+    recipient_list: string[];
+  };
 }
 
 export interface TableState<T> {

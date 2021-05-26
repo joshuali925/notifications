@@ -36,6 +36,7 @@ import {
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { SORT_DIRECTION } from '../../../../../common';
 import {
@@ -90,13 +91,12 @@ export class RecipientGroupsTable extends Component<
         width: '150px',
       },
       {
-        field: 'email',
+        field: 'email_group.recipient_list',
         name: 'Email addresses',
         sortable: true,
         truncateText: true,
         width: '450px',
-        render: (emailObjects: Array<{ email: string }>) => {
-          const emails = emailObjects.map((email) => email.email);
+        render: (emails: string[]) => {
           return (
             <div>
               {emails.slice(0, 5).join(', ')}
@@ -130,24 +130,52 @@ export class RecipientGroupsTable extends Component<
         sortable: true,
         truncateText: true,
         width: '300px',
+        render: (description: string) => description || '-',
       },
     ];
   }
 
   async componentDidMount() {
+    await this.refresh();
+  }
+
+  async componentDidUpdate(
+    prevProps: RecipientGroupsTableProps,
+    prevState: RecipientGroupsTableState
+  ) {
+    const prevQuery = RecipientGroupsTable.getQueryObjectFromState(prevState);
+    const currQuery = RecipientGroupsTable.getQueryObjectFromState(this.state);
+    if (!_.isEqual(prevQuery, currQuery)) {
+      await this.refresh();
+    }
+  }
+
+  static getQueryObjectFromState(state: RecipientGroupsTableState) {
+    return {
+      from_index: state.from,
+      max_items: state.size,
+      search: state.search,
+      config_type: 'email_group',
+      sort_field: state.sortField,
+      sort_order: state.sortDirection,
+    };
+  }
+
+  async refresh() {
     this.setState({ loading: true });
     try {
-      const queryObject = {
-        from: this.state.from,
-        size: this.state.size,
-        search: this.state.search,
-        sortField: this.state.sortField,
-        sortDirection: this.state.sortDirection,
-      };
+      const queryObject = RecipientGroupsTable.getQueryObjectFromState(
+        this.state
+      );
+      console.log('queryObject', queryObject);
       const recipientGroups = await this.context.notificationService.getRecipientGroups(
         queryObject
       );
-      this.setState({ items: recipientGroups, total: recipientGroups.length });
+      console.log('recipientGroups', recipientGroups);
+      this.setState({
+        items: recipientGroups.items,
+        total: recipientGroups.total,
+      });
     } catch (error) {
       this.context.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading senders.')
@@ -243,7 +271,7 @@ export class RecipientGroupsTable extends Component<
                       disabled={this.state.selectedItems.length !== 1}
                       onClick={() =>
                         location.assign(
-                          `#${ROUTES.EDIT_RECIPIENT_GROUP}/${this.state.selectedItems[0]?.id}`
+                          `#${ROUTES.EDIT_RECIPIENT_GROUP}/${this.state.selectedItems[0]?.config_id}`
                         )
                       }
                     >
@@ -277,7 +305,7 @@ export class RecipientGroupsTable extends Component<
           <EuiBasicTable
             columns={this.columns}
             items={items}
-            itemId="name"
+            itemId="config_id"
             isSelectable={true}
             selection={selection}
             noItemsMessage={
