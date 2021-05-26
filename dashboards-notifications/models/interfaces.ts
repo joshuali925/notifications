@@ -56,17 +56,14 @@ export interface DeliveryStatus {
 
 export interface ChannelItemType {
   config_id: string;
-  config: {
-    name: string;
-    config_type: string;
-    description?: string;
-    feature_list: string[];
-    is_enabled: boolean; // active or muted
-  }
+  name: string;
+  config_type: string;
+  description?: string;
+  feature_list: string[];
+  is_enabled: boolean; // active or muted
   created_time_ms: number;
   last_updated_time_ms: number;
   [config_type: string]: any;
-  description?: string;
 }
 
 export interface SenderItemType {

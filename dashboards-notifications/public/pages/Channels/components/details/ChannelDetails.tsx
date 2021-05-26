@@ -141,7 +141,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
                 onClick={() => {
                   if (!channel) return;
                   if (channel.enabled) {
-                    onShow(MuteChannelModal, { channels: [channel] });
+                    onShow(MuteChannelModal, { selected: [channel] });
                   } else {
                     coreContext.notifications.toasts.addSuccess(
                       `Channel ${channel.name} successfully unmuted.`

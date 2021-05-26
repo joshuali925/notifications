@@ -56,4 +56,78 @@ export function defineRoutes(router: IRouter) {
       }
     }
   );
+
+  router.put(
+    {
+      path: `${NODE_API.UPDATE_CHANNEL}/{configId}`,
+      validate: {
+        body: schema.any(),
+        params: schema.object({
+          configId: schema.string()
+        })
+      },
+    },
+    async (context, request, response) => {
+      console.log('request', request);
+      const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
+        request
+      );
+      try {
+        const resp = await client.callAsCurrentUser(
+          'notifications.updateConfigById',
+          {
+            configId: request.params.configId,
+            body: request.body,
+          }
+        );
+        return response.ok({
+          body: resp,
+        });
+      } catch (error) {
+        return response.custom({
+          statusCode: error.statusCode || 500,
+          body: error.message,
+        });
+      }
+    }
+  );
+
+  router.delete(
+    {
+      path: NODE_API.DELETE_CHANNELS,
+      validate: {
+        query: schema.object({
+          config_id_list: schema.oneOf([
+            schema.arrayOf(schema.string()),
+            schema.string(),
+          ]),
+        }),
+      },
+    },
+    async (context, request, response) => {
+      const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
+        request
+      );
+      const id_list =
+        typeof request.query.config_id_list === 'string'
+          ? request.query.config_id_list
+          : request.query.config_id_list.join(',');
+      try {
+        const resp = await client.callAsCurrentUser(
+          'notifications.deleteConfigs',
+          {
+            config_id_list: id_list,
+          }
+        );
+        return response.ok({
+          body: resp,
+        });
+      } catch (error) {
+        return response.custom({
+          statusCode: error.statusCode || 500,
+          body: error.message,
+        });
+      }
+    }
+  );
 }

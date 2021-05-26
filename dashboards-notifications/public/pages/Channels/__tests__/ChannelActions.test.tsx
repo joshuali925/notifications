@@ -32,20 +32,20 @@ import { ChannelActions } from '../components/ChannelActions';
 describe('<ChannelActions/> spec', () => {
   it('renders the action button', () => {
     const channels = [jest.fn() as any];
-    const utils = render(<ChannelActions selectedItems={channels} />);
+    const utils = render(<ChannelActions selected={channels} />);
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
   it('renders the disabled action button', () => {
     const channels: ChannelItemType[] = [];
-    const utils = render(<ChannelActions selectedItems={channels} />);
+    const utils = render(<ChannelActions selected={channels} />);
     const button = utils.getByText('Actions');
     expect(button).toBeDisabled;
   });
 
   it('renders the popover', () => {
     const channels = [jest.fn() as any];
-    const utils = render(<ChannelActions selectedItems={channels} />);
+    const utils = render(<ChannelActions selected={channels} />);
     const button = utils.getByText('Actions');
     fireEvent.click(button);
     expect(utils.container.firstChild).toMatchSnapshot();
@@ -55,7 +55,7 @@ describe('<ChannelActions/> spec', () => {
     const channel = jest.fn() as any;
     channel.enabled = true;
     const channels = [channel];
-    const utils = render(<ChannelActions selectedItems={channels} />);
+    const utils = render(<ChannelActions selected={channels} />);
     const button = utils.getByText('Actions');
     fireEvent.click(button);
     

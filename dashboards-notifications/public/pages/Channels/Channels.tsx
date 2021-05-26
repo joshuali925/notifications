@@ -89,7 +89,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
 
     this.columns = [
       {
-        field: 'config.name',
+        field: 'name',
         name: 'Name',
         sortable: true,
         truncateText: true,
@@ -100,7 +100,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         ),
       },
       {
-        field: 'config.is_enabled',
+        field: 'is_enabled',
         name: 'Notification status',
         sortable: true,
         render: (enabled: boolean) => {
@@ -110,14 +110,14 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         },
       },
       {
-        field: 'config.config_type',
+        field: 'config_type',
         name: 'Type',
         sortable: true,
         truncateText: false,
         render: (type: string) => _.get(CHANNEL_TYPE, type, '-'),
       },
       {
-        field: 'config.feature_list',
+        field: 'feature_list',
         name: 'Notification source',
         sortable: true,
         truncateText: true,
@@ -127,12 +127,14 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
             .join(', '),
       },
       {
-        field: 'config.description',
+        field: 'description',
         name: 'Description',
         sortable: true,
         truncateText: true,
       },
     ];
+
+    this.getChannels= this.getChannels.bind(this)
   }
 
   async componentDidMount() {
@@ -153,13 +155,12 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
   }
 
   static getQueryObjectFromState(state: ChannelsState) {
-    const backendField = state.sortField.replace(/^config\./, '');
     return {
       from_index: state.from,
       max_items: state.size,
       search: state.search,
       filters: state.filters,
-      sort_field: backendField,
+      sort_field: state.sortField,
       sort_order: state.sortDirection,
     };
   }
@@ -171,8 +172,6 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
       const channels = await this.props.notificationService.getChannels(
         queryObject
       );
-      console.log('queryObject', queryObject);
-      console.log('channels', channels);
       this.setState({ items: channels.items, total: channels.total });
     } catch (error) {
       this.context.notifications.toasts.addDanger(
@@ -204,32 +203,20 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
   };
 
   render() {
-    const {
-      total,
-      from,
-      size,
-      search,
-      sortField,
-      sortDirection,
-      selectedItems,
-      items,
-      loading,
-    } = this.state;
-
-    const filterIsApplied = !!search;
-    const page = Math.floor(from / size);
+    const filterIsApplied = !!this.state.search;
+    const page = Math.floor(this.state.from / this.state.size);
 
     const pagination: Pagination = {
       pageIndex: page,
-      pageSize: size,
+      pageSize: this.state.size,
       pageSizeOptions: DEFAULT_PAGE_SIZE_OPTIONS,
-      totalItemCount: total,
+      totalItemCount: this.state.total,
     };
 
     const sorting: EuiTableSortingType<ChannelItemType> = {
       sort: {
-        direction: sortDirection,
-        field: sortField,
+        direction: this.state.sortDirection,
+        field: this.state.sortField,
       },
     };
 
@@ -245,7 +232,19 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
             <ContentPanelActions
               actions={[
                 {
-                  component: <ChannelActions selectedItems={selectedItems} />,
+                  component: (
+                    <ChannelActions
+                      selected={this.state.selectedItems}
+                      setSelected={(selectedItems: ChannelItemType[]) =>
+                        this.setState({ selectedItems })
+                      }
+                      items={this.state.items}
+                      setItems={(items: ChannelItemType[]) =>
+                        this.setState({ items })
+                      }
+                      refresh={this.getChannels}
+                    />
+                  ),
                 },
                 {
                   component: (
@@ -263,7 +262,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
           total={this.state.total}
         >
           <ChannelControls
-            search={search}
+            search={this.state.search}
             onSearchChange={this.onSearchChange}
             filters={this.state.filters}
             onFiltersChange={this.onFiltersChange}
@@ -272,7 +271,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
 
           <EuiBasicTable
             columns={this.columns}
-            items={items}
+            items={this.state.items}
             itemId="config_id"
             isSelectable={true}
             selection={selection}
@@ -291,6 +290,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
             pagination={pagination}
             sorting={sorting}
             tableLayout="auto"
+            loading={this.state.loading}
           />
         </ContentPanel>
       </>

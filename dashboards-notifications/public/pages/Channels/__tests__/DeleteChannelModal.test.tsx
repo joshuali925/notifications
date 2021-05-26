@@ -33,7 +33,7 @@ describe('<DeleteChannelModal /> spec', () => {
   it('returns if no channels', () => {
     const { container } = render(
       <DeleteChannelModal
-        channels={[]}
+        selected={[]}
         onClose={() => {}}
         services={notificationServiceMock}
       />
@@ -45,7 +45,7 @@ describe('<DeleteChannelModal /> spec', () => {
     const channels = [jest.fn() as any];
     const { container } = render(
       <DeleteChannelModal
-        channels={channels}
+        selected={channels}
         onClose={() => {}}
         services={notificationServiceMock}
       />
@@ -57,7 +57,7 @@ describe('<DeleteChannelModal /> spec', () => {
     const channels = [jest.fn() as any, jest.fn() as any];
     const { container } = render(
       <DeleteChannelModal
-        channels={channels}
+        selected={channels}
         onClose={() => {}}
         services={notificationServiceMock}
       />

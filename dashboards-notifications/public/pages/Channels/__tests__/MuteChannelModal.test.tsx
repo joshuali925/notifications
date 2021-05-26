@@ -33,7 +33,7 @@ describe('<MuteChannelModal /> spec', () => {
   it('returns if no channels', () => {
     const { container } = render(
       <MuteChannelModal
-        channels={[]}
+        selected={[]}
         onClose={() => {}}
         services={notificationServiceMock}
         mute={true}
@@ -46,7 +46,7 @@ describe('<MuteChannelModal /> spec', () => {
     const channels = [jest.fn() as any];
     const { container } = render(
       <MuteChannelModal
-        channels={channels}
+        selected={channels}
         onClose={() => {}}
         services={notificationServiceMock}
         mute={true}

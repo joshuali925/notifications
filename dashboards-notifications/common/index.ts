@@ -35,6 +35,8 @@ export enum SORT_DIRECTION {
 const NODE_API_BASE_PATH = '/api/notifications';
 export const NODE_API = Object.freeze({
   GET_CHANNELS: `${NODE_API_BASE_PATH}/configs`,
+  DELETE_CHANNELS: `${NODE_API_BASE_PATH}/delete_channels`,
+  UPDATE_CHANNEL: `${NODE_API_BASE_PATH}/update_channel`,
 });
 
 // TODO change to _plugins when backend updates

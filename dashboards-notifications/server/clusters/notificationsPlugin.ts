@@ -24,7 +24,7 @@
  * permissions and limitations under the License.
  */
 
-import { OPENSEARCH_API } from "../../common";
+import { OPENSEARCH_API } from '../../common';
 
 export function NotificationsPlugin(Client: any, config: any, components: any) {
   const clientAction = components.clientAction.factory;
@@ -35,13 +35,13 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
   notifications.getConfigs = clientAction({
     url: {
       fmt: OPENSEARCH_API.CONFIGS,
-      params: {
-        from_index: {
-          type: 'number',
-        },
-        max_items: {
-          type: 'number',
-        },
+    },
+    params: {
+      from_index: {
+        type: 'number',
+      },
+      max_items: {
+        type: 'number',
       },
     },
     method: 'GET',
@@ -55,7 +55,33 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
     needBody: true,
   });
 
-  notifications.getConfigById = clientAction({
+  // notifications.getConfigById = clientAction({
+  //   url: {
+  //     fmt: `${OPENSEARCH_API.CONFIGS}/<%=configId%>`,
+  //     req: {
+  //       configId: {
+  //         type: 'string',
+  //         required: true,
+  //       },
+  //     },
+  //   },
+  //   method: 'GET',
+  // });
+
+  notifications.deleteConfigs = clientAction({
+    url: {
+      fmt: OPENSEARCH_API.CONFIGS,
+    },
+    params: {
+      config_id_list: {
+        type: 'list',
+        required: true,
+      },
+    },
+    method: 'DELETE',
+  });
+
+  notifications.updateConfigById = clientAction({
     url: {
       fmt: `${OPENSEARCH_API.CONFIGS}/<%=configId%>`,
       req: {
@@ -65,33 +91,7 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
         },
       },
     },
-    method: 'GET',
+    method: 'PUT',
+    needBody: true,
   });
-
-  // notifications.updateNotebookById = clientAction({
-  //   url: {
-  //     fmt: `${OPENSEARCH_API.CONFIGS}/<%=notebookId%>`,
-  //     req: {
-  //       notebookId: {
-  //         type: 'string',
-  //         required: true,
-  //       },
-  //     },
-  //   },
-  //   method: 'PUT',
-  //   needBody: true,
-  // });
-
-  // notifications.deleteNotebookById = clientAction({
-  //   url: {
-  //     fmt: `${OPENSEARCH_API.CONFIGS}/<%=notebookId%>`,
-  //     req: {
-  //       notebookId: {
-  //         type: 'string',
-  //         required: true,
-  //       },
-  //     },
-  //   },
-  //   method: 'DELETE',
-  // });
 }

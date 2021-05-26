@@ -58,13 +58,37 @@ export default class NotificationService {
   getChannels = async (
     queryObject: object
   ): Promise<{ items: ChannelItemType[]; total: number }> => {
-    const response = await this.httpClient.get(`..${NODE_API.GET_CHANNELS}`, {
+    const response = await this.httpClient.get(NODE_API.GET_CHANNELS, {
       query: queryObject,
     });
     return {
-      items: response.config_list || [],
+      items:
+        response.config_list.map((config) => ({
+          ...config.config,
+          config_id: config.config_id,
+        })) || [],
       total: response.total_hits || 0,
     };
+  };
+
+  updateChannel = async (id: string, config: ChannelItemType) => {
+    const response = await this.httpClient.put(
+      `${NODE_API.UPDATE_CHANNEL}/${id}`,
+      {
+        body: JSON.stringify({ config: config }),
+      }
+    );
+    return response;
+  };
+
+  deleteChannels = async (ids: string[]) => {
+    console.log('ids', ids);
+    const response = await this.httpClient.delete(NODE_API.DELETE_CHANNELS, {
+      query: {
+        config_id_list: ids,
+      },
+    });
+    return response;
   };
 
   getChannel = async (id: string) => {

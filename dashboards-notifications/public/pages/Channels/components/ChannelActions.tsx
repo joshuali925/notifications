@@ -29,6 +29,7 @@ import React, { useContext, useState } from 'react';
 import { ChannelItemType } from '../../../../models/interfaces';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { ModalConsumer } from '../../../components/Modal';
+import { ServicesContext } from '../../../services';
 import { ROUTES } from '../../../utils/constants';
 import { DeleteChannelModal } from './modals/DeleteChannelModal';
 import { MuteChannelModal } from './modals/MuteChannelModal';
@@ -43,38 +44,66 @@ interface ChannelActionsParams {
 }
 
 interface ChannelActionsProps {
-  selectedItems: ChannelItemType[];
+  selected: ChannelItemType[];
+  setSelected: (items: ChannelItemType[]) => void;
+  items: ChannelItemType[];
+  setItems: (items: ChannelItemType[]) => void;
+  refresh: () => void;
 }
 
 export function ChannelActions(props: ChannelActionsProps) {
   const coreContext = useContext(CoreServicesContext)!;
+  const servicesContext = useContext(ServicesContext)!;
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const actions: ChannelActionsParams[] = [
     {
       label: 'Edit',
-      disabled: props.selectedItems.length !== 1,
-      href: `#${ROUTES.EDIT_CHANNEL}/${props.selectedItems[0]?.id}`,
+      disabled: props.selected.length !== 1,
+      href: `#${ROUTES.EDIT_CHANNEL}/${props.selected[0]?.config_id}`,
     },
     {
       label: 'Delete',
-      disabled: props.selectedItems.length === 0,
+      disabled: props.selected.length === 0,
       modal: DeleteChannelModal,
+      modalParams: { refresh: props.refresh },
     },
     {
       label: 'Mute',
-      disabled:
-        props.selectedItems.length !== 1 || !props.selectedItems[0].enabled,
+      disabled: props.selected.length !== 1 || !props.selected[0].is_enabled,
       modal: MuteChannelModal,
+      modalParams: {
+        items: props.items,
+        setItems: props.setItems,
+        setSelected: props.setSelected,
+      },
     },
     {
       label: 'Unmute',
-      disabled:
-        props.selectedItems.length !== 1 || props.selectedItems[0].enabled,
-      action: () => {
-        coreContext.notifications.toasts.addSuccess(
-          `Channel ${props.selectedItems[0].name} successfully unmuted.`
-        );
+      disabled: props.selected.length !== 1 || props.selected[0].is_enabled,
+      action: async () => {
+        const channel = { ...props.selected[0], is_enabled: true };
+        servicesContext.notificationService
+          .updateChannel(channel.config_id, channel)
+          .then((resp) => {
+            coreContext.notifications.toasts.addSuccess(
+              `Channel ${channel.name} successfully unmuted.`
+            );
+            const newItems = [...props.items];
+            const index = newItems.findIndex(
+              (item) => item.config_id === channel.config_id
+            );
+            if (index !== -1) {
+              newItems.splice(index, 1, channel);
+              props.setItems(newItems);
+              props.setSelected([channel]);
+            }
+          })
+          .catch((error) => {
+            coreContext.notifications.toasts.addError(error, {
+              title: 'Failed to unmute channel',
+            });
+          });
       },
     },
   ];
@@ -88,7 +117,7 @@ export function ChannelActions(props: ChannelActionsProps) {
             <EuiButton
               iconType="arrowDown"
               iconSide="right"
-              disabled={props.selectedItems.length === 0}
+              disabled={props.selected.length === 0}
               onClick={() => setIsPopoverOpen(!isPopoverOpen)}
             >
               Actions
@@ -105,7 +134,7 @@ export function ChannelActions(props: ChannelActionsProps) {
                 setIsPopoverOpen(false);
                 if (params.modal) {
                   onShow(params.modal, {
-                    channels: props.selectedItems,
+                    selected: props.selected,
                     ...(params.modalParams || {}),
                   });
                 }
