@@ -133,6 +133,7 @@ export class RecipientGroupsTable extends Component<
         render: (description: string) => description || '-',
       },
     ];
+    this.refresh = this.refresh.bind(this);
   }
 
   async componentDidMount() {
@@ -256,6 +257,7 @@ export class RecipientGroupsTable extends Component<
                           onClick={() =>
                             onShow(DeleteRecipientGroupModal, {
                               recipientGroups: this.state.selectedItems,
+                              refresh: this.refresh
                             })
                           }
                         >
