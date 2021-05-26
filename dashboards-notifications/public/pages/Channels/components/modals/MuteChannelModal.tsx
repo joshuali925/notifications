@@ -38,6 +38,7 @@ import {
   EuiText,
 } from '@elastic/eui';
 import React, { useContext } from 'react';
+import { SERVER_DELAY } from '../../../../../common';
 import { ChannelItemType } from '../../../../../models/interfaces';
 import { CoreServicesContext } from '../../../../components/coreServices';
 import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
@@ -45,8 +46,7 @@ import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
 interface MuteChannelModalProps extends ModalRootProps {
   selected: ChannelItemType[];
   setSelected: (items: ChannelItemType[]) => void;
-  items?: ChannelItemType[];
-  setItems?: (items: ChannelItemType[]) => void;
+  refresh: () => void;
   onClose: () => void;
 }
 
@@ -83,16 +83,7 @@ export const MuteChannelModal = (props: MuteChannelModalProps) => {
                         `Channel ${channel.name} successfully muted.`
                       );
                       props.setSelected([channel]);
-                      if (props.items && props.setItems) {
-                        const newItems = [...props.items];
-                        const index = newItems.findIndex(
-                          (item) => item.config_id === channel.config_id
-                        );
-                        if (index !== -1) {
-                          newItems.splice(index, 1, channel);
-                          props.setItems(newItems);
-                        }
-                      }
+                      setTimeout(() => props.refresh(), SERVER_DELAY);
                     })
                     .catch((error) => {
                       coreContext.notifications.toasts.addError(error, {

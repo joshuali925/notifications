@@ -26,6 +26,7 @@
 
 import { EuiButton, EuiContextMenuItem, EuiPopover } from '@elastic/eui';
 import React, { useContext, useState } from 'react';
+import { SERVER_DELAY } from '../../../../common';
 import { ChannelItemType } from '../../../../models/interfaces';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { ModalConsumer } from '../../../components/Modal';
@@ -72,11 +73,7 @@ export function ChannelActions(props: ChannelActionsProps) {
       label: 'Mute',
       disabled: props.selected.length !== 1 || !props.selected[0].is_enabled,
       modal: MuteChannelModal,
-      modalParams: {
-        items: props.items,
-        setItems: props.setItems,
-        setSelected: props.setSelected,
-      },
+      modalParams: { refresh: props.refresh, setSelected: props.setSelected },
     },
     {
       label: 'Unmute',
@@ -89,15 +86,8 @@ export function ChannelActions(props: ChannelActionsProps) {
             coreContext.notifications.toasts.addSuccess(
               `Channel ${channel.name} successfully unmuted.`
             );
-            const newItems = [...props.items];
-            const index = newItems.findIndex(
-              (item) => item.config_id === channel.config_id
-            );
-            if (index !== -1) {
-              newItems.splice(index, 1, channel);
-              props.setItems(newItems);
-              props.setSelected([channel]);
-            }
+            props.setSelected([channel]);
+            setTimeout(() => props.refresh(), SERVER_DELAY);
           })
           .catch((error) => {
             coreContext.notifications.toasts.addError(error, {

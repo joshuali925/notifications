@@ -156,14 +156,20 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
   }
 
   static getQueryObjectFromState(state: ChannelsState) {
-    return {
+    const config_type = _.isEmpty(state.filters.type)
+      ? Object.keys(CHANNEL_TYPE) // by default get all channels but not email senders/groups
+      : state.filters.type;
+    const queryObject: any = {
       from_index: state.from,
       max_items: state.size,
       search: state.search,
-      filters: state.filters,
+      config_type,
       sort_field: state.sortField,
       sort_order: state.sortDirection,
     };
+    if (state.filters.state != undefined)
+      queryObject.is_enabled = state.filters.state;
+    return queryObject;
   }
 
   async getChannels() {

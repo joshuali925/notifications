@@ -25,13 +25,21 @@ export function defineRoutes(router: IRouter) {
           from_index: schema.number(),
           max_items: schema.number(),
           search: schema.string(),
-          filters: schema.string(),
+          config_type: schema.oneOf([
+            schema.arrayOf(schema.string()),
+            schema.string(),
+          ]),
+          is_enabled: schema.maybe(schema.boolean()),
           sort_field: schema.string(),
           sort_order: schema.string(),
         }),
       },
     },
     async (context, request, response) => {
+      const config_type =
+        typeof request.query.config_type === 'string'
+          ? request.query.config_type
+          : request.query.config_type.join(',');
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
@@ -41,6 +49,8 @@ export function defineRoutes(router: IRouter) {
           {
             from_index: request.query.from_index,
             max_items: request.query.max_items,
+            config_type,
+            is_enabled: request.query.is_enabled,
             sort_field: request.query.sort_field,
             sort_order: request.query.sort_order,
           }

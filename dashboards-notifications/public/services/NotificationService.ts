@@ -33,7 +33,7 @@ import {
   MOCK_RECIPIENT_GROUPS,
   MOCK_SENDERS,
 } from './mockData';
-import { configToChannel } from './utils/helper';
+import { configListToChannels, configToChannel } from './utils/helper';
 
 export interface GetNotificationsResponse {
   totalNotifications: number;
@@ -62,8 +62,7 @@ export default class NotificationService {
       query: queryObject,
     });
     return {
-      items:
-        response.config_list.map((config) => configToChannel(config)) || [],
+      items: configListToChannels(response.config_list),
       total: response.total_hits || 0,
     };
   };
@@ -100,6 +99,14 @@ export default class NotificationService {
   };
 
   getSenders = async (queryObject: object) => {
+    const response = await this.httpClient.get(NODE_API.GET_CHANNELS, {
+      query: queryObject,
+    });
+    return {
+      items:
+        response.config_list.map((config) => configToChannel(config)) || [],
+      total: response.total_hits || 0,
+    };
     return MOCK_SENDERS;
   };
 

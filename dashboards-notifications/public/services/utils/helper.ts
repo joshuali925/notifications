@@ -8,3 +8,7 @@ export const configToChannel = (config: any): ChannelItemType => {
     last_updated_time_ms: config.last_updated_time_ms,
   };
 };
+
+export const configListToChannels = (configs: any[]): ChannelItemType[] => {
+  return configs.map((config)=>configToChannel(config)) || []
+}

@@ -199,7 +199,7 @@ export function CreateChannel(props: CreateChannelsProps) {
     } else if (type === 'email') {
       setSender(response.destination.email?.email_account_id || '');
       setSelectedRecipientGroupOptions(
-        response.destination.email?.recipients.map((recipient) => ({
+        response.destination.email?.recipients.map((recipient: string) => ({
           label: recipient,
         })) || []
       );
