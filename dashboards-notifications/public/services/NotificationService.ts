@@ -68,6 +68,13 @@ export default class NotificationService {
     };
   };
 
+  createChannel = async (config: any) => {
+    const response = await this.httpClient.post(NODE_API.CREATE_CHANNEL, {
+      body: JSON.stringify({ config: config }),
+    });
+    return response;
+  };
+
   updateChannel = async (id: string, config: ChannelItemType) => {
     const response = await this.httpClient.put(
       `${NODE_API.UPDATE_CHANNEL}/${id}`,

@@ -124,17 +124,18 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
         render: (features: string[]) =>
           features
             .map((feature) => _.get(NOTIFICATION_SOURCE, feature, '-'))
-            .join(', '),
+            .join(', ') || '-',
       },
       {
         field: 'description',
         name: 'Description',
         sortable: true,
         truncateText: true,
+        render: (description: string) => description || '-',
       },
     ];
 
-    this.getChannels= this.getChannels.bind(this)
+    this.getChannels = this.getChannels.bind(this);
   }
 
   async componentDidMount() {

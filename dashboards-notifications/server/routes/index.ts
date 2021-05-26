@@ -89,6 +89,37 @@ export function defineRoutes(router: IRouter) {
     }
   );
 
+  router.post(
+    {
+      path: NODE_API.CREATE_CHANNEL,
+      validate: {
+        body: schema.any(),
+      },
+    },
+    async (context, request, response) => {
+      console.log('request', request);
+      const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
+        request
+      );
+      try {
+        const resp = await client.callAsCurrentUser(
+          'notifications.createConfig',
+          {
+            body: request.body,
+          }
+        );
+        return response.ok({
+          body: resp,
+        });
+      } catch (error) {
+        return response.custom({
+          statusCode: error.statusCode || 500,
+          body: error.message,
+        });
+      }
+    }
+  );
+
   router.put(
     {
       path: `${NODE_API.UPDATE_CHANNEL}/{configId}`,

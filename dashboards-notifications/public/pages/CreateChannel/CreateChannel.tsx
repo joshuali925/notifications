@@ -40,6 +40,7 @@ import {
 import queryString from 'query-string';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { SERVER_DELAY } from '../../../common';
 import { ContentPanel } from '../../components/ContentPanel';
 import { CoreServicesContext } from '../../components/coreServices';
 import { ServicesContext } from '../../services';
@@ -178,22 +179,20 @@ export function CreateChannel(props: CreateChannelsProps) {
     if (typeof id !== 'string') return;
 
     const response = await servicesContext.notificationService.getChannel(id);
-    const type = response.type as keyof typeof CHANNEL_TYPE;
+    const type = response.config_type as keyof typeof CHANNEL_TYPE;
     setName(response.name);
-    setDescription(response.description);
+    setDescription(response.description || '');
     setChannelType(type);
     setSourceCheckboxIdToSelectedMap(
       Object.fromEntries(
-        response.allowedFeatures.map((feature) => [feature, true])
+        response.feature_list.map((feature) => [feature, true])
       )
     );
 
-    if (!response.destination) return;
-
     if (type === 'slack') {
-      setSlackWebhook(response.destination.slack?.url || '');
+      setSlackWebhook(response.slack?.url || '');
     } else if (type === 'chime') {
-      setChimeWebhook(response.destination.chime?.url || '');
+      setChimeWebhook(response.chime?.url || '');
     } else if (type === 'SNS') {
       setTopicArn(response.destination.sns?.topic_arn || '');
       setRoleArn(response.destination.sns?.role_arn || '');
@@ -254,6 +253,24 @@ export function CreateChannel(props: CreateChannelsProps) {
       (errorFlag, error) => errorFlag || error.length > 0,
       false
     );
+  };
+
+  const createConfigObject = () => {
+    const config: any = {
+      name,
+      description,
+      config_type: channelType,
+      feature_list: Object.entries(sourceCheckboxIdToSelectedMap)
+        .filter(([key, value]) => value)
+        .map(([key, value]) => key),
+      is_enabled: true,
+    };
+    if (channelType === 'slack') {
+      config.slack = { url: slackWebhook };
+    } else if (channelType === 'chime') {
+      config.chime = { url: chimeWebhook };
+    }
+    return config;
   };
 
   return (
@@ -401,19 +418,35 @@ export function CreateChannel(props: CreateChannelsProps) {
           <EuiFlexItem grow={false}>
             <EuiButton
               fill
-              onClick={() => {
+              onClick={async () => {
                 if (!isInputValid()) {
                   coreContext.notifications.toasts.addDanger(
                     'Some fields are invalid. Fix all highlighted error(s) before continuing.'
                   );
                   return;
                 }
-                coreContext.notifications.toasts.addSuccess(
-                  `Channel ${name} successfully ${
-                    props.edit ? 'updated' : 'created'
-                  }.`
-                );
-                location.assign(prevURL);
+                const config = createConfigObject();
+                console.log('config', config);
+                const request = props.edit
+                  ? servicesContext.notificationService.updateChannel(
+                      id!,
+                      config
+                    )
+                  : servicesContext.notificationService.createChannel(config);
+                await request
+                  .then((response) => {
+                    coreContext.notifications.toasts.addSuccess(
+                      `Channel ${name} successfully ${
+                        props.edit ? 'updated' : 'created'
+                      }.`
+                    );
+                    setTimeout(() => location.assign(prevURL), SERVER_DELAY);
+                  })
+                  .catch((error) => {
+                    coreContext.notifications.toasts.addError(error, {
+                      title: 'Failed to create channel.',
+                    });
+                  });
               }}
             >
               {props.edit ? 'Save' : 'Create'}
