@@ -1,4 +1,4 @@
-import { ChannelItemType } from '../../../models/interfaces';
+import { ChannelItemType, SenderItemType } from '../../../models/interfaces';
 
 export const configToChannel = (config: any): ChannelItemType => {
   return {
@@ -10,5 +10,20 @@ export const configToChannel = (config: any): ChannelItemType => {
 };
 
 export const configListToChannels = (configs: any[]): ChannelItemType[] => {
-  return configs.map((config)=>configToChannel(config)) || []
-}
+  return configs?.map((config) => configToChannel(config)) || [];
+};
+
+export const configToSender = (config: any): SenderItemType => {
+  return {
+    ...config.config.smtp_account,
+    name: config.config.name,
+    description: config.config.description,
+    config_id: config.config_id,
+    created_time_ms: config.created_time_ms,
+    last_updated_time_ms: config.last_updated_time_ms,
+  };
+};
+
+export const configListToSenders = (configs: any[]): SenderItemType[] => {
+  return configs?.map((config) => configToSender(config)) || [];
+};

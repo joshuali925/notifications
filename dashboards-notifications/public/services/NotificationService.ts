@@ -33,7 +33,11 @@ import {
   MOCK_RECIPIENT_GROUPS,
   MOCK_SENDERS,
 } from './mockData';
-import { configListToChannels, configToChannel } from './utils/helper';
+import {
+  configListToChannels,
+  configListToSenders,
+  configToChannel,
+} from './utils/helper';
 
 export interface GetNotificationsResponse {
   totalNotifications: number;
@@ -58,7 +62,7 @@ export default class NotificationService {
   getChannels = async (
     queryObject: object
   ): Promise<{ items: ChannelItemType[]; total: number }> => {
-    const response = await this.httpClient.get(NODE_API.GET_CHANNELS, {
+    const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,
     });
     return {
@@ -94,20 +98,20 @@ export default class NotificationService {
   };
 
   getChannel = async (id: string) => {
-    const response = await this.httpClient.get(`${NODE_API.GET_CHANNEL}/${id}`);
+    const response = await this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
     return configToChannel(response.config_list[0]);
   };
 
   getSenders = async (queryObject: object) => {
-    const response = await this.httpClient.get(NODE_API.GET_CHANNELS, {
+    console.log('queryObject', queryObject);
+    const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,
     });
+    console.log('response', response);
     return {
-      items:
-        response.config_list.map((config) => configToChannel(config)) || [],
+      items: configListToSenders(response.config_list),
       total: response.total_hits || 0,
     };
-    return MOCK_SENDERS;
   };
 
   getSender = async (id: string) => {

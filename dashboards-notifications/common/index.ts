@@ -37,8 +37,8 @@ export const SERVER_DELAY = 1000;
 
 const NODE_API_BASE_PATH = '/api/notifications';
 export const NODE_API = Object.freeze({
-  GET_CHANNELS: `${NODE_API_BASE_PATH}/get_channels`,
-  GET_CHANNEL: `${NODE_API_BASE_PATH}/get_channel`,
+  GET_CONFIGS: `${NODE_API_BASE_PATH}/get_configs`,
+  GET_CONFIG: `${NODE_API_BASE_PATH}/get_config`,
   CREATE_CHANNEL: `${NODE_API_BASE_PATH}/create_channel`,
   DELETE_CHANNELS: `${NODE_API_BASE_PATH}/delete_channels`,
   UPDATE_CHANNEL: `${NODE_API_BASE_PATH}/update_channel`,

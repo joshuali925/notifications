@@ -19,7 +19,7 @@ import { NODE_API } from '../../../dashboards-notifications/common';
 export function defineRoutes(router: IRouter) {
   router.get(
     {
-      path: NODE_API.GET_CHANNELS,
+      path: NODE_API.GET_CONFIGS,
       validate: {
         query: schema.object({
           from_index: schema.number(),
@@ -40,6 +40,7 @@ export function defineRoutes(router: IRouter) {
         typeof request.query.config_type === 'string'
           ? request.query.config_type
           : request.query.config_type.join(',');
+      console.log('config_type', config_type);
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
@@ -69,7 +70,7 @@ export function defineRoutes(router: IRouter) {
 
   router.get(
     {
-      path: `${NODE_API.GET_CHANNEL}/{configId}`,
+      path: `${NODE_API.GET_CONFIG}/{configId}`,
       validate: {
         params: schema.object({
           configId: schema.string()

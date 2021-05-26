@@ -135,7 +135,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
       },
     ];
 
-    this.getChannels = this.getChannels.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   async componentDidMount() {
@@ -144,14 +144,14 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
       BREADCRUMBS.CHANNELS,
     ]);
     window.scrollTo(0, 0);
-    await this.getChannels();
+    await this.refresh();
   }
 
   async componentDidUpdate(prevProps: ChannelsProps, prevState: ChannelsState) {
     const prevQuery = Channels.getQueryObjectFromState(prevState);
     const currQuery = Channels.getQueryObjectFromState(this.state);
     if (!_.isEqual(prevQuery, currQuery)) {
-      await this.getChannels();
+      await this.refresh();
     }
   }
 
@@ -172,7 +172,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
     return queryObject;
   }
 
-  async getChannels() {
+  async refresh() {
     this.setState({ loading: true });
     try {
       const queryObject = Channels.getQueryObjectFromState(this.state);
@@ -249,7 +249,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
                       setItems={(items: ChannelItemType[]) =>
                         this.setState({ items })
                       }
-                      refresh={this.getChannels}
+                      refresh={this.refresh}
                     />
                   ),
                 },

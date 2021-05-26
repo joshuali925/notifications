@@ -54,22 +54,23 @@ export interface DeliveryStatus {
   statusText: string;
 }
 
-export interface ChannelItemType {
-  config_id: string;
-  name: string;
+export interface ChannelItemType extends ConfigType {
   config_type: string;
-  description?: string;
   feature_list: string[];
   is_enabled: boolean; // active or muted
-  created_time_ms: number;
-  last_updated_time_ms: number;
   [config_type: string]: any;
 }
 
-export interface SenderItemType {
-  id: string;
+interface ConfigType {
+  config_id: string;
   name: string;
-  from: string; // outbound email address
+  description?: string;
+  created_time_ms: number;
+  last_updated_time_ms: number;
+}
+
+export interface SenderItemType extends ConfigType {
+  from_address: string; // outbound email address
   host: string;
   port: string;
   method: ENCRYPTION_METHOD;
@@ -94,4 +95,4 @@ export interface TableState<T> {
   loading: boolean;
 }
 
-export type ENCRYPTION_METHOD = 'SSL' | 'TSL';
+export type ENCRYPTION_METHOD = 'ssl' | 'tls';

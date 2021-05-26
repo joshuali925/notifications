@@ -63,12 +63,12 @@ interface CreateSenderFormProps {
 export function CreateSenderForm(props: CreateSenderFormProps) {
   const encryptionOptions: Array<EuiSuperSelectOption<ENCRYPTION_METHOD>> = [
     {
-      value: 'SSL',
+      value: 'ssl',
       inputDisplay: 'SSL',
     },
     {
-      value: 'TSL',
-      inputDisplay: 'TSL',
+      value: 'tls',
+      inputDisplay: 'TLS',
     },
   ];
 

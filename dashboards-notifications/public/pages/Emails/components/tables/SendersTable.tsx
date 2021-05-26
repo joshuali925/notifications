@@ -35,9 +35,14 @@ import {
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { SORT_DIRECTION } from '../../../../../common';
-import { SenderItemType, TableState } from '../../../../../models/interfaces';
+import {
+  ENCRYPTION_METHOD,
+  SenderItemType,
+  TableState,
+} from '../../../../../models/interfaces';
 import {
   ContentPanel,
   ContentPanelActions,
@@ -84,7 +89,7 @@ export class SendersTable extends Component<
         width: '200px',
       },
       {
-        field: 'from',
+        field: 'from_address',
         name: 'Outbound email address',
         sortable: true,
         truncateText: true,
@@ -110,24 +115,45 @@ export class SendersTable extends Component<
         sortable: true,
         truncateText: true,
         width: '200px',
+        render: (method: ENCRYPTION_METHOD) => method.toUpperCase(),
       },
     ];
   }
 
   async componentDidMount() {
+    await this.refresh();
+  }
+
+  async componentDidUpdate(
+    prevProps: SendersTableProps,
+    prevState: SendersTableState
+  ) {
+    const prevQuery = SendersTable.getQueryObjectFromState(prevState);
+    const currQuery = SendersTable.getQueryObjectFromState(this.state);
+    if (!_.isEqual(prevQuery, currQuery)) {
+      await this.refresh();
+    }
+  }
+
+  static getQueryObjectFromState(state: SendersTableState) {
+    return {
+      from_index: state.from,
+      max_items: state.size,
+      search: state.search,
+      config_type: 'smtp_account',
+      sort_field: state.sortField,
+      sort_order: state.sortDirection,
+    };
+  }
+
+  async refresh() {
     this.setState({ loading: true });
     try {
-      const queryObject = {
-        from: this.state.from,
-        size: this.state.size,
-        search: this.state.search,
-        sortField: this.state.sortField,
-        sortDirection: this.state.sortDirection,
-      };
+      const queryObject = SendersTable.getQueryObjectFromState(this.state);
       const senders = await this.context.notificationService.getSenders(
         queryObject
       );
-      this.setState({ items: senders, total: senders.length });
+      this.setState({ items: senders.items, total: senders.total });
     } catch (error) {
       this.context.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading senders.')
@@ -153,38 +179,21 @@ export class SendersTable extends Component<
     this.setState({ from: 0, search: e.target.value });
   };
 
-  onPageChange = (page: number): void => {
-    const { size } = this.state;
-    this.setState({ from: page * size });
-  };
-
   render() {
-    const {
-      total,
-      from,
-      size,
-      search,
-      sortField,
-      sortDirection,
-      selectedItems,
-      items,
-      loading,
-    } = this.state;
-
-    const filterIsApplied = !!search;
-    const page = Math.floor(from / size);
+    const filterIsApplied = !!this.state.search;
+    const page = Math.floor(this.state.from / this.state.size);
 
     const pagination: Pagination = {
       pageIndex: page,
-      pageSize: size,
+      pageSize: this.state.size,
       pageSizeOptions: DEFAULT_PAGE_SIZE_OPTIONS,
-      totalItemCount: total,
+      totalItemCount: this.state.total,
     };
 
     const sorting: EuiTableSortingType<SenderItemType> = {
       sort: {
-        direction: sortDirection,
-        field: sortField,
+        direction: this.state.sortDirection,
+        field: this.state.sortField,
       },
     };
 
@@ -223,7 +232,7 @@ export class SendersTable extends Component<
                       disabled={this.state.selectedItems.length !== 1}
                       onClick={() =>
                         location.assign(
-                          `#${ROUTES.EDIT_SENDER}/${this.state.selectedItems[0]?.id}`
+                          `#${ROUTES.EDIT_SENDER}/${this.state.selectedItems[0]?.config_id}`
                         )
                       }
                     >
@@ -250,14 +259,14 @@ export class SendersTable extends Component<
             fullWidth={true}
             placeholder="Search"
             onChange={this.onSearchChange}
-            value={search}
+            value={this.state.search}
           />
           <EuiHorizontalRule margin="s" />
 
           <EuiBasicTable
             columns={this.columns}
-            items={items}
-            itemId="name"
+            items={this.state.items}
+            itemId="config_id"
             isSelectable={true}
             selection={selection}
             noItemsMessage={
@@ -274,6 +283,7 @@ export class SendersTable extends Component<
             onChange={this.onTableChange}
             pagination={pagination}
             sorting={sorting}
+            loading={this.state.loading}
           />
         </ContentPanel>
       </>

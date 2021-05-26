@@ -60,7 +60,7 @@ export function CreateSenderModal(props: CreateSenderModalProps) {
   const [email, setEmail] = useState('');
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
-  const [encryption, setEncryption] = useState<ENCRYPTION_METHOD>('SSL');
+  const [encryption, setEncryption] = useState<ENCRYPTION_METHOD>('ssl');
   const [inputErrors, setInputErrors] = useState<{ [key: string]: string[] }>({
     senderName: [],
     email: [],
