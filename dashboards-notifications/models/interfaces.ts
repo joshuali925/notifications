@@ -70,10 +70,12 @@ interface ConfigType {
 }
 
 export interface SenderItemType extends ConfigType {
-  from_address: string; // outbound email address
-  host: string;
-  port: string;
-  method: ENCRYPTION_METHOD;
+  smtp_account: {
+    from_address: string; // outbound email address
+    host: string;
+    port: string;
+    method: ENCRYPTION_METHOD;
+  };
 }
 
 export interface RecipientGroupItemType {

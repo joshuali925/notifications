@@ -15,12 +15,12 @@ export const configListToChannels = (configs: any[]): ChannelItemType[] => {
 
 export const configToSender = (config: any): SenderItemType => {
   return {
-    ...config.config.smtp_account,
     name: config.config.name,
     description: config.config.description,
     config_id: config.config_id,
     created_time_ms: config.created_time_ms,
     last_updated_time_ms: config.last_updated_time_ms,
+    smtp_account: config.config.smtp_account,
   };
 };
 
