@@ -155,7 +155,7 @@ export class RecipientGroupsTable extends Component<
     return {
       from_index: state.from,
       max_items: state.size,
-      search: state.search,
+      query: state.search,
       config_type: 'email_group',
       sort_field: state.sortField,
       sort_order: state.sortDirection,
@@ -196,8 +196,8 @@ export class RecipientGroupsTable extends Component<
     this.setState({ selectedItems });
   };
 
-  onSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ from: 0, search: e.target.value });
+  onSearchChange = (search: string): void => {
+    this.setState({ from: 0, search });
   };
 
   onPageChange = (page: number): void => {
@@ -255,7 +255,7 @@ export class RecipientGroupsTable extends Component<
                           onClick={() =>
                             onShow(DeleteRecipientGroupModal, {
                               recipientGroups: this.state.selectedItems,
-                              refresh: this.refresh
+                              refresh: this.refresh,
                             })
                           }
                         >
@@ -297,8 +297,7 @@ export class RecipientGroupsTable extends Component<
           <EuiFieldSearch
             fullWidth={true}
             placeholder="Search"
-            onChange={this.onSearchChange}
-            value={search}
+            onSearch={this.onSearchChange}
           />
           <EuiHorizontalRule margin="s" />
 

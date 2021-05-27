@@ -141,7 +141,7 @@ export class SendersTable extends Component<
     return {
       from_index: state.from,
       max_items: state.size,
-      search: state.search,
+      query: state.search,
       config_type: 'smtp_account',
       sort_field: state.sortField,
       sort_order: state.sortDirection,
@@ -177,8 +177,8 @@ export class SendersTable extends Component<
     this.setState({ selectedItems });
   };
 
-  onSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ from: 0, search: e.target.value });
+  onSearchChange = (search: string): void => {
+    this.setState({ from: 0, search });
   };
 
   render() {
@@ -261,8 +261,7 @@ export class SendersTable extends Component<
           <EuiFieldSearch
             fullWidth={true}
             placeholder="Search"
-            onChange={this.onSearchChange}
-            value={this.state.search}
+            onSearch={this.onSearchChange}
           />
           <EuiHorizontalRule margin="s" />
 

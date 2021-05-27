@@ -126,8 +126,7 @@ export const ChannelControls = (props: ChannelControlsProps) => {
         <EuiFieldSearch
           fullWidth={true}
           placeholder="Search"
-          onChange={(e) => props.onSearchChange(e.target.value)}
-          value={props.search}
+          onSearch={(search) => props.onSearchChange(search)}
         />
       </EuiFlexItem>
 

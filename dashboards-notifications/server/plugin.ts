@@ -37,7 +37,7 @@ export class notificationsDashboardsPlugin
       }
     );
 
-    core.http.registerRouteHandlerContext('notifications_plugin', (context, request) => {
+    core.http.registerRouteHandlerContext('notificationsContext', (context, request) => {
       return {
         logger: this.logger,
         notificationsClient,

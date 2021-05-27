@@ -36,14 +36,6 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
     url: {
       fmt: OPENSEARCH_API.CONFIGS,
     },
-    params: {
-      from_index: {
-        type: 'number',
-      },
-      max_items: {
-        type: 'number',
-      },
-    },
     method: 'GET',
   });
 

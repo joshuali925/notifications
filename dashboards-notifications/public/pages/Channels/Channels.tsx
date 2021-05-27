@@ -162,7 +162,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
     const queryObject: any = {
       from_index: state.from,
       max_items: state.size,
-      search: state.search,
+      query: state.search,
       config_type,
       sort_field: state.sortField,
       sort_order: state.sortDirection,
