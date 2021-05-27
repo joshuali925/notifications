@@ -34,7 +34,7 @@ export const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 export const DEFAULT_QUERY_PARAMS = {
   from: 0,
   search: '',
-  size: 5,
+  size: 10,
   sortDirection: SORT_DIRECTION.ASC,
   sortField: 'lastUpdatedTime',
   startTime: 'now-7d',

@@ -77,7 +77,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
     this.state = {
       total: 0,
       from: 0,
-      size: 5,
+      size: 10,
       search: '',
       filters: {},
       sortField: 'name',
