@@ -29,6 +29,9 @@ export function defineRoutes(router: IRouter) {
             schema.arrayOf(schema.string()),
             schema.string(),
           ]),
+          feature_list: schema.maybe(
+            schema.oneOf([schema.arrayOf(schema.string()), schema.string()])
+          ),
           is_enabled: schema.maybe(schema.boolean()),
           sort_field: schema.string(),
           sort_order: schema.string(),
@@ -40,7 +43,12 @@ export function defineRoutes(router: IRouter) {
         typeof request.query.config_type === 'string'
           ? request.query.config_type
           : request.query.config_type.join(',');
-      console.log('config_type', config_type);
+
+      let featStr = request.query.feature_list; // optional source plugin filter
+      if (featStr && featStr.length > 0)
+        featStr = typeof featStr === 'string' ? featStr : featStr.join(',');
+      const feature_list = featStr ? { feature_list: featStr } : {};
+
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
@@ -54,6 +62,7 @@ export function defineRoutes(router: IRouter) {
             is_enabled: request.query.is_enabled,
             sort_field: request.query.sort_field,
             sort_order: request.query.sort_order,
+            ...feature_list,
           }
         );
         return response.ok({
@@ -73,8 +82,8 @@ export function defineRoutes(router: IRouter) {
       path: `${NODE_API.GET_CONFIG}/{configId}`,
       validate: {
         params: schema.object({
-          configId: schema.string()
-        })
+          configId: schema.string(),
+        }),
       },
     },
     async (context, request, response) => {
@@ -137,8 +146,8 @@ export function defineRoutes(router: IRouter) {
       validate: {
         body: schema.any(),
         params: schema.object({
-          configId: schema.string()
-        })
+          configId: schema.string(),
+        }),
       },
     },
     async (context, request, response) => {

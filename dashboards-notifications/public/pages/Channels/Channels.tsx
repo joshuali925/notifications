@@ -169,6 +169,8 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
     };
     if (state.filters.state != undefined)
       queryObject.is_enabled = state.filters.state;
+    if (!_.isEmpty(state.filters.source))
+      queryObject.feature_list = state.filters.source;
     return queryObject;
   }
 
