@@ -34,7 +34,8 @@ import {
 } from '@elastic/eui';
 import React, { useContext } from 'react';
 import { CUSTOM_WEBHOOK_ENDPOINT_TYPE } from '../../../utils/constants';
-import { CreateChannelContext, HeaderType } from '../CreateChannel';
+import { HeaderItemType } from '../../Channels/types';
+import { CreateChannelContext } from '../CreateChannel';
 import {
   validateCustomURLHost,
   validateCustomURLPort,
@@ -55,10 +56,10 @@ interface CustomWebhookSettingsProps {
   setCustomURLPort: (customURLPort: string) => void;
   customURLPath: string;
   setCustomURLPath: (customURLPath: string) => void;
-  webhookParams: HeaderType[];
-  setWebhookParams: (webhookParams: HeaderType[]) => void;
-  webhookHeaders: HeaderType[];
-  setWebhookHeaders: (webhookHeaders: HeaderType[]) => void;
+  webhookParams: HeaderItemType[];
+  setWebhookParams: (webhookParams: HeaderItemType[]) => void;
+  webhookHeaders: HeaderItemType[];
+  setWebhookHeaders: (webhookHeaders: HeaderItemType[]) => void;
 }
 
 export function CustomWebhookSettings(props: CustomWebhookSettingsProps) {

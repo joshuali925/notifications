@@ -50,6 +50,7 @@ import {
   CUSTOM_WEBHOOK_ENDPOINT_TYPE,
   ROUTES,
 } from '../../utils/constants';
+import { HeaderItemType } from '../Channels/types';
 import { ChannelAvailabilityPanel } from './components/ChannelAvailabilityPanel';
 import { ChannelNamePanel } from './components/ChannelNamePanel';
 import { ChimeSettings } from './components/ChimeSettings';
@@ -57,6 +58,7 @@ import { CustomWebhookSettings } from './components/CustomWebhookSettings';
 import { EmailSettings } from './components/EmailSettings';
 import { SlackSettings } from './components/SlackSettings';
 import { SNSSettings } from './components/SNSSettings';
+import { deserializeWebhookURL, serializeWebhookURL } from './utils/helper';
 import {
   validateArn,
   validateChannelName,
@@ -78,8 +80,6 @@ export const CreateChannelContext = createContext<{
   inputErrors: InputErrorsType;
   setInputErrors: (errors: InputErrorsType) => void;
 } | null>(null);
-
-export type HeaderType = { key: string; value: string };
 
 export function CreateChannel(props: CreateChannelsProps) {
   const isOdfe = true;
@@ -133,8 +133,8 @@ export function CreateChannel(props: CreateChannelsProps) {
   const [customURLHost, setCustomURLHost] = useState('');
   const [customURLPort, setCustomURLPort] = useState('');
   const [customURLPath, setCustomURLPath] = useState('');
-  const [webhookParams, setWebhookParams] = useState<HeaderType[]>([]);
-  const [webhookHeaders, setWebhookHeaders] = useState<HeaderType[]>([
+  const [webhookParams, setWebhookParams] = useState<HeaderItemType[]>([]);
+  const [webhookHeaders, setWebhookHeaders] = useState<HeaderItemType[]>([
     { key: 'Content-Type', value: 'application/json' },
   ]);
   const [topicArn, setTopicArn] = useState(''); // SNS topic ARN
@@ -210,7 +210,13 @@ export function CreateChannel(props: CreateChannelsProps) {
       setEmailHeader(response.destination.email?.header || '');
       setEmailFooter(response.destination.email?.footer || '');
     } else if (type === 'webhook') {
-      // TODO
+      const webhookObject = deserializeWebhookURL(response.webhook.url);
+      setWebhookURL(webhookObject.webhookURL);
+      setCustomURLHost(webhookObject.customURLHost);
+      setCustomURLPort(webhookObject.customURLPort);
+      setCustomURLPath(webhookObject.customURLPath);
+      setWebhookParams(webhookObject.webhookParams);
+      setWebhookHeaders(webhookObject.webhookHeaders);
     } else if (type === 'SES') {
       // TODO
     }
@@ -269,6 +275,16 @@ export function CreateChannel(props: CreateChannelsProps) {
       config.slack = { url: slackWebhook };
     } else if (channelType === 'chime') {
       config.chime = { url: chimeWebhook };
+    } else if (channelType === 'webhook') {
+      config.webhook = serializeWebhookURL(
+        webhookTypeIdSelected,
+        webhookURL,
+        customURLHost,
+        customURLPort,
+        customURLPath,
+        webhookParams,
+        webhookHeaders
+      );
     }
     return config;
   };

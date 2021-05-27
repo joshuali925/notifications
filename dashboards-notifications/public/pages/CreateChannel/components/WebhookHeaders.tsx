@@ -35,11 +35,11 @@ import {
   EuiTitle,
 } from '@elastic/eui';
 import React from 'react';
-import { HeaderType } from '../CreateChannel';
+import { HeaderItemType } from '../../Channels/types';
 
 interface WebhookHeadersProps {
-  headers: HeaderType[];
-  setHeaders: (headers: HeaderType[]) => void;
+  headers: HeaderItemType[];
+  setHeaders: (headers: HeaderItemType[]) => void;
   type: 'header' | 'parameter';
 }
 

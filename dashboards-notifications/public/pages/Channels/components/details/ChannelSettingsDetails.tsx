@@ -29,6 +29,7 @@ import React from 'react';
 import { ChannelItemType } from '../../../../../models/interfaces';
 import { ModalConsumer } from '../../../../components/Modal';
 import { CHANNEL_TYPE } from '../../../../utils/constants';
+import { deserializeWebhookURL } from '../../../CreateChannel/utils/helper';
 import { HeaderItemType, ListItemType } from '../../types';
 import { DetailsListModal } from '../modals/DetailsListModal';
 import { DetailsTableModal } from '../modals/DetailsTableModal';
@@ -57,7 +58,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
             .map((item: string | HeaderItemType) =>
               typeof item === 'string' ? item : `${item.key}: ${item.value}`
             )
-            .join(separator)}
+            .join(separator) || '-'}
         </div>
         {items.length > 5 && (
           <>
@@ -170,19 +171,17 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
       ]
     );
   } else if (type === 'webhook') {
+    console.log('props.channel.webhook.url:', props.channel.webhook.url);
+    const webhookObject = deserializeWebhookURL(props.channel.webhook.url)
     const parametersDescription = getModalComponent(
-      Object.entries(props.channel.destination.custom_webhook.parameters).map(
-        ([key, value]) => ({ key, value } as HeaderItemType)
-      ),
+      webhookObject.webhookParams,
       'Query parameters',
       undefined,
       '\n',
       true
     );
     const headersDescription = getModalComponent(
-      Object.entries(props.channel.destination.custom_webhook.headers).map(
-        ([key, value]) => ({ key, value } as HeaderItemType)
-      ),
+      webhookObject.webhookHeaders,
       'Webhook headers',
       undefined,
       '\n',
@@ -196,15 +195,15 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Host',
-          description: props.channel.destination.custom_webhook.host || '-',
+          description: webhookObject.customURLHost || '-',
         },
         {
           title: 'Port',
-          description: props.channel.destination.custom_webhook.port || '-',
+          description: webhookObject.customURLPort || '-',
         },
         {
           title: 'Path',
-          description: props.channel.destination.custom_webhook.path || '-',
+          description: webhookObject.customURLPath || '-',
         },
         {
           title: 'Query parameters',
