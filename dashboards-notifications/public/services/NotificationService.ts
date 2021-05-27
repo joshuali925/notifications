@@ -42,6 +42,7 @@ import {
   configListToRecipientGroups,
   configListToSenders,
   configToChannel,
+  configToRecipientGroup,
   configToSender,
 } from './utils/helper';
 
@@ -138,6 +139,7 @@ export default class NotificationService {
   };
 
   getRecipientGroup = async (id: string): Promise<RecipientGroupItemType> => {
-    return MOCK_RECIPIENT_GROUPS[parseInt(id)];
+    const response = await this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
+    return configToRecipientGroup(response.config_list[0]);
   };
 }

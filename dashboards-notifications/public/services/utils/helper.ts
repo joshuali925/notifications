@@ -32,7 +32,7 @@ export const configListToSenders = (configs: any[]): SenderItemType[] => {
   return configs?.map((config) => configToSender(config)) || [];
 };
 
-export const configToRecipientGroups = (
+export const configToRecipientGroup = (
   config: any
 ): RecipientGroupItemType => {
   return {
@@ -48,5 +48,5 @@ export const configToRecipientGroups = (
 export const configListToRecipientGroups = (
   configs: any[]
 ): RecipientGroupItemType[] => {
-  return configs?.map((config) => configToRecipientGroups(config)) || [];
+  return configs?.map((config) => configToRecipientGroup(config)) || [];
 };
