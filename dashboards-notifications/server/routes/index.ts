@@ -15,6 +15,7 @@ import {
   IRouter,
 } from '../../../../src/core/server';
 import { NODE_API } from '../../../dashboards-notifications/common';
+import { joinRequestParams } from '../utils/helper';
 
 export function defineRoutes(router: IRouter) {
   router.get(
@@ -39,16 +40,9 @@ export function defineRoutes(router: IRouter) {
       },
     },
     async (context, request, response) => {
-      const config_type =
-        typeof request.query.config_type === 'string'
-          ? request.query.config_type
-          : request.query.config_type.join(',');
-
-      let featStr = request.query.feature_list; // optional source plugin filter
-      if (featStr && featStr.length > 0)
-        featStr = typeof featStr === 'string' ? featStr : featStr.join(',');
-      const feature_list = featStr ? { feature_list: featStr } : {};
-
+      const config_type = joinRequestParams(request.query.config_type);
+      const featureStr = joinRequestParams(request.query.feature_list);
+      const feature_list = featureStr ? { feature_list: featureStr } : {};
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
@@ -58,16 +52,14 @@ export function defineRoutes(router: IRouter) {
           {
             from_index: request.query.from_index,
             max_items: request.query.max_items,
-            config_type,
             is_enabled: request.query.is_enabled,
             sort_field: request.query.sort_field,
             sort_order: request.query.sort_order,
+            config_type,
             ...feature_list,
           }
         );
-        return response.ok({
-          body: resp,
-        });
+        return response.ok({ body: resp });
       } catch (error) {
         return response.custom({
           statusCode: error.statusCode || 500,
@@ -93,13 +85,9 @@ export function defineRoutes(router: IRouter) {
       try {
         const resp = await client.callAsCurrentUser(
           'notifications.getConfigById',
-          {
-            configId: request.params.configId,
-          }
+          { configId: request.params.configId }
         );
-        return response.ok({
-          body: resp,
-        });
+        return response.ok({ body: resp });
       } catch (error) {
         return response.custom({
           statusCode: error.statusCode || 500,
@@ -124,13 +112,9 @@ export function defineRoutes(router: IRouter) {
       try {
         const resp = await client.callAsCurrentUser(
           'notifications.createConfig',
-          {
-            body: request.body,
-          }
+          { body: request.body }
         );
-        return response.ok({
-          body: resp,
-        });
+        return response.ok({ body: resp });
       } catch (error) {
         return response.custom({
           statusCode: error.statusCode || 500,
@@ -162,9 +146,7 @@ export function defineRoutes(router: IRouter) {
             body: request.body,
           }
         );
-        return response.ok({
-          body: resp,
-        });
+        return response.ok({ body: resp });
       } catch (error) {
         return response.custom({
           statusCode: error.statusCode || 500,
@@ -190,20 +172,13 @@ export function defineRoutes(router: IRouter) {
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
-      const id_list =
-        typeof request.query.config_id_list === 'string'
-          ? request.query.config_id_list
-          : request.query.config_id_list.join(',');
+      const config_id_list = joinRequestParams(request.query.config_id_list);
       try {
         const resp = await client.callAsCurrentUser(
           'notifications.deleteConfigs',
-          {
-            config_id_list: id_list,
-          }
+          { config_id_list }
         );
-        return response.ok({
-          body: resp,
-        });
+        return response.ok({ body: resp });
       } catch (error) {
         return response.custom({
           statusCode: error.statusCode || 500,
