@@ -96,4 +96,4 @@ export interface TableState<T> {
   loading: boolean;
 }
 
-export type ENCRYPTION_METHOD = 'ssl' | 'tls';
+export type ENCRYPTION_METHOD = 'ssl' | 'start_tls';

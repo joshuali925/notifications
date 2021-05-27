@@ -67,7 +67,7 @@ export function CreateSenderForm(props: CreateSenderFormProps) {
       inputDisplay: 'SSL',
     },
     {
-      value: 'tls',
+      value: 'start_tls',
       inputDisplay: 'TLS',
     },
   ];

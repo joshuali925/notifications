@@ -115,7 +115,8 @@ export class SendersTable extends Component<
         sortable: true,
         truncateText: true,
         width: '200px',
-        render: (method: ENCRYPTION_METHOD) => method.toUpperCase(),
+        render: (method: ENCRYPTION_METHOD) =>
+          method === 'ssl' ? 'SSL' : method === 'start_tls' ? 'TLS' : '-',
       },
     ];
     this.refresh = this.refresh.bind(this);
