@@ -168,11 +168,9 @@ export class RecipientGroupsTable extends Component<
       const queryObject = RecipientGroupsTable.getQueryObjectFromState(
         this.state
       );
-      console.log('queryObject', queryObject);
       const recipientGroups = await this.context.notificationService.getRecipientGroups(
         queryObject
       );
-      console.log('recipientGroups', recipientGroups);
       this.setState({
         items: recipientGroups.items,
         total: recipientGroups.total,

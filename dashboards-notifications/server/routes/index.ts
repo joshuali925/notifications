@@ -105,7 +105,6 @@ export function defineRoutes(router: IRouter) {
       },
     },
     async (context, request, response) => {
-      console.log('request', request);
       const client: ILegacyScopedClusterClient = context.notifications_plugin.notificationsClient.asScoped(
         request
       );
