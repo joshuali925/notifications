@@ -122,6 +122,7 @@ export function CreateChannel(props: CreateChannelsProps) {
     selectedSenderOptions,
     setSelectedSenderOptions,
   ] = useState<Array<EuiComboBoxOptionOption<string>>>([]);
+  // "value" field is the config_id of recipient groups, if it doesn't exist means it's a custom email address
   const [
     selectedRecipientGroupOptions,
     setSelectedRecipientGroupOptions,

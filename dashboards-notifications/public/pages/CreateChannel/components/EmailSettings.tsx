@@ -110,7 +110,12 @@ export function EmailSettings(props: EmailSettingsProps) {
       const senders = await servicesContext.notificationService.getSenders(
         getQueryObject('smtp_account', query)
       );
-      setSenderOptions(senders.items.map((sender) => ({ label: sender.name })));
+      setSenderOptions(
+        senders.items.map((sender) => ({
+          label: sender.name,
+          value: sender.config_id,
+        }))
+      );
     } catch (error) {
       coreContext.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading senders.')
@@ -126,6 +131,7 @@ export function EmailSettings(props: EmailSettingsProps) {
       setRecipientGroupOptions(
         recipientGroups.items.map((recipientGroup) => ({
           label: recipientGroup.name,
+          value: recipientGroup.config_id,
         }))
       );
     } catch (error) {
