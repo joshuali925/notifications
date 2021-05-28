@@ -35,11 +35,10 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { SERVER_DELAY } from '../../../common';
-import { ENCRYPTION_METHOD } from '../../../models/interfaces';
 import { ContentPanel } from '../../components/ContentPanel';
 import { CoreServicesContext } from '../../components/coreServices';
 import { ServicesContext } from '../../services';
-import { BREADCRUMBS, ROUTES } from '../../utils/constants';
+import { BREADCRUMBS, ENCRYPTION_TYPE, ROUTES } from '../../utils/constants';
 import { CreateSenderForm } from './components/forms/CreateSenderForm';
 import {
   validateEmail,
@@ -60,7 +59,9 @@ export function CreateSender(props: CreateSenderProps) {
   const [email, setEmail] = useState('');
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
-  const [encryption, setEncryption] = useState<ENCRYPTION_METHOD>('ssl');
+  const [encryption, setEncryption] = useState<keyof typeof ENCRYPTION_TYPE>(
+    Object.keys(ENCRYPTION_TYPE)[0] as keyof typeof ENCRYPTION_TYPE
+  );
   const [inputErrors, setInputErrors] = useState<{ [key: string]: string[] }>({
     senderName: [],
     email: [],
@@ -90,7 +91,7 @@ export function CreateSender(props: CreateSenderProps) {
     setEmail(response.smtp_account.from_address);
     setHost(response.smtp_account.host);
     setPort(response.smtp_account.port);
-    setEncryption(response.smtp_account.method as ENCRYPTION_METHOD);
+    setEncryption(response.smtp_account.method);
   };
 
   const isInputValid = (): boolean => {

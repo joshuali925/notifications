@@ -25,6 +25,7 @@
  */
 
 import { Direction } from '@elastic/eui';
+import { ENCRYPTION_TYPE } from '../public/utils/constants';
 
 export interface NotificationItem {
   id: string;
@@ -74,7 +75,7 @@ export interface SenderItemType extends ConfigType {
     from_address: string; // outbound email address
     host: string;
     port: string;
-    method: ENCRYPTION_METHOD;
+    method: keyof typeof ENCRYPTION_TYPE;
   };
 }
 
@@ -95,5 +96,3 @@ export interface TableState<T> {
   items: T[];
   loading: boolean;
 }
-
-export type ENCRYPTION_METHOD = 'ssl' | 'start_tls';

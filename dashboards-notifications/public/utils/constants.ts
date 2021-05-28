@@ -25,7 +25,8 @@
  */
 
 export const DOCUMENTATION_LINK = '';
-export const ALERTING_DOCUMENTATION_LINK = 'https://docs-beta.opensearch.org/docs/alerting/monitors/#authenticate-sender-account';
+export const ALERTING_DOCUMENTATION_LINK =
+  'https://docs-beta.opensearch.org/docs/alerting/monitors/#authenticate-sender-account';
 
 export const ROUTES = Object.freeze({
   // notification
@@ -76,6 +77,12 @@ export const CHANNEL_TYPE = Object.freeze({
   webhook: 'Custom webhook',
   SES: 'Amazon SES',
   SNS: 'Amazon SNS',
+});
+
+export const ENCRYPTION_TYPE = Object.freeze({
+  ssl: 'SSL',
+  start_tls: 'TLS',
+  none: 'None',
 });
 
 export const CUSTOM_WEBHOOK_ENDPOINT_TYPE = Object.freeze({

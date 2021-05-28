@@ -36,9 +36,9 @@ import {
   EuiOverlayMask,
 } from '@elastic/eui';
 import React, { useContext, useState } from 'react';
-import { ENCRYPTION_METHOD } from '../../../../../models/interfaces';
 import { CoreServicesContext } from '../../../../components/coreServices';
 import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
+import { ENCRYPTION_TYPE } from '../../../../utils/constants';
 import { CreateSenderForm } from '../../../Emails/components/forms/CreateSenderForm';
 import {
   validateEmail,
@@ -60,7 +60,9 @@ export function CreateSenderModal(props: CreateSenderModalProps) {
   const [email, setEmail] = useState('');
   const [host, setHost] = useState('');
   const [port, setPort] = useState('');
-  const [encryption, setEncryption] = useState<ENCRYPTION_METHOD>('ssl');
+  const [encryption, setEncryption] = useState<keyof typeof ENCRYPTION_TYPE>(
+    Object.keys(ENCRYPTION_TYPE)[0] as keyof typeof ENCRYPTION_TYPE
+  );
   const [inputErrors, setInputErrors] = useState<{ [key: string]: string[] }>({
     senderName: [],
     email: [],

@@ -38,18 +38,14 @@ import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_b
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { SORT_DIRECTION } from '../../../../../common';
-import {
-  ENCRYPTION_METHOD,
-  SenderItemType,
-  TableState,
-} from '../../../../../models/interfaces';
+import { SenderItemType, TableState } from '../../../../../models/interfaces';
 import {
   ContentPanel,
   ContentPanelActions,
 } from '../../../../components/ContentPanel';
 import { ModalConsumer } from '../../../../components/Modal';
 import { ServicesContext } from '../../../../services';
-import { ROUTES } from '../../../../utils/constants';
+import { ENCRYPTION_TYPE, ROUTES } from '../../../../utils/constants';
 import { getErrorMessage } from '../../../../utils/helpers';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../../../Notifications/utils/constants';
 import { DeleteSenderModal } from '../modals/DeleteSenderModal';
@@ -115,8 +111,7 @@ export class SendersTable extends Component<
         sortable: true,
         truncateText: true,
         width: '200px',
-        render: (method: ENCRYPTION_METHOD) =>
-          method === 'ssl' ? 'SSL' : method === 'start_tls' ? 'TLS' : '-',
+        render: (method: string) => _.get(ENCRYPTION_TYPE, method, '-'),
       },
     ];
     this.refresh = this.refresh.bind(this);
