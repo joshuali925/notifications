@@ -67,7 +67,9 @@ export const validateCustomURLPort = (port: string) => {
   return errors;
 };
 
-export const validateEmailSender = (sender: string) => {
+export const validateEmailSender = (
+  sender: Array<EuiComboBoxOptionOption<string>> | string
+) => {
   const errors = [];
   if (sender.length === 0) errors.push('Sender cannot be empty.');
   return errors;

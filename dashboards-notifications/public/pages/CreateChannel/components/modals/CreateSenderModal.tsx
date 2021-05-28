@@ -27,13 +27,13 @@
 import {
   EuiButton,
   EuiButtonEmpty,
+  EuiComboBoxOptionOption,
   EuiModal,
   EuiModalBody,
   EuiModalFooter,
   EuiModalHeader,
   EuiModalHeaderTitle,
   EuiOverlayMask,
-  EuiSuperSelectOption,
 } from '@elastic/eui';
 import React, { useContext, useState } from 'react';
 import { ENCRYPTION_METHOD } from '../../../../../models/interfaces';
@@ -49,7 +49,7 @@ import {
 
 interface CreateSenderModalProps extends ModalRootProps {
   addSenderOptionAndSelect: (
-    senderOption: EuiSuperSelectOption<string>
+    senderOption: EuiComboBoxOptionOption<string>
   ) => void;
   onClose: () => void;
 }
@@ -107,9 +107,7 @@ export function CreateSenderModal(props: CreateSenderModalProps) {
         </EuiModalBody>
 
         <EuiModalFooter>
-          <EuiButtonEmpty onClick={props.onClose}>
-            Cancel
-          </EuiButtonEmpty>
+          <EuiButtonEmpty onClick={props.onClose}>Cancel</EuiButtonEmpty>
           <EuiButton
             fill
             onClick={() => {
@@ -122,10 +120,7 @@ export function CreateSenderModal(props: CreateSenderModalProps) {
               coreContext.notifications.toasts.addSuccess(
                 `Sender ${senderName} successfully created. You can select ${senderName} from the list of senders.`
               );
-              props.addSenderOptionAndSelect({
-                value: senderName,
-                inputDisplay: senderName,
-              });
+              props.addSenderOptionAndSelect({ label: senderName });
               props.onClose();
             }}
           >

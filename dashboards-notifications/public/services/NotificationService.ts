@@ -32,11 +32,8 @@ import {
   RecipientGroupItemType,
   SenderItemType,
 } from '../../models/interfaces';
-import {
-  MOCK_GET_HISTOGRAM,
-  MOCK_NOTIFICATIONS,
-  MOCK_RECIPIENT_GROUPS,
-} from './mockData';
+import { CHANNEL_TYPE } from '../utils/constants';
+import { MOCK_GET_HISTOGRAM, MOCK_NOTIFICATIONS } from './mockData';
 import {
   configListToChannels,
   configListToRecipientGroups,
@@ -93,7 +90,7 @@ export default class NotificationService {
   };
 
   getChannels = async (
-    queryObject: object
+    queryObject: object = { config_type: Object.keys(CHANNEL_TYPE) }
   ): Promise<{ items: ChannelItemType[]; total: number }> => {
     const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,
@@ -110,7 +107,7 @@ export default class NotificationService {
   };
 
   getSenders = async (
-    queryObject: object
+    queryObject: object = { config_type: 'smtp_account' }
   ): Promise<{ items: SenderItemType[]; total: number }> => {
     const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,
@@ -127,7 +124,7 @@ export default class NotificationService {
   };
 
   getRecipientGroups = async (
-    queryObject: object
+    queryObject: object = { config_type: 'email_group' }
   ): Promise<{ items: RecipientGroupItemType[]; total: number }> => {
     const response = await this.httpClient.get(NODE_API.GET_CONFIGS, {
       query: queryObject,

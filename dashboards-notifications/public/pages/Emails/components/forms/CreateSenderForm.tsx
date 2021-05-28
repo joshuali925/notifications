@@ -37,7 +37,7 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 import { ENCRYPTION_METHOD } from '../../../../../models/interfaces';
-import { DOCUMENTATION_LINK } from '../../../../utils/constants';
+import { ALERTING_DOCUMENTATION_LINK } from '../../../../utils/constants';
 import {
   validateEmail,
   validateHost,
@@ -167,12 +167,14 @@ export function CreateSenderForm(props: CreateSenderFormProps) {
         helpText={
           <div>
             SSL or TLS is recommended for security. To use either one, you must
-            add the following fields to the OpenSearch keystore on each node.{' '}
-            <EuiLink href={DOCUMENTATION_LINK} target="_blank" external>Learn more</EuiLink>
-            <br />
-            opendistro.alerting.destination.mail.adminTest.username: [username]
-            <br />
-            opendistro.alerting.destination.mail.adminTest.password: [password]
+            enter each sender account's credentials using the CLI.{' '}
+            <EuiLink
+              href={ALERTING_DOCUMENTATION_LINK}
+              target="_blank"
+              external
+            >
+              Learn more
+            </EuiLink>
           </div>
         }
       >

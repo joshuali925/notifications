@@ -118,7 +118,10 @@ export function CreateChannel(props: CreateChannelsProps) {
   const [emailFooter, setEmailFooter] = useState(
     `Example footer in markdown:\n### Operations team alerts\nContact the team [ops@company.com](mailto://ops@company.com).`
   );
-  const [sender, setSender] = useState('');
+  const [
+    selectedSenderOptions,
+    setSelectedSenderOptions,
+  ] = useState<Array<EuiComboBoxOptionOption<string>>>([]);
   const [
     selectedRecipientGroupOptions,
     setSelectedRecipientGroupOptions,
@@ -352,8 +355,8 @@ export function CreateChannel(props: CreateChannelsProps) {
               setEmailHeader={setEmailHeader}
               emailFooter={emailFooter}
               setEmailFooter={setEmailFooter}
-              sender={sender}
-              setSender={setSender}
+              selectedSenderOptions={selectedSenderOptions}
+              setSelectedSenderOptions={setSelectedSenderOptions}
               selectedRecipientGroupOptions={selectedRecipientGroupOptions}
               setSelectedRecipientGroupOptions={
                 setSelectedRecipientGroupOptions
