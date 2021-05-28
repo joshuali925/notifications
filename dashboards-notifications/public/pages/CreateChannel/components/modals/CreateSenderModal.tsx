@@ -40,6 +40,7 @@ import { CoreServicesContext } from '../../../../components/coreServices';
 import { ModalRootProps } from '../../../../components/Modal/ModalRoot';
 import { ENCRYPTION_TYPE } from '../../../../utils/constants';
 import { CreateSenderForm } from '../../../Emails/components/forms/CreateSenderForm';
+import { createSenderConfigObject } from '../../../Emails/utils/helper';
 import {
   validateEmail,
   validateHost,
@@ -112,18 +113,34 @@ export function CreateSenderModal(props: CreateSenderModalProps) {
           <EuiButtonEmpty onClick={props.onClose}>Cancel</EuiButtonEmpty>
           <EuiButton
             fill
-            onClick={() => {
+            onClick={async () => {
               if (!isInputValid()) {
                 coreContext.notifications.toasts.addDanger(
                   'Some fields are invalid. Fix all highlighted error(s) before continuing.'
                 );
                 return;
               }
-              coreContext.notifications.toasts.addSuccess(
-                `Sender ${senderName} successfully created. You can select ${senderName} from the list of senders.`
+              const config = createSenderConfigObject(
+                senderName,
+                host,
+                port,
+                encryption,
+                email
               );
-              props.addSenderOptionAndSelect({ label: senderName });
-              props.onClose();
+              await props.services.notificationService
+                .createConfig(config)
+                .then((response) => {
+                  coreContext.notifications.toasts.addSuccess(
+                    `Sender ${senderName} successfully created. You can select ${senderName} from the list of senders.`
+                  );
+                  props.addSenderOptionAndSelect({ label: senderName });
+                  props.onClose();
+                })
+                .catch((error) => {
+                  coreContext.notifications.toasts.addError(error, {
+                    title: 'Failed to create sender.',
+                  });
+                });
             }}
           >
             Create

@@ -40,6 +40,7 @@ import { CoreServicesContext } from '../../components/coreServices';
 import { ServicesContext } from '../../services';
 import { BREADCRUMBS, ENCRYPTION_TYPE, ROUTES } from '../../utils/constants';
 import { CreateSenderForm } from './components/forms/CreateSenderForm';
+import { createSenderConfigObject } from './utils/helper';
 import {
   validateEmail,
   validateHost,
@@ -108,21 +109,6 @@ export function CreateSender(props: CreateSenderProps) {
     );
   };
 
-  const createConfigObject = () => {
-    return {
-      name: senderName,
-      config_type: 'smtp_account',
-      feature_list: [],
-      is_enabled: true,
-      smtp_account: {
-        host,
-        port,
-        method: encryption,
-        from_address: email,
-      },
-    };
-  };
-
   return (
     <>
       <EuiTitle size="l">
@@ -169,7 +155,13 @@ export function CreateSender(props: CreateSenderProps) {
                 );
                 return;
               }
-              const config = createConfigObject();
+              const config = createSenderConfigObject(
+                senderName,
+                host,
+                port,
+                encryption,
+                email
+              );
               const request = props.edit
                 ? servicesContext.notificationService.updateConfig(
                     props.match.params.id!,

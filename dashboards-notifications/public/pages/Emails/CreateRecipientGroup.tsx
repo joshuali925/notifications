@@ -41,6 +41,7 @@ import { CoreServicesContext } from '../../components/coreServices';
 import { ServicesContext } from '../../services';
 import { BREADCRUMBS, ROUTES } from '../../utils/constants';
 import { CreateRecipientGroupForm } from './components/forms/CreateRecipientGroupForm';
+import { createRecipientGroupConfigObject } from './utils/helper';
 import {
   validateRecipientGroupEmails,
   validateRecipientGroupName,
@@ -111,19 +112,6 @@ export function CreateRecipientGroup(props: CreateRecipientGroupProps) {
     );
   };
 
-  const createConfigObject = () => {
-    return {
-      name,
-      description,
-      config_type: 'email_group',
-      feature_list: [],
-      is_enabled: true,
-      email_group: {
-        recipient_list: selectedEmailOptions.map((email) => email.label),
-      },
-    };
-  };
-
   return (
     <>
       <EuiTitle size="l">
@@ -167,7 +155,11 @@ export function CreateRecipientGroup(props: CreateRecipientGroupProps) {
                 );
                 return;
               }
-              const config = createConfigObject();
+              const config = createRecipientGroupConfigObject(
+                name,
+                description,
+                selectedEmailOptions
+              );
               const request = props.edit
                 ? servicesContext.notificationService.updateConfig(
                     props.match.params.id!,
