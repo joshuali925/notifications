@@ -58,7 +58,12 @@ import { CustomWebhookSettings } from './components/CustomWebhookSettings';
 import { EmailSettings } from './components/EmailSettings';
 import { SlackSettings } from './components/SlackSettings';
 import { SNSSettings } from './components/SNSSettings';
-import { deserializeWebhook, serializeWebhook } from './utils/helper';
+import {
+  constructEmailObject,
+  constructWebhookObject,
+  deconstructEmailObject,
+  deconstructWebhookObject,
+} from './utils/helper';
 import {
   validateArn,
   validateChannelName,
@@ -185,7 +190,7 @@ export function CreateChannel(props: CreateChannelsProps) {
 
     const response = await servicesContext.notificationService.getChannel(id);
     const type = response.config_type as keyof typeof CHANNEL_TYPE;
-    setIsEnabled(response.is_enabled)
+    setIsEnabled(response.is_enabled);
     setName(response.name);
     setDescription(response.description || '');
     setChannelType(type);
@@ -199,30 +204,20 @@ export function CreateChannel(props: CreateChannelsProps) {
       setSlackWebhook(response.slack?.url || '');
     } else if (type === 'chime') {
       setChimeWebhook(response.chime?.url || '');
-    } else if (type === 'SNS') {
-      setTopicArn(response.destination.sns?.topic_arn || '');
-      setRoleArn(response.destination.sns?.role_arn || '');
     } else if (type === 'email') {
-      setSender(response.destination.email?.email_account_id || '');
-      setSelectedRecipientGroupOptions(
-        response.destination.email?.recipients.map((recipient: string) => ({
-          label: recipient,
-        })) || []
-      );
-      setHeaderFooterCheckboxIdToSelectedMap({
-        header: !!response.destination.email?.header,
-        footer: !!response.destination.email?.footer,
-      });
-      setEmailHeader(response.destination.email?.header || '');
-      setEmailFooter(response.destination.email?.footer || '');
+      const emailObject = deconstructEmailObject(response.email!);
+      setSelectedSenderOptions(emailObject.selectedSenderOptions);
+      setSelectedRecipientGroupOptions(emailObject.selectedRecipientGroupOptions)
     } else if (type === 'webhook') {
-      const webhookObject = deserializeWebhook(response.webhook);
+      const webhookObject = deconstructWebhookObject(response.webhook!);
       setWebhookURL(webhookObject.webhookURL);
       setCustomURLHost(webhookObject.customURLHost);
       setCustomURLPort(webhookObject.customURLPort);
       setCustomURLPath(webhookObject.customURLPath);
       setWebhookParams(webhookObject.webhookParams);
       setWebhookHeaders(webhookObject.webhookHeaders);
+    } else if (type === 'SNS') {
+      // TODO
     } else if (type === 'SES') {
       // TODO
     }
@@ -247,7 +242,7 @@ export function CreateChannel(props: CreateChannelsProps) {
     } else if (channelType === 'chime') {
       errors.chimeWebhook = validateWebhookURL(chimeWebhook);
     } else if (channelType === 'email') {
-      errors.sender = validateEmailSender(sender);
+      errors.sender = validateEmailSender(selectedSenderOptions);
       errors.recipients = validateRecipients(selectedRecipientGroupOptions);
     } else if (channelType === 'webhook') {
       if (webhookTypeIdSelected === 'WEBHOOK_URL') {
@@ -282,7 +277,7 @@ export function CreateChannel(props: CreateChannelsProps) {
     } else if (channelType === 'chime') {
       config.chime = { url: chimeWebhook };
     } else if (channelType === 'webhook') {
-      config.webhook = serializeWebhook(
+      config.webhook = constructWebhookObject(
         webhookTypeIdSelected,
         webhookURL,
         customURLHost,
@@ -290,6 +285,11 @@ export function CreateChannel(props: CreateChannelsProps) {
         customURLPath,
         webhookParams,
         webhookHeaders
+      );
+    } else if (channelType === 'email') {
+      config.email = constructEmailObject(
+        selectedSenderOptions,
+        selectedRecipientGroupOptions
       );
     }
     return config;

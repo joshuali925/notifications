@@ -29,7 +29,10 @@ import React from 'react';
 import { ChannelItemType } from '../../../../../models/interfaces';
 import { ModalConsumer } from '../../../../components/Modal';
 import { CHANNEL_TYPE } from '../../../../utils/constants';
-import { deserializeWebhook } from '../../../CreateChannel/utils/helper';
+import {
+  deconstructEmailObject,
+  deconstructWebhookObject,
+} from '../../../CreateChannel/utils/helper';
 import { HeaderItemType, ListItemType } from '../../types';
 import { DetailsListModal } from '../modals/DetailsListModal';
 import { DetailsTableModal } from '../modals/DetailsTableModal';
@@ -102,7 +105,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Webhook URL',
-          description: props.channel.slack.url || '-',
+          description: props.channel.slack!.url || '-',
         },
       ]
     );
@@ -115,30 +118,14 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Webhook URL',
-          description: props.channel.chime.url || '-',
-        },
-      ]
-    );
-  } else if (type === 'SNS') {
-    settingsList.push(
-      ...[
-        {
-          title: 'Channel type',
-          description: CHANNEL_TYPE.SNS,
-        },
-        {
-          title: 'SNS topic ARN',
-          description: props.channel.destination.sns.topic_arn || '-',
-        },
-        {
-          title: 'IAM role ARN',
-          description: props.channel.destination.sns.role_arn || '-',
+          description: props.channel.chime!.url || '-',
         },
       ]
     );
   } else if (type === 'email') {
+    const emailObject = deconstructEmailObject(props.channel.email!);
     const recipientsDescription = getModalComponent(
-      props.channel.destination.email.recipients,
+      emailObject.selectedRecipientGroupOptions.map((group) => group.label),
       'Default recipients',
       'Recipients'
     );
@@ -150,28 +137,29 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
         {
           title: 'Sender',
-          description: props.channel.destination.email.email_account_id || '-',
+          description: emailObject.selectedSenderOptions[0].label || '-',
         },
         {
           title: 'Default recipients',
           description: recipientsDescription,
         },
-        {
-          title: 'Email header',
-          description: props.channel.destination.email.header
-            ? 'Enabled'
-            : 'Disabled',
-        },
-        {
-          title: 'Email footer',
-          description: props.channel.destination.email.footer
-            ? 'Enabled'
-            : 'Disabled',
-        },
+        // TODO remove when removing header/footer functionality
+        // {
+        //   title: 'Email header',
+        //   description: props.channel.destination.email.header
+        //     ? 'Enabled'
+        //     : 'Disabled',
+        // },
+        // {
+        //   title: 'Email footer',
+        //   description: props.channel.destination.email.footer
+        //     ? 'Enabled'
+        //     : 'Disabled',
+        // },
       ]
     );
   } else if (type === 'webhook') {
-    const webhookObject = deserializeWebhook(props.channel.webhook)
+    const webhookObject = deconstructWebhookObject(props.channel.webhook!);
     const parametersDescription = getModalComponent(
       webhookObject.webhookParams,
       'Query parameters',
@@ -214,40 +202,25 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
         },
       ]
     );
-  } else if (type === 'SES') {
-    const recipientsDescription = getModalComponent(
-      props.channel.destination.ses.recipients,
-      'Default recipients',
-      'Recipients'
-    );
+  } else if (type === 'SNS') {
     settingsList.push(
       ...[
         {
           title: 'Channel type',
-          description: CHANNEL_TYPE.SES,
+          description: CHANNEL_TYPE.SNS,
         },
         {
-          title: 'Sender',
-          description: props.channel.destination.ses.email_account_id || '-',
+          title: 'SNS topic ARN',
+          description: props.channel.destination.sns.topic_arn || '-',
         },
         {
-          title: 'Default recipients',
-          description: recipientsDescription,
-        },
-        {
-          title: 'Email header',
-          description: props.channel.destination.ses.header
-            ? 'Enabled'
-            : 'Disabled',
-        },
-        {
-          title: 'Email footer',
-          description: props.channel.destination.ses.footer
-            ? 'Enabled'
-            : 'Disabled',
+          title: 'IAM role ARN',
+          description: props.channel.destination.sns.role_arn || '-',
         },
       ]
     );
+  } else if (type === 'SES') {
+    // TODO
   }
 
   return (

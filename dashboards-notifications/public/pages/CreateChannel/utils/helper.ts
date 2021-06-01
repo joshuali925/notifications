@@ -9,10 +9,12 @@
  * GitHub history for details.
  */
 
+import { EuiComboBoxOptionOption } from '@elastic/eui';
+import { ChannelItemType } from '../../../../models/interfaces';
 import { CUSTOM_WEBHOOK_ENDPOINT_TYPE } from '../../../utils/constants';
 import { HeaderItemType } from '../../Channels/types';
 
-export const serializeWebhook = (
+export const constructWebhookObject = (
   webhookTypeIdSelected: keyof typeof CUSTOM_WEBHOOK_ENDPOINT_TYPE,
   webhookURL: string,
   customURLHost: string,
@@ -43,10 +45,9 @@ export const serializeWebhook = (
   return { url, header_params };
 };
 
-export const deserializeWebhook = (webhook: {
-  url: string;
-  header_params: object;
-}): {
+export const deconstructWebhookObject = (
+  webhook: NonNullable<ChannelItemType['webhook']>
+): {
   webhookURL: string;
   customURLHost: string;
   customURLPort: string;
@@ -85,4 +86,53 @@ export const deserializeWebhook = (webhook: {
       webhookHeaders: [],
     };
   }
+};
+
+export const constructEmailObject = (
+  selectedSenderOptions: Array<EuiComboBoxOptionOption<string>>,
+  selectedRecipientGroupOptions: Array<EuiComboBoxOptionOption<string>>
+) => {
+  const customEmailsList = [];
+  const recipientGroupIds = [];
+  for (let i = 0; i < selectedRecipientGroupOptions.length; i++) {
+    const group = selectedRecipientGroupOptions[i];
+    if (group.value) {
+      recipientGroupIds.push(group.value);
+    } else {
+      customEmailsList.push(group.label);
+    }
+  }
+  return {
+    email_account_id: selectedSenderOptions[0].value,
+    recipient_list: customEmailsList,
+    email_group_id_list: recipientGroupIds,
+  };
+};
+
+export const deconstructEmailObject = (
+  email: NonNullable<ChannelItemType['email']>
+): {
+  selectedSenderOptions: Array<EuiComboBoxOptionOption<string>>;
+  selectedRecipientGroupOptions: Array<EuiComboBoxOptionOption<string>>;
+} => {
+  const selectedSenderOptions = [
+    {
+      label: 'unknown',
+      value: email.email_account_id,
+    },
+  ];
+  const selectedRecipientGroupOptions: Array<EuiComboBoxOptionOption<
+    string
+  >> = email.email_group_id_list.map((groupId) => ({
+    label: 'unknown',
+    value: groupId,
+  }));
+  const customEmailOptions = email.recipient_list.map((address) => ({
+    label: address,
+  }));
+  selectedRecipientGroupOptions.concat(customEmailOptions);
+  return {
+    selectedSenderOptions,
+    selectedRecipientGroupOptions,
+  };
 };

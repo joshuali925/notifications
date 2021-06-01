@@ -59,7 +59,21 @@ export interface ChannelItemType extends ConfigType {
   config_type: string;
   feature_list: string[];
   is_enabled: boolean; // active or muted
-  [config_type: string]: any;
+  slack?: {
+    url: string;
+  };
+  chime?: {
+    url: string;
+  };
+  webhook?: {
+    url: string;
+    header_params: object;
+  };
+  email?: {
+    email_account_id: string;
+    recipient_list: string[]; // custom email addresses
+    email_group_id_list: string[];
+  };
 }
 
 interface ConfigType {
