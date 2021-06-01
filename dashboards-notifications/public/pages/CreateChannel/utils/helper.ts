@@ -12,7 +12,7 @@
 import { CUSTOM_WEBHOOK_ENDPOINT_TYPE } from '../../../utils/constants';
 import { HeaderItemType } from '../../Channels/types';
 
-export const serializeWebhookURL = (
+export const serializeWebhook = (
   webhookTypeIdSelected: keyof typeof CUSTOM_WEBHOOK_ENDPOINT_TYPE,
   webhookURL: string,
   customURLHost: string,
@@ -21,25 +21,32 @@ export const serializeWebhookURL = (
   webhookParams: HeaderItemType[],
   webhookHeaders: HeaderItemType[]
 ) => {
-  if (webhookTypeIdSelected === 'WEBHOOK_URL') return { url: webhookURL };
-
-  let url = `https://${customURLHost.replace(/^https:\/\//, '')}`;
-  if (customURLPort) url += `:${customURLPort}`;
-  if (customURLPath) url += `/${customURLPath.replace(/^\//, '')}`;
-  if (webhookParams.length > 0) {
-    const params = new URLSearchParams(
-      webhookParams
-        .filter(({ key, value }) => key)
-        .map(({ key, value }) => [key, value])
-    );
-    url += '?' + params.toString();
+  let url: string;
+  if (webhookTypeIdSelected === 'WEBHOOK_URL') {
+    url = webhookURL;
+  } else {
+    url = `https://${customURLHost.replace(/^https:\/\//, '')}`;
+    if (customURLPort) url += `:${customURLPort}`;
+    if (customURLPath) url += `/${customURLPath.replace(/^\//, '')}`;
+    if (webhookParams.length > 0) {
+      const params = new URLSearchParams(
+        webhookParams
+          .filter(({ key, value }) => key)
+          .map(({ key, value }) => [key, value])
+      );
+      url += '?' + params.toString();
+    }
   }
-  return { url };
+  const header_params = webhookHeaders
+    .filter(({ key, value }) => key)
+    .reduce((prev, curr) => ({ ...prev, [curr.key]: curr.value }), {});
+  return { url, header_params };
 };
 
-export const deserializeWebhookURL = (
-  webhookURL: string
-): {
+export const deserializeWebhook = (webhook: {
+  url: string;
+  header_params: object;
+}): {
   webhookURL: string;
   customURLHost: string;
   customURLPort: string;
@@ -48,7 +55,7 @@ export const deserializeWebhookURL = (
   webhookHeaders: HeaderItemType[];
 } => {
   try {
-    const url = new URL(webhookURL);
+    const url = new URL(webhook.url);
     const customURLHost = url.hostname;
     const customURLPort = url.port;
     const customURLPath = url.pathname.replace(/^\//, '');
@@ -56,18 +63,21 @@ export const deserializeWebhookURL = (
     url.searchParams.forEach((value, key) =>
       webhookParams.push({ key, value })
     );
+    const webhookHeaders = Object.entries(
+      webhook.header_params
+    ).map(([key, value]) => ({ key, value }));
     return {
-      webhookURL,
+      webhookURL: webhook.url,
       customURLHost,
       customURLPort,
       customURLPath,
       webhookParams,
-      webhookHeaders: [],
+      webhookHeaders,
     };
   } catch (error) {
     console.error('Error parsing url:', error);
     return {
-      webhookURL,
+      webhookURL: webhook.url,
       customURLHost: '',
       customURLPort: '',
       customURLPath: '',

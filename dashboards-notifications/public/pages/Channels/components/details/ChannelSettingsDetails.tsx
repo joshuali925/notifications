@@ -29,7 +29,7 @@ import React from 'react';
 import { ChannelItemType } from '../../../../../models/interfaces';
 import { ModalConsumer } from '../../../../components/Modal';
 import { CHANNEL_TYPE } from '../../../../utils/constants';
-import { deserializeWebhookURL } from '../../../CreateChannel/utils/helper';
+import { deserializeWebhook } from '../../../CreateChannel/utils/helper';
 import { HeaderItemType, ListItemType } from '../../types';
 import { DetailsListModal } from '../modals/DetailsListModal';
 import { DetailsTableModal } from '../modals/DetailsTableModal';
@@ -171,8 +171,7 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
       ]
     );
   } else if (type === 'webhook') {
-    console.log('props.channel.webhook.url:', props.channel.webhook.url);
-    const webhookObject = deserializeWebhookURL(props.channel.webhook.url)
+    const webhookObject = deserializeWebhook(props.channel.webhook)
     const parametersDescription = getModalComponent(
       webhookObject.webhookParams,
       'Query parameters',

@@ -58,7 +58,7 @@ import { CustomWebhookSettings } from './components/CustomWebhookSettings';
 import { EmailSettings } from './components/EmailSettings';
 import { SlackSettings } from './components/SlackSettings';
 import { SNSSettings } from './components/SNSSettings';
-import { deserializeWebhookURL, serializeWebhookURL } from './utils/helper';
+import { deserializeWebhook, serializeWebhook } from './utils/helper';
 import {
   validateArn,
   validateChannelName,
@@ -92,6 +92,8 @@ export function CreateChannel(props: CreateChannelsProps) {
       ? `#${ROUTES.CHANNEL_DETAILS}/${id}`
       : `#${ROUTES.CHANNELS}`;
 
+  const [isEnabled, setIsEnabled] = useState(true); // should be true unless editing muted channel
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -118,10 +120,9 @@ export function CreateChannel(props: CreateChannelsProps) {
   const [emailFooter, setEmailFooter] = useState(
     `Example footer in markdown:\n### Operations team alerts\nContact the team [ops@company.com](mailto://ops@company.com).`
   );
-  const [
-    selectedSenderOptions,
-    setSelectedSenderOptions,
-  ] = useState<Array<EuiComboBoxOptionOption<string>>>([]);
+  const [selectedSenderOptions, setSelectedSenderOptions] = useState<
+    Array<EuiComboBoxOptionOption<string>>
+  >([]);
   // "value" field is the config_id of recipient groups, if it doesn't exist means it's a custom email address
   const [
     selectedRecipientGroupOptions,
@@ -184,6 +185,7 @@ export function CreateChannel(props: CreateChannelsProps) {
 
     const response = await servicesContext.notificationService.getChannel(id);
     const type = response.config_type as keyof typeof CHANNEL_TYPE;
+    setIsEnabled(response.is_enabled)
     setName(response.name);
     setDescription(response.description || '');
     setChannelType(type);
@@ -214,7 +216,7 @@ export function CreateChannel(props: CreateChannelsProps) {
       setEmailHeader(response.destination.email?.header || '');
       setEmailFooter(response.destination.email?.footer || '');
     } else if (type === 'webhook') {
-      const webhookObject = deserializeWebhookURL(response.webhook.url);
+      const webhookObject = deserializeWebhook(response.webhook);
       setWebhookURL(webhookObject.webhookURL);
       setCustomURLHost(webhookObject.customURLHost);
       setCustomURLPort(webhookObject.customURLPort);
@@ -273,14 +275,14 @@ export function CreateChannel(props: CreateChannelsProps) {
       feature_list: Object.entries(sourceCheckboxIdToSelectedMap)
         .filter(([key, value]) => value)
         .map(([key, value]) => key),
-      is_enabled: true,
+      is_enabled: isEnabled,
     };
     if (channelType === 'slack') {
       config.slack = { url: slackWebhook };
     } else if (channelType === 'chime') {
       config.chime = { url: chimeWebhook };
     } else if (channelType === 'webhook') {
-      config.webhook = serializeWebhookURL(
+      config.webhook = serializeWebhook(
         webhookTypeIdSelected,
         webhookURL,
         customURLHost,
