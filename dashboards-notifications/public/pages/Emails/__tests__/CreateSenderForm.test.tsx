@@ -35,6 +35,8 @@ describe('<CreateSenderForm/> spec', () => {
     const setHost = jest.fn();
     const setPort = jest.fn();
     const setEncryption = jest.fn();
+    const setInputErrors = jest.fn();
+    const inputErrors = { senderName: [], email: [], host: [], port: [] }
     const utils = render(
       <CreateSenderForm
           senderName="test"
@@ -45,8 +47,10 @@ describe('<CreateSenderForm/> spec', () => {
           setHost={setHost}
           port="test"
           setPort={setPort}
-          encryption="SSL"
+          encryption="ssl"
           setEncryption={setEncryption}
+          inputErrors={inputErrors}
+          setInputErrors={setInputErrors}
       />
     );
     expect(utils.container.firstChild).toMatchSnapshot();

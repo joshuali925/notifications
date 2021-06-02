@@ -93,7 +93,25 @@ exports[`<TableFlyout /> spec renders the component 1`] = `
                   <dd
                     class="euiDescriptionList__description"
                   >
-                    TODO
+                    <a
+                      class="euiLink euiLink--primary"
+                      href="#"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      new monitor
+                      <svg
+                        aria-hidden="true"
+                        aria-label="External link"
+                        class="euiIcon euiIcon--small euiIcon-isLoading euiLink__externalIcon"
+                        focusable="false"
+                        height="16"
+                        role="img"
+                        viewBox="0 0 16 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      />
+                    </a>
                   </dd>
                 </dl>
               </div>
@@ -111,7 +129,7 @@ exports[`<TableFlyout /> spec renders the component 1`] = `
                   <dd
                     class="euiDescriptionList__description"
                   >
-                    Alerting
+                    -
                   </dd>
                 </dl>
               </div>
@@ -130,7 +148,7 @@ exports[`<TableFlyout /> spec renders the component 1`] = `
               <dd
                 class="euiDescriptionList__description"
               >
-                02/01/21 5:23 pm
+                02/01/21 5:23 pm PDT
               </dd>
             </dl>
             <div
@@ -231,7 +249,7 @@ exports[`<TableFlyout /> spec renders the component 1`] = `
                                 <div
                                   class="euiText euiText--small"
                                 >
-                                  Errors
+                                  Error
                                 </div>
                               </div>
                             </div>

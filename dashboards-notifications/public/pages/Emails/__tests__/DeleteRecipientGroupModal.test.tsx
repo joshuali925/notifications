@@ -35,6 +35,7 @@ describe('<DeleteRecipientGroupModal /> spec', () => {
       <DeleteRecipientGroupModal
         recipientGroups={[]}
         onClose={() => {}}
+        refresh={() => {}}
         services={notificationServiceMock}
       />
     );
@@ -47,6 +48,7 @@ describe('<DeleteRecipientGroupModal /> spec', () => {
       <DeleteRecipientGroupModal
         recipientGroups={recipientGroups}
         onClose={() => {}}
+        refresh={() => {}}
         services={notificationServiceMock}
       />
     );
@@ -59,6 +61,7 @@ describe('<DeleteRecipientGroupModal /> spec', () => {
       <DeleteRecipientGroupModal
         recipientGroups={recipientGroups}
         onClose={() => {}}
+        refresh={() => {}}
         services={notificationServiceMock}
       />
     );

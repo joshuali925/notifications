@@ -27,40 +27,35 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { coreServicesMock } from '../../../../test/mocks/serviceMock';
+import {
+  coreServicesMock,
+  notificationServiceMock,
+} from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
+import { ServicesContext } from '../../../services';
 import { ChannelDetails } from '../components/details/ChannelDetails';
 
 describe('<ChannelDetails/> spec', () => {
   it('renders the component', () => {
     const props = { match: { params: { id: 'test' } } };
     const utils = render(
-      <CoreServicesContext.Provider value={coreServicesMock}>
-        <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
-      </CoreServicesContext.Provider>
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
     );
-    expect(utils.container.firstChild).toMatchSnapshot();
-  });
-
-  it('clicks delete button', () => {
-    const props = { match: { params: { id: 'test' } } };
-    const utils = render(
-      <CoreServicesContext.Provider value={coreServicesMock}>
-        <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
-      </CoreServicesContext.Provider>
-    );
-
-    const button = utils.getByText('Delete');
-    fireEvent.click(button);
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
   it('clicks mute or unmute button', () => {
     const props = { match: { params: { id: 'test' } } };
     const utils = render(
-      <CoreServicesContext.Provider value={coreServicesMock}>
-        <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
-      </CoreServicesContext.Provider>
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
     );
 
     const button = utils.getByText('ute channel', { exact: false });

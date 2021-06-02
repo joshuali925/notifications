@@ -26,9 +26,14 @@
 
 import { render } from '@testing-library/react';
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { routerComponentPropsMock } from '../../../../test/mocks/routerPropsMock';
-import { coreServicesMock } from '../../../../test/mocks/serviceMock';
+import {
+  coreServicesMock,
+  notificationServiceMock,
+} from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
+import { ServicesContext } from '../../../services';
 import { CreateRecipientGroup } from '../CreateRecipientGroup';
 
 describe('<CreateRecipientGroup/> spec', () => {
@@ -42,10 +47,16 @@ describe('<CreateRecipientGroup/> spec', () => {
   });
 
   it('renders the component for editing', () => {
+    const props = { match: { params: { id: 'test' } } };
     const utils = render(
-      <CoreServicesContext.Provider value={coreServicesMock}>
-        <CreateRecipientGroup {...routerComponentPropsMock} edit={true} />
-      </CoreServicesContext.Provider>
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <CreateRecipientGroup
+            {...(props as RouteComponentProps<{ id: string }>)}
+            edit={true}
+          />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });

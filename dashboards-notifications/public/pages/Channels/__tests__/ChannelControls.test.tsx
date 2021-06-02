@@ -31,23 +31,32 @@ import { ChannelControls } from '../components/ChannelControls';
 describe('<ChannelControls /> spec', () => {
   it('renders the component', () => {
     const onSearchChange = jest.fn();
+    const onFiltersChange = jest.fn();
     const { container } = render(
-      <ChannelControls search="" onSearchChange={onSearchChange} />
+      <ChannelControls
+        search=""
+        onSearchChange={onSearchChange}
+        filters={{}}
+        onFiltersChange={onFiltersChange}
+      />
     );
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it('renders the component', () => {
+  it('searches with input query', () => {
     const onSearchChange = jest.fn();
+    const onFiltersChange = jest.fn();
     const utils = render(
-      <ChannelControls search="" onSearchChange={onSearchChange} />
+      <ChannelControls
+        search=""
+        onSearchChange={onSearchChange}
+        filters={{}}
+        onFiltersChange={onFiltersChange}
+      />
     );
     const input = utils.getByPlaceholderText('Search');
 
-    fireEvent.change(input, { target: { value: '+(invalid query' } });
-    expect(onSearchChange).not.toBeCalled();
-
     fireEvent.change(input, { target: { value: 'test' } });
-    expect(onSearchChange).toBeCalledWith('+test');
+    expect(onSearchChange).toBeCalledWith('test');
   });
 });

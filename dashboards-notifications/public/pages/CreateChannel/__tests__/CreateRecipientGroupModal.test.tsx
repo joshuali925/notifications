@@ -33,6 +33,7 @@ describe('<CreateRecipientGroupModal/> spec', () => {
   it('renders the component', () => {
     const utils = render(
       <CreateRecipientGroupModal
+        addRecipientGroupOptionAndSelect={() => {}}
         onClose={() => {}}
         services={notificationServiceMock}
       />

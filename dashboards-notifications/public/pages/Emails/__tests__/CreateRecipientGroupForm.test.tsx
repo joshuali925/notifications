@@ -39,6 +39,11 @@ describe('<CreateRecipientGroupForm/> spec', () => {
     const setDescription = jest.fn();
     const setSelectedEmailOptions = jest.fn();
     const setEmailOptions = jest.fn();
+    const setInputErrors = jest.fn();
+    const inputErrors = {
+      name: [],
+      emailOptions: [],
+    };
     const utils = render(
       <CreateRecipientGroupForm
         name="test"
@@ -49,6 +54,8 @@ describe('<CreateRecipientGroupForm/> spec', () => {
         setSelectedEmailOptions={setSelectedEmailOptions}
         emailOptions={emailOptions}
         setEmailOptions={setEmailOptions}
+        inputErrors={inputErrors}
+        setInputErrors={setInputErrors}
       />
     );
     expect(utils.container.firstChild).toMatchSnapshot();

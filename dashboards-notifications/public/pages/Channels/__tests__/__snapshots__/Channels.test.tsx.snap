@@ -14,7 +14,12 @@ exports[`<Channels/> spec renders the component 1`] = `
       <h3
         class="euiTitle euiTitle--medium"
       >
-        Channels (5)
+        Channels
+        <span
+          style="color: rgb(159, 159, 159); font-weight: 300;"
+        >
+           (0)
+        </span>
       </h3>
     </div>
     <div
@@ -39,7 +44,7 @@ exports[`<Channels/> spec renders the component 1`] = `
                   class="euiPopover__anchor"
                 >
                   <button
-                    class="euiButton euiButton--primary euiButton--small euiButton-isDisabled"
+                    class="euiButton euiButton--primary euiButton-isDisabled"
                     disabled=""
                     type="button"
                   >
@@ -70,7 +75,7 @@ exports[`<Channels/> spec renders the component 1`] = `
               class="euiFlexItem euiFlexItem--flexGrowZero"
             >
               <a
-                class="euiButton euiButton--primary euiButton--small euiButton--fill"
+                class="euiButton euiButton--primary euiButton--fill"
                 href="#/create-channel"
                 rel="noreferrer"
               >
@@ -97,10 +102,10 @@ exports[`<Channels/> spec renders the component 1`] = `
     style="padding: initial;"
   >
     <div
-      class="euiFlexGroup euiFlexGroup--gutterMedium euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow euiFlexGroup--responsive euiFlexGroup--wrap"
+      class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
     >
       <div
-        class="euiFlexItem euiSearchBar__searchHolder"
+        class="euiFlexItem"
       >
         <div
           class="euiFormControlLayout euiFormControlLayout--fullWidth"
@@ -109,11 +114,9 @@ exports[`<Channels/> spec renders the component 1`] = `
             class="euiFormControlLayout__childrenWrapper"
           >
             <input
-              aria-label="This is a search bar. After typing your query, hit enter to filter the results lower in the page."
               class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
               placeholder="Search"
               type="search"
-              value=""
             />
             <div
               class="euiFormControlLayoutIcons"
@@ -137,20 +140,19 @@ exports[`<Channels/> spec renders the component 1`] = `
         </div>
       </div>
       <div
-        class="euiFlexItem euiFlexItem--flexGrowZero euiSearchBar__filtersHolder"
+        class="euiFlexItem euiFlexItem--flexGrowZero"
       >
         <div
           class="euiFilterGroup"
         >
           <div
             class="euiPopover euiPopover--anchorDownCenter"
-            id="field_value_selection_0"
           >
             <div
               class="euiPopover__anchor"
             >
               <button
-                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon"
+                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon euiFilterButton--noGrow"
                 type="button"
               >
                 <span
@@ -171,10 +173,10 @@ exports[`<Channels/> spec renders the component 1`] = `
                   >
                     <span
                       class="euiFilterButton__textShift"
-                      data-text="State"
-                      title="State"
+                      data-text="Status"
+                      title="Status"
                     >
-                      State
+                      Status
                     </span>
                   </span>
                 </span>
@@ -183,13 +185,12 @@ exports[`<Channels/> spec renders the component 1`] = `
           </div>
           <div
             class="euiPopover euiPopover--anchorDownCenter"
-            id="field_value_selection_1"
           >
             <div
               class="euiPopover__anchor"
             >
               <button
-                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon"
+                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon euiFilterButton--noGrow"
                 type="button"
               >
                 <span
@@ -222,13 +223,12 @@ exports[`<Channels/> spec renders the component 1`] = `
           </div>
           <div
             class="euiPopover euiPopover--anchorDownCenter"
-            id="field_value_selection_2"
           >
             <div
               class="euiPopover__anchor"
             >
               <button
-                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon"
+                class="euiButtonEmpty euiButtonEmpty--text euiFilterButton euiFilterButton--hasIcon euiFilterButton--noGrow"
                 type="button"
               >
                 <span
@@ -284,6 +284,7 @@ exports[`<Channels/> spec renders the component 1`] = `
                 <input
                   aria-label="Select all rows"
                   class="euiCheckbox__input"
+                  disabled=""
                   id="_selection_column-checkbox_random_html_id"
                   type="checkbox"
                 />
@@ -341,7 +342,7 @@ exports[`<Channels/> spec renders the component 1`] = `
           </div>
         </div>
         <table
-          class="euiTable euiTable--responsive"
+          class="euiTable euiTable--responsive euiTable--auto"
           id="random_html_id"
           tabindex="-1"
         >
@@ -364,6 +365,7 @@ exports[`<Channels/> spec renders the component 1`] = `
                       aria-label="Select all rows"
                       class="euiCheckbox__input"
                       data-test-subj="checkboxSelectAll"
+                      disabled=""
                       id="_selection_column-checkbox_random_html_id"
                       type="checkbox"
                     />
@@ -380,7 +382,6 @@ exports[`<Channels/> spec renders the component 1`] = `
                 data-test-subj="tableHeaderCell_name_0"
                 role="columnheader"
                 scope="col"
-                style="width: 150px;"
               >
                 <button
                   class="euiTableHeaderButton euiTableHeaderButton-isSorted"
@@ -419,10 +420,9 @@ exports[`<Channels/> spec renders the component 1`] = `
                 aria-live="polite"
                 aria-sort="none"
                 class="euiTableHeaderCell"
-                data-test-subj="tableHeaderCell_enabled_1"
+                data-test-subj="tableHeaderCell_is_enabled_1"
                 role="columnheader"
                 scope="col"
-                style="width: 150px;"
               >
                 <button
                   class="euiTableHeaderButton"
@@ -450,10 +450,9 @@ exports[`<Channels/> spec renders the component 1`] = `
                 aria-live="polite"
                 aria-sort="none"
                 class="euiTableHeaderCell"
-                data-test-subj="tableHeaderCell_type_2"
+                data-test-subj="tableHeaderCell_config_type_2"
                 role="columnheader"
                 scope="col"
-                style="width: 150px;"
               >
                 <button
                   class="euiTableHeaderButton"
@@ -481,10 +480,9 @@ exports[`<Channels/> spec renders the component 1`] = `
                 aria-live="polite"
                 aria-sort="none"
                 class="euiTableHeaderCell"
-                data-test-subj="tableHeaderCell_allowedFeatures_3"
+                data-test-subj="tableHeaderCell_feature_list_3"
                 role="columnheader"
                 scope="col"
-                style="width: 150px;"
               >
                 <button
                   class="euiTableHeaderButton"
@@ -515,7 +513,6 @@ exports[`<Channels/> spec renders the component 1`] = `
                 data-test-subj="tableHeaderCell_description_4"
                 role="columnheader"
                 scope="col"
-                style="width: 150px;"
               >
                 <button
                   class="euiTableHeaderButton"
@@ -543,836 +540,66 @@ exports[`<Channels/> spec renders the component 1`] = `
           </thead>
           <tbody>
             <tr
-              class="euiTableRow euiTableRow-isSelectable"
+              class="euiTableRow"
             >
               <td
-                class="euiTableRowCellCheckbox"
+                class="euiTableRowCell euiTableRowCell--isMobileFullWidth"
+                colspan="6"
               >
                 <div
-                  class="euiTableCellContent"
+                  class="euiTableCellContent euiTableCellContent--alignCenter"
                 >
-                  <div
-                    class="euiCheckbox euiCheckbox--inList euiCheckbox--noLabel"
-                  >
-                    <input
-                      aria-label="Select this row"
-                      class="euiCheckbox__input"
-                      data-test-subj="checkboxSelectRow-Channel 1"
-                      id="_selection_column_Channel 1-checkbox"
-                      title="Select this row"
-                      type="checkbox"
-                    />
-                    <div
-                      class="euiCheckbox__square"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Name
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  <a
-                    class="euiLink euiLink--primary"
-                    href="#/channel-details/0"
-                    rel="noreferrer"
-                  >
-                    Channel 1
-                  </a>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification status
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--overflowingContent"
-                >
-                  <div
-                    class="euiHealth"
+                  <span
+                    class="euiTableCellContent__text"
                   >
                     <div
-                      class="euiFlexGroup euiFlexGroup--gutterExtraSmall euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow"
+                      class="euiEmptyPrompt"
                     >
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
+                      <span
+                        class="euiTextColor euiTextColor--subdued"
                       >
-                        <svg
-                          aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon--success euiIcon-isLoading"
-                          focusable="false"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <h2
+                          class="euiTitle euiTitle--medium"
+                        >
+                          No channels to display
+                        </h2>
+                        <div
+                          class="euiSpacer euiSpacer--m"
                         />
-                      </div>
+                        <div
+                          class="euiText euiText--medium"
+                        >
+                          To send or receive notifications, you will need to create a notification channel.
+                        </div>
+                      </span>
                       <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
+                        class="euiSpacer euiSpacer--l"
+                      />
+                      <div
+                        class="euiSpacer euiSpacer--s"
+                      />
+                      <a
+                        class="euiButton euiButton--primary"
+                        href="#/create-channel"
+                        rel="noreferrer"
                       >
-                        Active
-                      </div>
+                        <span
+                          class="euiButtonContent euiButton__content"
+                        >
+                          <span
+                            class="euiButton__text"
+                          >
+                            Create channel
+                          </span>
+                        </span>
+                      </a>
                     </div>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Type
-                </div>
-                <div
-                  class="euiTableCellContent"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    email
-                  </span>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification source
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  Alerting, Reporting
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Description
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    a sample description
-                  </span>
-                </div>
-              </td>
-            </tr>
-            <tr
-              class="euiTableRow euiTableRow-isSelectable"
-            >
-              <td
-                class="euiTableRowCellCheckbox"
-              >
-                <div
-                  class="euiTableCellContent"
-                >
-                  <div
-                    class="euiCheckbox euiCheckbox--inList euiCheckbox--noLabel"
-                  >
-                    <input
-                      aria-label="Select this row"
-                      class="euiCheckbox__input"
-                      data-test-subj="checkboxSelectRow-Channel 2"
-                      id="_selection_column_Channel 2-checkbox"
-                      title="Select this row"
-                      type="checkbox"
-                    />
-                    <div
-                      class="euiCheckbox__square"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Name
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  <a
-                    class="euiLink euiLink--primary"
-                    href="#/channel-details/1"
-                    rel="noreferrer"
-                  >
-                    Channel 2
-                  </a>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification status
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--overflowingContent"
-                >
-                  <div
-                    class="euiHealth"
-                  >
-                    <div
-                      class="euiFlexGroup euiFlexGroup--gutterExtraSmall euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow"
-                    >
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon--success euiIcon-isLoading"
-                          focusable="false"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        />
-                      </div>
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        Active
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Type
-                </div>
-                <div
-                  class="euiTableCellContent"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    email
-                  </span>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification source
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  Alerting, Reporting
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Description
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    a sample description
-                  </span>
-                </div>
-              </td>
-            </tr>
-            <tr
-              class="euiTableRow euiTableRow-isSelectable"
-            >
-              <td
-                class="euiTableRowCellCheckbox"
-              >
-                <div
-                  class="euiTableCellContent"
-                >
-                  <div
-                    class="euiCheckbox euiCheckbox--inList euiCheckbox--noLabel"
-                  >
-                    <input
-                      aria-label="Select this row"
-                      class="euiCheckbox__input"
-                      data-test-subj="checkboxSelectRow-Channel 3"
-                      id="_selection_column_Channel 3-checkbox"
-                      title="Select this row"
-                      type="checkbox"
-                    />
-                    <div
-                      class="euiCheckbox__square"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Name
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  <a
-                    class="euiLink euiLink--primary"
-                    href="#/channel-details/2"
-                    rel="noreferrer"
-                  >
-                    Channel 3
-                  </a>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification status
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--overflowingContent"
-                >
-                  <div
-                    class="euiHealth"
-                  >
-                    <div
-                      class="euiFlexGroup euiFlexGroup--gutterExtraSmall euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow"
-                    >
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon--success euiIcon-isLoading"
-                          focusable="false"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        />
-                      </div>
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        Active
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Type
-                </div>
-                <div
-                  class="euiTableCellContent"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    email
-                  </span>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification source
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  Alerting, Reporting
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Description
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    a sample description
-                  </span>
-                </div>
-              </td>
-            </tr>
-            <tr
-              class="euiTableRow euiTableRow-isSelectable"
-            >
-              <td
-                class="euiTableRowCellCheckbox"
-              >
-                <div
-                  class="euiTableCellContent"
-                >
-                  <div
-                    class="euiCheckbox euiCheckbox--inList euiCheckbox--noLabel"
-                  >
-                    <input
-                      aria-label="Select this row"
-                      class="euiCheckbox__input"
-                      data-test-subj="checkboxSelectRow-Channel 4"
-                      id="_selection_column_Channel 4-checkbox"
-                      title="Select this row"
-                      type="checkbox"
-                    />
-                    <div
-                      class="euiCheckbox__square"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Name
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  <a
-                    class="euiLink euiLink--primary"
-                    href="#/channel-details/3"
-                    rel="noreferrer"
-                  >
-                    Channel 4
-                  </a>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification status
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--overflowingContent"
-                >
-                  <div
-                    class="euiHealth"
-                  >
-                    <div
-                      class="euiFlexGroup euiFlexGroup--gutterExtraSmall euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow"
-                    >
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon--success euiIcon-isLoading"
-                          focusable="false"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        />
-                      </div>
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        Active
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Type
-                </div>
-                <div
-                  class="euiTableCellContent"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    email
-                  </span>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification source
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  Alerting, Reporting
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Description
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    a sample description
-                  </span>
-                </div>
-              </td>
-            </tr>
-            <tr
-              class="euiTableRow euiTableRow-isSelectable"
-            >
-              <td
-                class="euiTableRowCellCheckbox"
-              >
-                <div
-                  class="euiTableCellContent"
-                >
-                  <div
-                    class="euiCheckbox euiCheckbox--inList euiCheckbox--noLabel"
-                  >
-                    <input
-                      aria-label="Select this row"
-                      class="euiCheckbox__input"
-                      data-test-subj="checkboxSelectRow-Channel 5"
-                      id="_selection_column_Channel 5-checkbox"
-                      title="Select this row"
-                      type="checkbox"
-                    />
-                    <div
-                      class="euiCheckbox__square"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Name
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  <a
-                    class="euiLink euiLink--primary"
-                    href="#/channel-details/4"
-                    rel="noreferrer"
-                  >
-                    Channel 5
-                  </a>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification status
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--overflowingContent"
-                >
-                  <div
-                    class="euiHealth"
-                  >
-                    <div
-                      class="euiFlexGroup euiFlexGroup--gutterExtraSmall euiFlexGroup--alignItemsCenter euiFlexGroup--directionRow"
-                    >
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon--success euiIcon-isLoading"
-                          focusable="false"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                          xmlns="http://www.w3.org/2000/svg"
-                        />
-                      </div>
-                      <div
-                        class="euiFlexItem euiFlexItem--flexGrowZero"
-                      >
-                        Active
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Type
-                </div>
-                <div
-                  class="euiTableCellContent"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    email
-                  </span>
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Notification source
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText euiTableCellContent--overflowingContent"
-                >
-                  Alerting, Reporting
-                </div>
-              </td>
-              <td
-                class="euiTableRowCell"
-                style="width: 150px;"
-              >
-                <div
-                  class="euiTableRowCell__mobileHeader euiTableRowCell--hideForDesktop"
-                >
-                  Description
-                </div>
-                <div
-                  class="euiTableCellContent euiTableCellContent--truncateText"
-                >
-                  <span
-                    class="euiTableCellContent__text"
-                  >
-                    a sample description
                   </span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-      <div>
-        <div
-          class="euiSpacer euiSpacer--m"
-        />
-        <div
-          class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentSpaceBetween euiFlexGroup--directionRow"
-        >
-          <div
-            class="euiFlexItem euiFlexItem--flexGrowZero"
-          >
-            <div
-              class="euiPopover euiPopover--anchorUpRight euiPopover--withTitle"
-            >
-              <div
-                class="euiPopover__anchor"
-              >
-                <button
-                  class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall"
-                  data-test-subj="tablePaginationPopoverButton"
-                  type="button"
-                >
-                  <span
-                    class="euiButtonContent euiButtonContent--iconRight euiButtonEmpty__content"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
-                      focusable="false"
-                      height="16"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    />
-                    <span
-                      class="euiButtonEmpty__text"
-                    >
-                      Rows per page
-                      : 
-                      5
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            class="euiFlexItem euiFlexItem--flexGrowZero"
-          >
-            <nav
-              class="euiPagination"
-            >
-              <button
-                aria-label="Previous page"
-                class="euiButtonIcon euiButtonIcon--text"
-                data-test-subj="pagination-button-previous"
-                disabled=""
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
-                  focusable="false"
-                  height="16"
-                  role="img"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                />
-              </button>
-              <ul
-                class="euiPagination__list"
-              >
-                <li
-                  class="euiPagination__item"
-                >
-                  <button
-                    aria-controls="random_html_id"
-                    aria-current="true"
-                    aria-label="Page 1 of 1"
-                    class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiButtonEmpty-isDisabled euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
-                    data-test-subj="pagination-button-0"
-                    disabled=""
-                    type="button"
-                  >
-                    <span
-                      class="euiButtonContent euiButtonEmpty__content"
-                    >
-                      <span
-                        class="euiButtonEmpty__text"
-                      >
-                        1
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              </ul>
-              <button
-                aria-label="Next page"
-                class="euiButtonIcon euiButtonIcon--text"
-                data-test-subj="pagination-button-next"
-                disabled=""
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
-                  focusable="false"
-                  height="16"
-                  role="img"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                />
-              </button>
-            </nav>
-          </div>
-        </div>
       </div>
     </div>
   </div>

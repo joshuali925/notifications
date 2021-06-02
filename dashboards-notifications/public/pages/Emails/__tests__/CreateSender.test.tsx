@@ -26,9 +26,14 @@
 
 import { render } from '@testing-library/react';
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { routerComponentPropsMock } from '../../../../test/mocks/routerPropsMock';
-import { coreServicesMock } from '../../../../test/mocks/serviceMock';
+import {
+  coreServicesMock,
+  notificationServiceMock,
+} from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
+import { ServicesContext } from '../../../services';
 import { CreateSender } from '../CreateSender';
 
 describe('<CreateSender/> spec', () => {
@@ -42,12 +47,17 @@ describe('<CreateSender/> spec', () => {
   });
 
   it('renders the component for editing', () => {
+    const props = { match: { params: { id: 'test' } } };
     const utils = render(
-      <CoreServicesContext.Provider value={coreServicesMock}>
-        <CreateSender {...routerComponentPropsMock} edit={true} />
-      </CoreServicesContext.Provider>
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <CreateSender
+            {...(props as RouteComponentProps<{ id: string }>)}
+            edit={true}
+          />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 });
-
