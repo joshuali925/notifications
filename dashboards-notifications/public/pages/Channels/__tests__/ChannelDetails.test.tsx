@@ -24,9 +24,14 @@
  * permissions and limitations under the License.
  */
 
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { act } from 'react-dom/test-utils';
 import { RouteComponentProps } from 'react-router-dom';
+import { MOCK_CHANNEL } from '../../../../test/mocks/mockData';
 import {
   coreServicesMock,
   notificationServiceMock,
@@ -36,6 +41,8 @@ import { ServicesContext } from '../../../services';
 import { ChannelDetails } from '../components/details/ChannelDetails';
 
 describe('<ChannelDetails/> spec', () => {
+  configure({ adapter: new Adapter() });
+
   it('renders the component', () => {
     const props = { match: { params: { id: 'test' } } };
     const utils = render(
@@ -61,5 +68,53 @@ describe('<ChannelDetails/> spec', () => {
     const button = utils.getByText('ute channel', { exact: false });
     fireEvent.click(button);
     expect(utils.container.firstChild).toMatchSnapshot();
+  });
+
+  it('renders a specific channel', async () => {
+    const props = { match: { params: { id: 'test' } } };
+    const notificationServiceMock = jest.fn() as any;
+    notificationServiceMock.notificationService = {
+      getChannel: async (id: string) => {
+        return MOCK_CHANNEL.chime;
+      },
+    };
+    let container = document.createElement('div');
+
+    act(() => {
+      ReactDOM.render(
+        <ServicesContext.Provider value={notificationServiceMock}>
+          <CoreServicesContext.Provider value={coreServicesMock}>
+            <ChannelDetails
+              {...(props as RouteComponentProps<{ id: string }>)}
+            />
+          </CoreServicesContext.Provider>
+        </ServicesContext.Provider>,
+        container
+      );
+    });
+    await waitFor(() => {
+      expect(container).toMatchSnapshot();
+    });
+  });
+
+  it('clicks mute or unmute button with channel', async () => {
+    const props = { match: { params: { id: 'test' } } };
+    const notificationServiceMock = jest.fn() as any;
+    notificationServiceMock.notificationService = {
+      getChannel: async (id: string) => {
+        return MOCK_CHANNEL.chime;
+      },
+    };
+
+    const wrap = await mount(
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
+    );
+    await waitFor(() => {
+      wrap.find('.euiButton__text').simulate('click');
+    });
   });
 });

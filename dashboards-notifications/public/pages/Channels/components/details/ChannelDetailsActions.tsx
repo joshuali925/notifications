@@ -63,7 +63,7 @@ export function ChannelDetailsActions(props: ChannelDetailsActionsProps) {
     {
       label: 'Send test message',
       action: () => {
-        if (Math.random() < 0.5) {
+        if (true) {
           coreContext.notifications.toasts.addSuccess(
             'Successfully sent a test message.'
           );

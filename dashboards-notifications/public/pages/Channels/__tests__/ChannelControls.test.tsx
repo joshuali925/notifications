@@ -59,4 +59,32 @@ describe('<ChannelControls /> spec', () => {
     fireEvent.change(input, { target: { value: 'test' } });
     expect(onSearchChange).toBeCalledWith('test');
   });
+
+  it('changes filters', () => {
+    const onSearchChange = jest.fn();
+    const onFiltersChange = jest.fn();
+    const utils = render(
+      <ChannelControls
+        search=""
+        onSearchChange={onSearchChange}
+        filters={{}}
+        onFiltersChange={onFiltersChange}
+      />
+    );
+    fireEvent.click(utils.getByText('Status'));
+    fireEvent.click(utils.getByText('Active'));
+    expect(onFiltersChange).toBeCalledWith({ state: 'true' });
+
+    fireEvent.click(utils.getByText('Type'));
+    fireEvent.click(utils.getByText('Email'));
+    fireEvent.click(utils.getByText('Chime'));
+    expect(onFiltersChange).toBeCalledWith({ type: ['email', 'chime'] });
+
+    fireEvent.click(utils.getByText('Source'));
+    fireEvent.click(utils.getByText('Alerting'));
+    fireEvent.click(utils.getByText('Reporting'));
+    expect(onFiltersChange).toBeCalledWith({ source: ['alerting', 'reports'] });
+
+    expect(onFiltersChange).toBeCalledTimes(5);
+  });
 });

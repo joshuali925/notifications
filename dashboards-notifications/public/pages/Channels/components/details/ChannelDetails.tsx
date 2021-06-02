@@ -77,6 +77,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
       })
       .then((response) => {
         setChannel(response);
+        console.log('response', response);
         coreContext.chrome.setBreadcrumbs([
           BREADCRUMBS.NOTIFICATIONS,
           BREADCRUMBS.CHANNELS,
