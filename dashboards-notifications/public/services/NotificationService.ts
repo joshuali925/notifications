@@ -114,6 +114,34 @@ export default class NotificationService {
     return configToChannel(response.config_list[0]);
   };
 
+  getEmailConfigDetails = async (
+    channel: ChannelItemType
+  ): Promise<ChannelItemType> => {
+    if (!channel.email) return channel;
+    channel.email.email_account_name = await this.getChannel(
+      channel.email.email_account_id
+    ).then((channel) => channel.name);
+
+    channel.email.email_group_id_map = {};
+    await channel.email.email_group_id_list
+      .map((id) => () =>
+        this.getChannel(id).then((channel) => ({ id, name: channel.name }))
+      )
+      .reduce(
+        (prev, curr) =>
+          prev.then(() =>
+            curr().then(
+              (response) =>
+                (channel.email!.email_group_id_map![response.id] =
+                  response.name)
+            )
+          ),
+        Promise.resolve() as any
+      );
+
+    return channel;
+  };
+
   getSenders = async (
     queryObject: object = { config_type: 'smtp_account' }
   ): Promise<{ items: SenderItemType[]; total: number }> => {

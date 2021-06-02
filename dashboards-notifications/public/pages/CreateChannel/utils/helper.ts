@@ -10,6 +10,7 @@
  */
 
 import { EuiComboBoxOptionOption } from '@elastic/eui';
+import _ from 'lodash';
 import { ChannelItemType } from '../../../../models/interfaces';
 import { CUSTOM_WEBHOOK_ENDPOINT_TYPE } from '../../../utils/constants';
 import { HeaderItemType } from '../../Channels/types';
@@ -117,20 +118,19 @@ export const deconstructEmailObject = (
 } => {
   const selectedSenderOptions = [
     {
-      label: 'unknown',
+      label: email.email_account_name || '-',
       value: email.email_account_id,
     },
   ];
   const selectedRecipientGroupOptions: Array<EuiComboBoxOptionOption<
     string
-  >> = email.email_group_id_list.map((groupId) => ({
-    label: 'unknown',
-    value: groupId,
-  }));
-  const customEmailOptions = email.recipient_list.map((address) => ({
-    label: address,
-  }));
-  selectedRecipientGroupOptions.concat(customEmailOptions);
+  >> = [
+    ...email.email_group_id_list.map((groupId) => ({
+      label: _.get(email.email_group_id_map, groupId, '-'),
+      value: groupId,
+    })),
+    ...email.recipient_list.map((address) => ({ label: address })),
+  ];
   return {
     selectedSenderOptions,
     selectedRecipientGroupOptions,

@@ -68,6 +68,14 @@ export function ChannelDetails(props: ChannelDetailsProps) {
     servicesContext.notificationService
       .getChannel(id)
       .then((response) => {
+        if (response.config_type === 'email') {
+          return servicesContext.notificationService.getEmailConfigDetails(
+            response
+          );
+        }
+        return response;
+      })
+      .then((response) => {
         setChannel(response);
         coreContext.chrome.setBreadcrumbs([
           BREADCRUMBS.NOTIFICATIONS,

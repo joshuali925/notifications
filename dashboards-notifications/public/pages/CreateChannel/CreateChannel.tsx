@@ -50,6 +50,7 @@ import {
   CUSTOM_WEBHOOK_ENDPOINT_TYPE,
   ROUTES,
 } from '../../utils/constants';
+import { getErrorMessage } from '../../utils/helpers';
 import { HeaderItemType } from '../Channels/types';
 import { ChannelAvailabilityPanel } from './components/ChannelAvailabilityPanel';
 import { ChannelNamePanel } from './components/ChannelNamePanel';
@@ -188,38 +189,55 @@ export function CreateChannel(props: CreateChannelsProps) {
     const id = props.match.params.id;
     if (typeof id !== 'string') return;
 
-    const response = await servicesContext.notificationService.getChannel(id);
-    const type = response.config_type as keyof typeof CHANNEL_TYPE;
-    setIsEnabled(response.is_enabled);
-    setName(response.name);
-    setDescription(response.description || '');
-    setChannelType(type);
-    setSourceCheckboxIdToSelectedMap(
-      Object.fromEntries(
-        response.feature_list.map((feature) => [feature, true])
-      )
-    );
+    try {
+      const response = await servicesContext.notificationService
+        .getChannel(id)
+        .then((response) => {
+          if (response.config_type === 'email') {
+            return servicesContext.notificationService.getEmailConfigDetails(
+              response
+            );
+          }
+          return response;
+        });
+      const type = response.config_type as keyof typeof CHANNEL_TYPE;
+      setIsEnabled(response.is_enabled);
+      setName(response.name);
+      setDescription(response.description || '');
+      setChannelType(type);
+      setSourceCheckboxIdToSelectedMap(
+        Object.fromEntries(
+          response.feature_list.map((feature) => [feature, true])
+        )
+      );
 
-    if (type === 'slack') {
-      setSlackWebhook(response.slack?.url || '');
-    } else if (type === 'chime') {
-      setChimeWebhook(response.chime?.url || '');
-    } else if (type === 'email') {
-      const emailObject = deconstructEmailObject(response.email!);
-      setSelectedSenderOptions(emailObject.selectedSenderOptions);
-      setSelectedRecipientGroupOptions(emailObject.selectedRecipientGroupOptions)
-    } else if (type === 'webhook') {
-      const webhookObject = deconstructWebhookObject(response.webhook!);
-      setWebhookURL(webhookObject.webhookURL);
-      setCustomURLHost(webhookObject.customURLHost);
-      setCustomURLPort(webhookObject.customURLPort);
-      setCustomURLPath(webhookObject.customURLPath);
-      setWebhookParams(webhookObject.webhookParams);
-      setWebhookHeaders(webhookObject.webhookHeaders);
-    } else if (type === 'SNS') {
-      // TODO
-    } else if (type === 'SES') {
-      // TODO
+      if (type === 'slack') {
+        setSlackWebhook(response.slack?.url || '');
+      } else if (type === 'chime') {
+        setChimeWebhook(response.chime?.url || '');
+      } else if (type === 'email') {
+        const emailObject = deconstructEmailObject(response.email!);
+        setSelectedSenderOptions(emailObject.selectedSenderOptions);
+        setSelectedRecipientGroupOptions(
+          emailObject.selectedRecipientGroupOptions
+        );
+      } else if (type === 'webhook') {
+        const webhookObject = deconstructWebhookObject(response.webhook!);
+        setWebhookURL(webhookObject.webhookURL);
+        setCustomURLHost(webhookObject.customURLHost);
+        setCustomURLPort(webhookObject.customURLPort);
+        setCustomURLPath(webhookObject.customURLPath);
+        setWebhookParams(webhookObject.webhookParams);
+        setWebhookHeaders(webhookObject.webhookHeaders);
+      } else if (type === 'SNS') {
+        // TODO
+      } else if (type === 'SES') {
+        // TODO
+      }
+    } catch (error) {
+      coreContext.notifications.toasts.addDanger(
+        getErrorMessage(error, 'There was a problem loading channel.')
+      );
     }
   };
 

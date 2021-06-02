@@ -203,22 +203,22 @@ export function ChannelSettingsDetails(props: ChannelSettingsDetailsProps) {
       ]
     );
   } else if (type === 'SNS') {
-    settingsList.push(
-      ...[
-        {
-          title: 'Channel type',
-          description: CHANNEL_TYPE.SNS,
-        },
-        {
-          title: 'SNS topic ARN',
-          description: props.channel.destination.sns.topic_arn || '-',
-        },
-        {
-          title: 'IAM role ARN',
-          description: props.channel.destination.sns.role_arn || '-',
-        },
-      ]
-    );
+    // settingsList.push(
+    //   ...[
+    //     {
+    //       title: 'Channel type',
+    //       description: CHANNEL_TYPE.SNS,
+    //     },
+    //     {
+    //       title: 'SNS topic ARN',
+    //       description: props.channel.destination.sns.topic_arn || '-',
+    //     },
+    //     {
+    //       title: 'IAM role ARN',
+    //       description: props.channel.destination.sns.role_arn || '-',
+    //     },
+    //   ]
+    // );
   } else if (type === 'SES') {
     // TODO
   }
