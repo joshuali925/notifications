@@ -13,7 +13,7 @@ import { render } from '@testing-library/react';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { MOCK_CHANNEL } from '../../../../test/mocks/mockData';
+import { MOCK_CONFIG } from '../../../../test/mocks/mockData';
 import { ChannelSettingsDetails } from '../components/details/ChannelSettingsDetails';
 
 describe('<ChannelSettingsDetails /> spec', () => {
@@ -26,28 +26,28 @@ describe('<ChannelSettingsDetails /> spec', () => {
 
   it('renders Chime channel', () => {
     const utils = render(
-      <ChannelSettingsDetails channel={MOCK_CHANNEL.chime} />
+      <ChannelSettingsDetails channel={MOCK_CONFIG.chime} />
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
   it('renders Slack channel', () => {
     const utils = render(
-      <ChannelSettingsDetails channel={MOCK_CHANNEL.slack} />
+      <ChannelSettingsDetails channel={MOCK_CONFIG.slack} />
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
   it('renders Email channel', () => {
     const utils = render(
-      <ChannelSettingsDetails channel={MOCK_CHANNEL.email} />
+      <ChannelSettingsDetails channel={MOCK_CONFIG.email} />
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
   it('renders Webhook channel', () => {
     const utils = render(
-      <ChannelSettingsDetails channel={MOCK_CHANNEL.webhook} />
+      <ChannelSettingsDetails channel={MOCK_CONFIG.webhook} />
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });

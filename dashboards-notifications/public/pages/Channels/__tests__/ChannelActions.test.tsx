@@ -122,6 +122,11 @@ describe('<ChannelActions/> spec', () => {
   });
 
   it('clicks unmute', () => {
+    const notificationServiceMock = jest.fn() as any;
+    const updateConfig = jest.fn(async () => Promise.resolve());
+    notificationServiceMock.notificationService = {
+      updateConfig,
+    };
     const channel = jest.fn() as any;
     channel.enabled = true;
     const channels = [channel];
@@ -143,6 +148,6 @@ describe('<ChannelActions/> spec', () => {
 
     const muteButton = utils.getByText('Unmute');
     fireEvent.click(muteButton);
-    expect(utils.container.firstChild).toMatchSnapshot();
+    expect(updateConfig).toBeCalled();
   });
 });

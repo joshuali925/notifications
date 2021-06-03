@@ -77,7 +77,6 @@ export function ChannelDetails(props: ChannelDetailsProps) {
       })
       .then((response) => {
         setChannel(response);
-        console.log('response', response);
         coreContext.chrome.setBreadcrumbs([
           BREADCRUMBS.NOTIFICATIONS,
           BREADCRUMBS.CHANNELS,
@@ -150,6 +149,7 @@ export function ChannelDetails(props: ChannelDetailsProps) {
           <ModalConsumer>
             {({ onShow }) => (
               <EuiButton
+                data-test-subj="channel-details-mute-button"
                 iconType={channel?.is_enabled ? 'bellSlash' : 'bell'}
                 onClick={() => {
                   if (!channel) return;

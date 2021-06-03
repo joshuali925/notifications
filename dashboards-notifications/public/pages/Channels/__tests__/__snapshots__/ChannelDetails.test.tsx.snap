@@ -37,6 +37,7 @@ exports[`<ChannelDetails/> spec clicks mute or unmute button 1`] = `
   >
     <button
       class="euiButton euiButton--primary"
+      data-test-subj="channel-details-mute-button"
       type="button"
     >
       <span
@@ -106,6 +107,7 @@ exports[`<ChannelDetails/> spec renders a specific channel 1`] = `
     >
       <button
         class="euiButton euiButton--primary"
+        data-test-subj="channel-details-mute-button"
         type="button"
       >
         <span
@@ -367,6 +369,7 @@ exports[`<ChannelDetails/> spec renders the component 1`] = `
   >
     <button
       class="euiButton euiButton--primary"
+      data-test-subj="channel-details-mute-button"
       type="button"
     >
       <span

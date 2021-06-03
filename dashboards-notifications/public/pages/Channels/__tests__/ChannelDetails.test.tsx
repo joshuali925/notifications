@@ -25,13 +25,13 @@
  */
 
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import { configure, mount } from 'enzyme';
+import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { RouteComponentProps } from 'react-router-dom';
-import { MOCK_CHANNEL } from '../../../../test/mocks/mockData';
+import { MOCK_CONFIG } from '../../../../test/mocks/mockData';
 import {
   coreServicesMock,
   notificationServiceMock,
@@ -75,7 +75,7 @@ describe('<ChannelDetails/> spec', () => {
     const notificationServiceMock = jest.fn() as any;
     notificationServiceMock.notificationService = {
       getChannel: async (id: string) => {
-        return MOCK_CHANNEL.chime;
+        return MOCK_CONFIG.chime;
       },
     };
     let container = document.createElement('div');
@@ -97,24 +97,50 @@ describe('<ChannelDetails/> spec', () => {
     });
   });
 
-  it('clicks mute or unmute button with channel', async () => {
+  it('clicks mute button with channel', async () => {
     const props = { match: { params: { id: 'test' } } };
     const notificationServiceMock = jest.fn() as any;
     notificationServiceMock.notificationService = {
       getChannel: async (id: string) => {
-        return MOCK_CHANNEL.chime;
+        return MOCK_CONFIG.chime;
       },
+      updateConfig: jest.fn(),
     };
 
-    const wrap = await mount(
+    const utils = render(
       <ServicesContext.Provider value={notificationServiceMock}>
         <CoreServicesContext.Provider value={coreServicesMock}>
           <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
         </CoreServicesContext.Provider>
       </ServicesContext.Provider>
     );
+
     await waitFor(() => {
-      wrap.find('.euiButton__text').simulate('click');
+      utils.getByTestId('channel-details-mute-button').click();
+    });
+  });
+
+  it('clicks unmute button with channel', async () => {
+    const props = { match: { params: { id: 'test' } } };
+    const notificationServiceMock = jest.fn() as any;
+    const updateConfig = jest.fn(async () => Promise.resolve());
+    notificationServiceMock.notificationService = {
+      getChannel: async (id: string) => {
+        return MOCK_CONFIG.slack;
+      },
+      updateConfig,
+    };
+
+    const utils = render(
+      <ServicesContext.Provider value={notificationServiceMock}>
+        <CoreServicesContext.Provider value={coreServicesMock}>
+          <ChannelDetails {...(props as RouteComponentProps<{ id: string }>)} />
+        </CoreServicesContext.Provider>
+      </ServicesContext.Provider>
+    );
+
+    await waitFor(() => {
+      utils.getByTestId('channel-details-mute-button').click();
     });
   });
 });

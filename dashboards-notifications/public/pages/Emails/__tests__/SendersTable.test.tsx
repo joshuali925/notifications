@@ -9,7 +9,7 @@
  * GitHub history for details.
  */
 
-import { render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
@@ -20,51 +20,46 @@ import {
 } from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { ServicesContext } from '../../../services';
-import { ChannelDetailsActions } from '../components/details/ChannelDetailsActions';
+import { SendersTable } from '../components/tables/SendersTable';
 
-describe('<ChannelDetailsActions /> spec', () => {
+describe('<SendersTable /> spec', () => {
   configure({ adapter: new Adapter() });
 
-  it('renders the component', () => {
-    const channel = MOCK_CONFIG.chime;
+  it('renders empty state', async () => {
     const utils = render(
       <ServicesContext.Provider value={notificationServiceMock}>
         <CoreServicesContext.Provider value={coreServicesMock}>
-          <ChannelDetailsActions channel={channel} />
+          <SendersTable />
         </CoreServicesContext.Provider>
       </ServicesContext.Provider>
     );
     expect(utils.container.firstChild).toMatchSnapshot();
   });
 
-  it('opens popover', () => {
-    const channel = MOCK_CONFIG.chime;
-    const utils = render(
-      <ServicesContext.Provider value={notificationServiceMock}>
-        <CoreServicesContext.Provider value={coreServicesMock}>
-          <ChannelDetailsActions channel={channel} />
-        </CoreServicesContext.Provider>
-      </ServicesContext.Provider>
+  it('renders table', async () => {
+    const notificationServiceMock = jest.fn() as any;
+    const getSenders = jest.fn(
+      async (queryObject: object) => MOCK_CONFIG.senders
     );
-    utils.getByText('Actions').click();
-    expect(utils.container.firstChild).toMatchSnapshot();
-  });
+    notificationServiceMock.notificationService = { getSenders };
 
-  it('clicks buttons in popover', () => {
-    const channel = MOCK_CONFIG.chime;
     const utils = render(
       <ServicesContext.Provider value={notificationServiceMock}>
         <CoreServicesContext.Provider value={coreServicesMock}>
-          <ChannelDetailsActions channel={channel} />
+          <SendersTable />
         </CoreServicesContext.Provider>
       </ServicesContext.Provider>
     );
-    utils.getByText('Actions').click();
-    utils.getByText('Edit').click();
-    utils.getByText('Actions').click();
-    utils.getByText('Send test message').click();
-    utils.getByText('Actions').click();
-    utils.getByText('Delete').click();
-    expect(utils.container.firstChild).toMatchSnapshot();
+
+    await waitFor(() => expect(getSenders).toBeCalled());
+
+    const input = utils.getByPlaceholderText('Search');
+    fireEvent.change(input, { target: { value: 'test-query' } });
+
+    await waitFor(() =>
+      expect(getSenders).toBeCalledWith(
+        expect.objectContaining({ query: 'test-query' })
+      )
+    );
   });
 });
