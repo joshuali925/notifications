@@ -114,18 +114,6 @@ export function CreateChannel(props: CreateChannelsProps) {
   const [slackWebhook, setSlackWebhook] = useState('');
   const [chimeWebhook, setChimeWebhook] = useState('');
 
-  const [
-    headerFooterCheckboxIdToSelectedMap,
-    setHeaderFooterCheckboxIdToSelectedMap,
-  ] = useState<{
-    [x: string]: boolean;
-  }>({});
-  const [emailHeader, setEmailHeader] = useState(
-    `Example header in markdown:\n## Company XYZ\n### Operations team alerts`
-  );
-  const [emailFooter, setEmailFooter] = useState(
-    `Example footer in markdown:\n### Operations team alerts\nContact the team [ops@company.com](mailto://ops@company.com).`
-  );
   const [selectedSenderOptions, setSelectedSenderOptions] = useState<
     Array<EuiComboBoxOptionOption<string>>
   >([]);
@@ -366,16 +354,6 @@ export function CreateChannel(props: CreateChannelsProps) {
           ) : channelType === 'email' || channelType === 'SES' ? (
             <EmailSettings
               isAmazonSES={channelType === 'SES'}
-              headerFooterCheckboxIdToSelectedMap={
-                headerFooterCheckboxIdToSelectedMap
-              }
-              setHeaderFooterCheckboxIdToSelectedMap={
-                setHeaderFooterCheckboxIdToSelectedMap
-              }
-              emailHeader={emailHeader}
-              setEmailHeader={setEmailHeader}
-              emailFooter={emailFooter}
-              setEmailFooter={setEmailFooter}
               selectedSenderOptions={selectedSenderOptions}
               setSelectedSenderOptions={setSelectedSenderOptions}
               selectedRecipientGroupOptions={selectedRecipientGroupOptions}

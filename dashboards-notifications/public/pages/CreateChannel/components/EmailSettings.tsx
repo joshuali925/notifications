@@ -54,14 +54,6 @@ import { CreateSenderModal } from './modals/CreateSenderModal';
 
 interface EmailSettingsProps {
   isAmazonSES: boolean;
-  headerFooterCheckboxIdToSelectedMap: { [x: string]: boolean };
-  setHeaderFooterCheckboxIdToSelectedMap: (map: {
-    [x: string]: boolean;
-  }) => void;
-  emailHeader: string;
-  setEmailHeader: (emailHeader: string) => void;
-  emailFooter: string;
-  setEmailFooter: (emailFooter: string) => void;
   selectedSenderOptions: Array<EuiComboBoxOptionOption<string>>;
   setSelectedSenderOptions: (
     options: Array<EuiComboBoxOptionOption<string>>
@@ -78,16 +70,6 @@ export function EmailSettings(props: EmailSettingsProps) {
   const context = useContext(CreateChannelContext)!;
   const coreContext = useContext(CoreServicesContext)!;
   const servicesContext = useContext(ServicesContext)!;
-  const checkboxOptions: EuiCheckboxGroupOption[] = [
-    {
-      id: 'header',
-      label: 'Add header',
-    },
-    {
-      id: 'footer',
-      label: 'Add footer',
-    },
-  ];
 
   const [senderOptions, setSenderOptions] = useState<
     Array<EuiComboBoxOptionOption<string>>
@@ -306,51 +288,6 @@ export function EmailSettings(props: EmailSettingsProps) {
           </EuiFormRow>
         </EuiFlexItem>
       </EuiFlexGroup>
-
-      <EuiSpacer size="m" />
-      <EuiFormRow>
-        <EuiCheckboxGroup
-          options={checkboxOptions}
-          idToSelectedMap={props.headerFooterCheckboxIdToSelectedMap}
-          onChange={(optionId: string) => {
-            props.setHeaderFooterCheckboxIdToSelectedMap({
-              ...props.headerFooterCheckboxIdToSelectedMap,
-              ...{
-                [optionId]: !props.headerFooterCheckboxIdToSelectedMap[
-                  optionId
-                ],
-              },
-            });
-          }}
-          legend={{ children: 'Header and footer' }}
-        />
-      </EuiFormRow>
-
-      {props.headerFooterCheckboxIdToSelectedMap.header && (
-        <EuiFormRow label="Header" fullWidth={true}>
-          <>
-            <EuiText size="xs" color="subdued">
-              Use Markdown to style your header.
-            </EuiText>
-            <EuiSpacer size="s" />
-            <EuiMarkdownEditor
-              aria-labelledby="email-header-markdown-editor"
-              value={props.emailHeader}
-              onChange={props.setEmailHeader}
-            />
-          </>
-        </EuiFormRow>
-      )}
-
-      {props.headerFooterCheckboxIdToSelectedMap.footer && (
-        <EuiFormRow label="Footer" fullWidth={true}>
-          <EuiMarkdownEditor
-            aria-labelledby="email-footer-markdown-editor"
-            value={props.emailFooter}
-            onChange={props.setEmailFooter}
-          />
-        </EuiFormRow>
-      )}
     </>
   );
 }
