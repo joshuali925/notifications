@@ -404,6 +404,9 @@ export function CreateChannel(props: CreateChannelsProps) {
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
             <EuiButton
+              disabled={Object.values(sourceCheckboxIdToSelectedMap).every(
+                (enabled) => !enabled
+              )}
               onClick={() => {
                 if (!isInputValid()) {
                   coreContext.notifications.toasts.addDanger(
