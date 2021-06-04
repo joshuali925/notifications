@@ -149,7 +149,7 @@ export const isSingleSelection = (filterOrOperator: FilterType | string) => {
   );
 };
 
-export const filterToQueryString = (filters: FilterType[]) => {
+export const filterToQueryParams = (filters: FilterType[]) => {
   // TODO: need to map display names to field names (Channel type => CHANNEL_TYPE ?)
   return filters
     .filter((filter) => !filter.disabled)

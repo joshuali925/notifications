@@ -98,9 +98,7 @@ export const getURLQueryParams = (
 };
 
 export const navigateToChannelDetail = (item: NotificationItem) => {
-  const {
-    channel: { id, type },
-  } = item;
+  // const { id, referenceId } = item;
   // TODO: need a dict here to map source to it's pages identifier. e.g. reporting -> report detail page
-  window.location.assign(`opendistro_something#/type${type}/${id}`);
+  // window.location.assign(`opendistro_something#/type${type}/${id}`);
 };
