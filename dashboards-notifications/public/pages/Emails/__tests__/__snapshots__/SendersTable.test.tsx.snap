@@ -443,7 +443,7 @@ exports[`<SendersTable /> spec renders empty state 1`] = `
                       />
                       <a
                         class="euiButton euiButton--primary"
-                        href="#/create-channel"
+                        href="#/create-sender"
                         rel="noreferrer"
                       >
                         <span
