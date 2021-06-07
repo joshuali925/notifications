@@ -26,17 +26,13 @@
 
 import {
   EuiButton,
-  EuiCheckboxGroup,
-  EuiCheckboxGroupOption,
   EuiComboBox,
   EuiComboBoxOptionOption,
   EuiFieldText,
   EuiFlexGroup,
   EuiFlexItem,
   EuiFormRow,
-  EuiMarkdownEditor,
   EuiSpacer,
-  EuiText,
 } from '@elastic/eui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { SORT_DIRECTION } from '../../../../common';
@@ -164,7 +160,7 @@ export function EmailSettings(props: EmailSettingsProps) {
               placeholder="Enter a sender email address"
               value={props.sesSender}
               onChange={(e) => props.setSesSender(e.target.value)}
-              isInvalid={context.inputErrors.slackWebhook.length > 0}
+              isInvalid={context.inputErrors.sesSender.length > 0}
               onBlur={() => {
                 context.setInputErrors({
                   ...context.inputErrors,
