@@ -149,8 +149,8 @@ export default class Main extends Component<MainProps, object> {
                             render={(props: RouteComponentProps) => (
                               <Notifications
                                 {...props}
-                                notificationService={
-                                  services.notificationService
+                                services={
+                                  services
                                 }
                               />
                             )}

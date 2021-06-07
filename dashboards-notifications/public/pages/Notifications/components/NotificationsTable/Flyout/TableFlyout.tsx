@@ -92,7 +92,7 @@ export function TableFlyout(props: TableFlyoutProps) {
                     title: 'Source type',
                     description: _.get(
                       NOTIFICATION_SOURCE,
-                      props.notificationItem.source,
+                      props.notificationItem.feature,
                       '-'
                     ),
                   },
@@ -105,7 +105,7 @@ export function TableFlyout(props: TableFlyoutProps) {
             listItems={[
               {
                 title: 'Time sent',
-                description: renderTime(props.notificationItem.lastUpdatedTime),
+                description: renderTime(props.notificationItem.last_updated_time_ms),
               },
             ]}
           />
@@ -113,8 +113,8 @@ export function TableFlyout(props: TableFlyoutProps) {
           <EuiTitle size="xs">
             <h4>Channels sent</h4>
           </EuiTitle>
-          {props.notificationItem.statusList.map((channelStatus) => (
-            <div key={`channel-card-${channelStatus.configId}`}>
+          {props.notificationItem.status_list.map((channelStatus) => (
+            <div key={`channel-card-${channelStatus.config_id}`}>
               <EuiSpacer size="s" />
               <ChannelCard channel={channelStatus} onClose={props.onClose} />
             </div>

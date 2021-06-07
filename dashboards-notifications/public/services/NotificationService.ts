@@ -31,7 +31,6 @@ import {
   RecipientGroupItemType,
   SenderItemType,
 } from '../../models/interfaces';
-import { CHANNEL_TYPE } from '../utils/constants';
 import {
   configListToChannels,
   configListToRecipientGroups,
@@ -79,9 +78,7 @@ export default class NotificationService {
     return response;
   };
 
-  getConfigs = async (
-    queryObject: HttpFetchQuery = { config_type: Object.keys(CHANNEL_TYPE) }
-  ) => {
+  getConfigs = async (queryObject: HttpFetchQuery) => {
     return this.httpClient.get<ConfigsResponse>(NODE_API.GET_CONFIGS, {
       query: queryObject,
     });
@@ -92,7 +89,7 @@ export default class NotificationService {
   };
 
   getChannels = async (
-    queryObject: HttpFetchQuery = { config_type: Object.keys(CHANNEL_TYPE) }
+    queryObject: HttpFetchQuery // config_type: Object.keys(CHANNEL_TYPE)
   ): Promise<{ items: ChannelItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {
@@ -135,7 +132,7 @@ export default class NotificationService {
   };
 
   getSenders = async (
-    queryObject: HttpFetchQuery = { config_type: 'smtp_account' }
+    queryObject: HttpFetchQuery // config_type: 'smtp_account'
   ): Promise<{ items: SenderItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {
@@ -150,7 +147,7 @@ export default class NotificationService {
   };
 
   getRecipientGroups = async (
-    queryObject: HttpFetchQuery = { config_type: 'email_group' }
+    queryObject: HttpFetchQuery // config_type: 'email_group'
   ): Promise<{ items: RecipientGroupItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {

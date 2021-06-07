@@ -41,7 +41,10 @@ import {
 } from '../../../../../models/interfaces';
 import { ContentPanel } from '../../../../components/ContentPanel';
 import { ModalConsumer } from '../../../../components/Modal';
-import { NOTIFICATION_SOURCE } from '../../../../utils/constants';
+import {
+  NOTIFICATION_SOURCE,
+  SEVERITY_TYPE,
+} from '../../../../utils/constants';
 import { renderTime } from '../../../../utils/helpers';
 import { TableFlyout } from './Flyout/TableFlyout';
 
@@ -53,6 +56,7 @@ interface NotificationsTableProps {
   }: Criteria<NotificationItem>) => void;
   pagination: Pagination;
   sorting: EuiTableSortingType<NotificationItem>;
+  loading: boolean;
 }
 
 export function NotificationsTable(props: NotificationsTableProps) {
@@ -75,21 +79,21 @@ export function NotificationsTable(props: NotificationsTableProps) {
       ),
     },
     {
-      field: 'source',
+      field: 'feature',
       name: 'Source type',
       sortable: true,
       truncateText: true,
       render: (source) => _.get(NOTIFICATION_SOURCE, source, '-'),
     },
     {
-      field: 'severity', // we don't care about the field as we're using the whole item in render
+      field: 'severity',
       name: 'Severity',
       sortable: true,
       truncateText: false,
-      textOnly: true,
+      render: (severity) => _.get(SEVERITY_TYPE, severity, '-'),
     },
     {
-      field: 'lastUpdatedTime',
+      field: 'last_updated_time_ms',
       name: 'Time sent',
       sortable: true,
       truncateText: false,
@@ -97,15 +101,15 @@ export function NotificationsTable(props: NotificationsTableProps) {
       dataType: 'date',
     },
     {
-      field: 'status',
+      field: 'success',
       name: 'Sent status',
       sortable: true,
-      render: (status, item: NotificationItem) => {
-        const color = status == 'Success' ? 'success' : 'danger';
-        const label = status == 'Success' ? 'Sent' : 'Error';
+      render: (success, item: NotificationItem) => {
+        const color = success ? 'success' : 'danger';
+        const label = success ? 'Sent' : 'Error';
         return (
           <EuiHealth color={color}>
-            {status === 'Success' ? (
+            {success ? (
               label
             ) : (
               <ModalConsumer>
@@ -125,22 +129,22 @@ export function NotificationsTable(props: NotificationsTableProps) {
       },
     },
     {
-      field: 'statusList',
+      field: 'status_list',
       name: 'Channels',
       sortable: true,
       truncateText: true,
-      render: (status: ChannelStatus[]) =>
-        status.length === 1
-          ? status[0].configName
-          : `${status.length} channels`,
+      render: (status_list: ChannelStatus[]) =>
+        status_list.length === 1
+          ? status_list[0].config_name
+          : `${status_list.length} channels`,
     },
     {
-      field: 'statusList', // we don't care about the field as we're using the whole item in render
+      field: 'status_list',
       name: 'Channel types',
       sortable: true,
       truncateText: false,
-      render: (status: ChannelStatus[]) =>
-        status.map((channel) => channel.configType).join(', '),
+      render: (status_list: ChannelStatus[]) =>
+        status_list.map((channel) => channel.config_type).join(', '),
     },
   ];
 
@@ -157,13 +161,10 @@ export function NotificationsTable(props: NotificationsTableProps) {
           itemId="id"
           isSelectable={true}
           items={props.items}
-          noItemsMessage={
-            // TODO: add empty prompt component, pending UXDR
-            <div>no item</div>
-          }
           onChange={props.onTableChange}
           pagination={props.pagination}
           sorting={props.sorting}
+          loading={props.loading}
         />
       </ContentPanel>
     </>

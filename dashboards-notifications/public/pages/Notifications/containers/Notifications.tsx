@@ -40,24 +40,27 @@ import _ from 'lodash';
 import queryString from 'querystring';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { SORT_DIRECTION } from '../../../../common';
 import { NotificationItem, TableState } from '../../../../models/interfaces';
 import { CoreServicesContext } from '../../../components/coreServices';
-import { NotificationService } from '../../../services';
-import { BREADCRUMBS, HISTOGRAM_TYPE, ROUTES } from '../../../utils/constants';
+import { BrowserServices } from '../../../models/interfaces';
+import {
+  BREADCRUMBS,
+  CHANNEL_TYPE,
+  HISTOGRAM_TYPE,
+  ROUTES,
+} from '../../../utils/constants';
 import { getErrorMessage } from '../../../utils/helpers';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { NotificationsHistogram } from '../components/NotificationsHistogram/NotificationsHistogram';
 import { NotificationsTable } from '../components/NotificationsTable/NotificationsTable';
 import { FilterType } from '../components/SearchBar/Filter/Filters';
 import { NotificationsSearchBar } from '../components/SearchBar/NotificationsSearchBar';
-import {
-  DEFAULT_PAGE_SIZE_OPTIONS,
-  DEFAULT_QUERY_PARAMS,
-} from '../utils/constants';
+import { DEFAULT_PAGE_SIZE_OPTIONS } from '../utils/constants';
 import { getURLQueryParams } from '../utils/helpers';
 
 interface NotificationsProps extends RouteComponentProps {
-  notificationService: NotificationService;
+  services: BrowserServices;
 }
 
 interface NotificationsState extends TableState<NotificationItem> {
@@ -66,6 +69,7 @@ interface NotificationsState extends TableState<NotificationItem> {
   filters: Array<FilterType>;
   histogramType: keyof typeof HISTOGRAM_TYPE;
   histogramData: Array<Datum>;
+  channelsConfigured: boolean; // if no channels configured, show helper message
 }
 
 export default class Notifications extends Component<
@@ -103,6 +107,7 @@ export default class Notifications extends Component<
       items: [],
       selectedItems: [],
       loading: true,
+      channelsConfigured: true,
       startTime,
       endTime,
       filters,
@@ -137,37 +142,44 @@ export default class Notifications extends Component<
 
   static getQueryObjectFromState(state: NotificationsState) {
     return {
-      from: state.from,
-      size: state.size,
-      search: state.search,
-      sortField: state.sortField,
-      sortDirection: state.sortDirection,
-      startTime: state.startTime,
-      endTime: state.endTime,
-      filters: JSON.stringify(state.filters),
-      histogramType: state.histogramType,
+      from_index: state.from,
+      max_items: state.size,
+      // search: state.search,
+      // sortField: state.sortField,
+      // sortDirection: state.sortDirection,
+      // startTime: state.startTime,
+      // endTime: state.endTime,
+      // filters: JSON.stringify(state.filters),
+      // histogramType: state.histogramType,
     };
   }
 
   getNotifications = async () => {
     this.setState({ loading: true });
     try {
-      const { notificationService, history } = this.props;
+      const { services, history } = this.props;
       const queryObject = Notifications.getQueryObjectFromState(this.state);
       const queryParamsString = queryString.stringify(queryObject);
       history.replace({ ...this.props.location, search: queryParamsString });
       sessionStorage.setItem('NotificationsQueryParams', queryParamsString);
-      const getNotificationsResponse = await notificationService.getNotifications(
+      const getNotificationsResponse = await services.eventService.getNotifications(
         queryObject
       );
-      const getHistogramResponse = await notificationService.getHistogram(
+      const getHistogramResponse = await services.eventService.getHistogram(
         queryObject
       );
-      const { notifications, totalNotifications } = getNotificationsResponse;
+      const channelsExist = await services.notificationService.getChannels({
+        config_type: Object.keys(CHANNEL_TYPE),
+        from_index: 0,
+        max_items: 1,
+        sort_field: 'name',
+        sort_order: SORT_DIRECTION.ASC,
+      });
       this.setState({
-        items: notifications,
-        total: totalNotifications,
+        items: getNotificationsResponse.items,
+        total: getNotificationsResponse.total,
         histogramData: getHistogramResponse,
+        channelsConfigured: channelsExist.total > 0,
       });
     } catch (err) {
       this.context.notifications.toasts.addDanger(
@@ -186,17 +198,8 @@ export default class Notifications extends Component<
     this.setState({ from: page * size, size, sortField, sortDirection });
   };
 
-  // onSelectionChange = (selectedItems: NotificationItem[]): void => {
-  //   this.setState({ selectedItems });
-  // };
-
   onSearchChange = (search: string): void => {
     this.setState({ from: 0, search });
-  };
-
-  onPageChange = (page: number): void => {
-    const { size } = this.state;
-    this.setState({ from: page * size });
   };
 
   setStartTime = (startTime: ShortDate) => {
@@ -212,16 +215,6 @@ export default class Notifications extends Component<
     this.setState({ histogramType });
   };
 
-  // onClickModalEdit = (item: NotificationItem, onClose: () => void): void => {
-  //   onClose();
-  //   if (!item || !item.policyId) return;
-  //   this.props.history.push(`${ROUTES.EDIT_POLICY}?id=${item.policyId}`);
-  // };
-
-  resetFilters = (): void => {
-    this.setState({ search: DEFAULT_QUERY_PARAMS.search });
-  };
-
   render() {
     const {
       total,
@@ -230,7 +223,6 @@ export default class Notifications extends Component<
       search,
       sortField,
       sortDirection,
-      selectedItems,
       items,
       loading,
     } = this.state;
@@ -252,8 +244,7 @@ export default class Notifications extends Component<
       },
     };
 
-    // TODO check if no channels
-    if (this.state.items.length === 0) {
+    if (!loading && !this.state.channelsConfigured) {
       return <EmptyState channels={false} />;
     }
 
@@ -289,8 +280,7 @@ export default class Notifications extends Component<
           refresh={this.getNotifications}
         />
 
-        {/* TODO: change back to items.length > 0 */}
-        {this.state.search.length === 0 ? (
+        {loading || this.state.total > 0 ? (
           <>
             <EuiSpacer />
             <NotificationsHistogram
@@ -305,10 +295,11 @@ export default class Notifications extends Component<
               onTableChange={this.onTableChange}
               pagination={pagination}
               sorting={sorting}
+              loading={loading}
             />
           </>
         ) : (
-          <EmptyState channels />
+          <EmptyState channels={true} />
         )}
       </div>
     );

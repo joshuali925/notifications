@@ -25,17 +25,17 @@ export function eventRoutes(router: IRouter) {
         query: schema.object({
           from_index: schema.number(),
           max_items: schema.number(),
-          query: schema.maybe(schema.string()),
-          config_type: schema.oneOf([
-            schema.arrayOf(schema.string()),
-            schema.string(),
-          ]),
-          feature_list: schema.maybe(
-            schema.oneOf([schema.arrayOf(schema.string()), schema.string()])
-          ),
-          is_enabled: schema.maybe(schema.boolean()),
-          sort_field: schema.string(),
-          sort_order: schema.string(),
+          // query: schema.maybe(schema.string()),
+          // config_type: schema.oneOf([
+          //   schema.arrayOf(schema.string()),
+          //   schema.string(),
+          // ]),
+          // feature_list: schema.maybe(
+          //   schema.oneOf([schema.arrayOf(schema.string()), schema.string()])
+          // ),
+          // is_enabled: schema.maybe(schema.boolean()),
+          // sort_field: schema.string(),
+          // sort_order: schema.string(),
         }),
       },
     },

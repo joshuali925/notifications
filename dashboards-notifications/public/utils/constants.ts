@@ -85,6 +85,13 @@ export const ENCRYPTION_TYPE = Object.freeze({
   none: 'None',
 });
 
+export const SEVERITY_TYPE = Object.freeze({
+  none: 'None',
+  info: 'Info',
+  high: 'High',
+  critical: 'Critical',
+});
+
 export const CUSTOM_WEBHOOK_ENDPOINT_TYPE = Object.freeze({
   WEBHOOK_URL: 'Webhook URL',
   CUSTOM_URL: 'Custom attributes URL with HTTPS',

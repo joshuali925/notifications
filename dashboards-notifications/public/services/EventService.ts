@@ -27,6 +27,7 @@
 import { HttpFetchQuery, HttpSetup } from '../../../../src/core/public';
 import { NODE_API } from '../../common';
 import { MOCK_GET_HISTOGRAM } from './mockData';
+import { eventListToNotifications, eventToNotification } from './utils/helper';
 
 interface EventsResponse {
   total_hits: number;
@@ -44,13 +45,23 @@ export default class EventService {
     return MOCK_GET_HISTOGRAM();
   };
 
-  getEvents = async (queryObject: HttpFetchQuery) => {
-    return this.httpClient.get<EventsResponse>(NODE_API.GET_EVENTS, {
-      query: queryObject,
-    });
+  getNotifications = async (queryObject: HttpFetchQuery) => {
+    const response = await this.httpClient.get<EventsResponse>(
+      NODE_API.GET_EVENTS,
+      {
+        query: queryObject,
+      }
+    );
+    return {
+      items: eventListToNotifications(response.event_list),
+      total: response.total_hits || 0,
+    };
   };
 
-  getEvent = async (id: string) => {
-    return this.httpClient.get<EventsResponse>(`${NODE_API.GET_EVENT}/${id}`);
+  getNotification = async (id: string) => {
+    const response = await this.httpClient.get<EventsResponse>(
+      `${NODE_API.GET_EVENT}/${id}`
+    );
+    return eventToNotification(response.event_list[0]);
   };
 }
