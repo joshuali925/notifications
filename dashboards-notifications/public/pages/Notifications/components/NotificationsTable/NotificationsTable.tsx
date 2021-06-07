@@ -42,6 +42,7 @@ import {
 import { ContentPanel } from '../../../../components/ContentPanel';
 import { ModalConsumer } from '../../../../components/Modal';
 import {
+  CHANNEL_TYPE,
   NOTIFICATION_SOURCE,
   SEVERITY_TYPE,
 } from '../../../../utils/constants';
@@ -144,7 +145,9 @@ export function NotificationsTable(props: NotificationsTableProps) {
       sortable: false,
       truncateText: false,
       render: (status_list: ChannelStatus[]) =>
-        status_list.map((channel) => channel.config_type).join(', '),
+        status_list
+          .map((channel) => _.get(CHANNEL_TYPE, channel.config_type, '-'))
+          .join(', '),
     },
   ];
 

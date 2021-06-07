@@ -38,6 +38,7 @@ import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { CoreStart } from '../../../../../../../src/core/public';
 import { SORT_DIRECTION } from '../../../../../common';
 import {
   RecipientGroupItemType,
@@ -55,7 +56,9 @@ import { DetailsListModal } from '../../../Channels/components/modals/DetailsLis
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../../../Notifications/utils/constants';
 import { DeleteRecipientGroupModal } from '../modals/DeleteRecipientGroupModal';
 
-interface RecipientGroupsTableProps {}
+interface RecipientGroupsTableProps {
+  coreContext: CoreStart;
+}
 
 interface RecipientGroupsTableState
   extends TableState<RecipientGroupItemType> {}
@@ -176,7 +179,7 @@ export class RecipientGroupsTable extends Component<
         total: recipientGroups.total,
       });
     } catch (error) {
-      this.context.notifications.toasts.addDanger(
+      this.props.coreContext.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading senders.')
       );
     }

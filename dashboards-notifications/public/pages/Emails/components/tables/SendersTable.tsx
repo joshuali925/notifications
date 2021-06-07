@@ -37,6 +37,7 @@ import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { CoreStart } from '../../../../../../../src/core/public';
 import { SORT_DIRECTION } from '../../../../../common';
 import { SenderItemType, TableState } from '../../../../../models/interfaces';
 import {
@@ -50,7 +51,9 @@ import { getErrorMessage } from '../../../../utils/helpers';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../../../Notifications/utils/constants';
 import { DeleteSenderModal } from '../modals/DeleteSenderModal';
 
-interface SendersTableProps {}
+interface SendersTableProps {
+  coreContext: CoreStart;
+}
 
 interface SendersTableState extends TableState<SenderItemType> {}
 
@@ -152,7 +155,7 @@ export class SendersTable extends Component<
       );
       this.setState({ items: senders.items, total: senders.total });
     } catch (error) {
-      this.context.notifications.toasts.addDanger(
+      this.props.coreContext.notifications.toasts.addDanger(
         getErrorMessage(error, 'There was a problem loading senders.')
       );
     }

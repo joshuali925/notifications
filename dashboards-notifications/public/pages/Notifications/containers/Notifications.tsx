@@ -226,6 +226,7 @@ export default class Notifications extends Component<
   };
   setFilters = (filters: FilterType[]) => {
     this.setState({ from: 0, filters });
+    this.getNotifications();
   };
   setHistogramType = (histogramType: keyof typeof HISTOGRAM_TYPE) => {
     this.setState({ histogramType });
