@@ -24,10 +24,33 @@
  * permissions and limitations under the License.
  */
 
-import { NotificationService } from '../services';
-import EventService from '../services/EventService';
+import { HttpFetchQuery, HttpSetup } from '../../../../src/core/public';
+import { NODE_API } from '../../common';
+import { MOCK_GET_HISTOGRAM } from './mockData';
 
-export interface BrowserServices {
-  notificationService: NotificationService;
-  eventService: EventService;
+interface EventsResponse {
+  total_hits: number;
+  event_list: any[];
+}
+
+export default class EventService {
+  httpClient: HttpSetup;
+
+  constructor(httpClient: HttpSetup) {
+    this.httpClient = httpClient;
+  }
+
+  getHistogram = async (queryObject: object) => {
+    return MOCK_GET_HISTOGRAM();
+  };
+
+  getEvents = async (queryObject: HttpFetchQuery) => {
+    return this.httpClient.get<EventsResponse>(NODE_API.GET_EVENTS, {
+      query: queryObject,
+    });
+  };
+
+  getEvent = async (id: string) => {
+    return this.httpClient.get<EventsResponse>(`${NODE_API.GET_EVENT}/${id}`);
+  };
 }

@@ -24,16 +24,14 @@
  * permissions and limitations under the License.
  */
 
-import { HttpSetup } from '../../../../src/core/public';
+import { HttpFetchQuery, HttpSetup } from '../../../../src/core/public';
 import { NODE_API } from '../../common';
 import {
   ChannelItemType,
-  NotificationItem,
   RecipientGroupItemType,
   SenderItemType,
 } from '../../models/interfaces';
 import { CHANNEL_TYPE } from '../utils/constants';
-import { MOCK_GET_HISTOGRAM, MOCK_NOTIFICATIONS } from './mockData';
 import {
   configListToChannels,
   configListToRecipientGroups,
@@ -43,9 +41,9 @@ import {
   configToSender,
 } from './utils/helper';
 
-export interface GetNotificationsResponse {
-  totalNotifications: number;
-  notifications: NotificationItem[];
+interface ConfigsResponse {
+  total_hits: number;
+  config_list: any[];
 }
 
 export default class NotificationService {
@@ -54,14 +52,6 @@ export default class NotificationService {
   constructor(httpClient: HttpSetup) {
     this.httpClient = httpClient;
   }
-
-  getNotifications = async (queryObject: object): Promise<any> => {
-    return MOCK_NOTIFICATIONS;
-  };
-
-  getHistogram = async (queryObject: object) => {
-    return MOCK_GET_HISTOGRAM();
-  };
 
   createConfig = async (config: any) => {
     const response = await this.httpClient.post(NODE_API.CREATE_CONFIG, {
@@ -90,17 +80,19 @@ export default class NotificationService {
   };
 
   getConfigs = async (
-    queryObject: object = { config_type: Object.keys(CHANNEL_TYPE) }
+    queryObject: HttpFetchQuery = { config_type: Object.keys(CHANNEL_TYPE) }
   ) => {
-    return this.httpClient.get(NODE_API.GET_CONFIGS, { query: queryObject });
+    return this.httpClient.get<ConfigsResponse>(NODE_API.GET_CONFIGS, {
+      query: queryObject,
+    });
   };
 
   getConfig = async (id: string) => {
-    return this.httpClient.get(`${NODE_API.GET_CONFIG}/${id}`);
+    return this.httpClient.get<ConfigsResponse>(`${NODE_API.GET_CONFIG}/${id}`);
   };
 
   getChannels = async (
-    queryObject: object = { config_type: Object.keys(CHANNEL_TYPE) }
+    queryObject: HttpFetchQuery = { config_type: Object.keys(CHANNEL_TYPE) }
   ): Promise<{ items: ChannelItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {
@@ -143,7 +135,7 @@ export default class NotificationService {
   };
 
   getSenders = async (
-    queryObject: object = { config_type: 'smtp_account' }
+    queryObject: HttpFetchQuery = { config_type: 'smtp_account' }
   ): Promise<{ items: SenderItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {
@@ -158,7 +150,7 @@ export default class NotificationService {
   };
 
   getRecipientGroups = async (
-    queryObject: object = { config_type: 'email_group' }
+    queryObject: HttpFetchQuery = { config_type: 'email_group' }
   ): Promise<{ items: RecipientGroupItemType[]; total: number }> => {
     const response = await this.getConfigs(queryObject);
     return {
