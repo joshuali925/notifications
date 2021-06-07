@@ -71,7 +71,7 @@ export const eventToNotification = (event: any): NotificationItem => {
     (status: any) => isStatusCodeSuccess(status.delivery_status.status_code)
   );
   return {
-    ...event.event.event_source,
+    event_source: event.event.event_source,
     status_list: event.event.status_list,
     event_id: event.event_id,
     created_time_ms: event.created_time_ms,

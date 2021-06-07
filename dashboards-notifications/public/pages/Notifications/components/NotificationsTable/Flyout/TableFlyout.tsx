@@ -64,7 +64,7 @@ export function TableFlyout(props: TableFlyoutProps) {
             listItems={[
               {
                 title: 'Notification',
-                description: props.notificationItem.title,
+                description: props.notificationItem.event_source.title,
               },
             ]}
           />
@@ -92,7 +92,7 @@ export function TableFlyout(props: TableFlyoutProps) {
                     title: 'Source type',
                     description: _.get(
                       NOTIFICATION_SOURCE,
-                      props.notificationItem.feature,
+                      props.notificationItem.event_source.feature,
                       '-'
                     ),
                   },

@@ -27,16 +27,14 @@
 import { HISTOGRAM_TYPE } from '../../../utils/constants';
 import { SORT_DIRECTION } from '../../../../common';
 
-export const MAX_NOTIFICATIONS = 1000;
-
 export const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 
 export const DEFAULT_QUERY_PARAMS = {
   from: 0,
   search: '',
   size: 10,
-  sortDirection: SORT_DIRECTION.ASC,
-  sortField: 'lastUpdatedTime',
+  sortDirection: SORT_DIRECTION.DESC,
+  sortField: 'last_updated_time_ms',
   startTime: 'now-7d',
   endTime: 'now',
   filters: [],

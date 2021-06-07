@@ -177,7 +177,6 @@ export class SendersTable extends Component<
   };
 
   render() {
-    const filterIsApplied = !!this.state.search;
     const page = Math.floor(this.state.from / this.state.size);
 
     const pagination: Pagination = {

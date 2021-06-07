@@ -62,7 +62,7 @@ interface NotificationsTableProps {
 export function NotificationsTable(props: NotificationsTableProps) {
   const columns: EuiTableFieldDataColumnType<NotificationItem>[] = [
     {
-      field: 'title',
+      field: 'event_source.title',
       name: 'Notification',
       sortable: true,
       truncateText: true,
@@ -79,14 +79,14 @@ export function NotificationsTable(props: NotificationsTableProps) {
       ),
     },
     {
-      field: 'feature',
+      field: 'event_source.feature',
       name: 'Source type',
       sortable: true,
       truncateText: true,
       render: (source) => _.get(NOTIFICATION_SOURCE, source, '-'),
     },
     {
-      field: 'severity',
+      field: 'event_source.severity',
       name: 'Severity',
       sortable: true,
       truncateText: false,
@@ -103,7 +103,7 @@ export function NotificationsTable(props: NotificationsTableProps) {
     {
       field: 'success',
       name: 'Sent status',
-      sortable: true,
+      sortable: false,
       render: (success, item: NotificationItem) => {
         const color = success ? 'success' : 'danger';
         const label = success ? 'Sent' : 'Error';
@@ -131,7 +131,7 @@ export function NotificationsTable(props: NotificationsTableProps) {
     {
       field: 'status_list',
       name: 'Channels',
-      sortable: true,
+      sortable: false,
       truncateText: true,
       render: (status_list: ChannelStatus[]) =>
         status_list.length === 1
@@ -141,7 +141,7 @@ export function NotificationsTable(props: NotificationsTableProps) {
     {
       field: 'status_list',
       name: 'Channel types',
-      sortable: true,
+      sortable: false,
       truncateText: false,
       render: (status_list: ChannelStatus[]) =>
         status_list.map((channel) => channel.config_type).join(', '),

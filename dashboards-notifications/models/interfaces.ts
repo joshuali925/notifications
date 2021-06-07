@@ -36,11 +36,13 @@ export interface NotificationItem {
   event_id: string;
   created_time_ms: number;
   last_updated_time_ms: number;
-  title: string;
-  reference_id: string;
-  feature: keyof typeof NOTIFICATION_SOURCE;
-  severity: keyof typeof SEVERITY_TYPE;
-  tags?: string[];
+  event_source: {
+    title: string;
+    reference_id: string;
+    feature: keyof typeof NOTIFICATION_SOURCE;
+    severity: keyof typeof SEVERITY_TYPE;
+    tags?: string[];
+  };
   status_list: ChannelStatus[]; // could be multiple channels in a notification item
   success: boolean; // calculated in the frontend based on status_list
 }

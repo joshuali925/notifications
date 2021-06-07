@@ -52,7 +52,6 @@ import {
 } from '../../../utils/constants';
 import { getErrorMessage } from '../../../utils/helpers';
 import { EmptyState } from '../components/EmptyState/EmptyState';
-import { NotificationsHistogram } from '../components/NotificationsHistogram/NotificationsHistogram';
 import { NotificationsTable } from '../components/NotificationsTable/NotificationsTable';
 import { FilterType } from '../components/SearchBar/Filter/Filters';
 import { NotificationsSearchBar } from '../components/SearchBar/NotificationsSearchBar';
@@ -144,9 +143,9 @@ export default class Notifications extends Component<
     return {
       from_index: state.from,
       max_items: state.size,
-      // search: state.search,
-      // sortField: state.sortField,
-      // sortDirection: state.sortDirection,
+      query: state.search,
+      sort_field: state.sortField,
+      sort_order: state.sortDirection,
       // startTime: state.startTime,
       // endTime: state.endTime,
       // filters: JSON.stringify(state.filters),
@@ -216,35 +215,27 @@ export default class Notifications extends Component<
   };
 
   render() {
-    const {
-      total,
-      from,
-      size,
-      search,
-      sortField,
-      sortDirection,
-      items,
-      loading,
-    } = this.state;
-
-    const filterIsApplied = !!search;
-    const page = Math.floor(from / size);
+    const page = Math.floor(this.state.from / this.state.size);
 
     const pagination: Pagination = {
       pageIndex: page,
-      pageSize: size,
+      pageSize: this.state.size,
       pageSizeOptions: DEFAULT_PAGE_SIZE_OPTIONS,
-      totalItemCount: total,
+      totalItemCount: this.state.total,
     };
 
     const sorting: EuiTableSortingType<NotificationItem> = {
       sort: {
-        direction: sortDirection,
-        field: sortField,
+        direction: this.state.sortDirection,
+        field: this.state.sortField,
       },
     };
 
-    if (!loading && !this.state.channelsConfigured) {
+    if (
+      !this.state.loading &&
+      !this.state.channelsConfigured &&
+      this.state.total === 0
+    ) {
       return <EmptyState channels={false} />;
     }
 
@@ -273,29 +264,29 @@ export default class Notifications extends Component<
           setStartTime={this.setStartTime}
           endTime={this.state.endTime}
           setEndTime={this.setEndTime}
-          search={search}
+          search={this.state.search}
           setSearch={this.onSearchChange}
           filters={this.state.filters}
           setFilters={this.setFilters}
           refresh={this.getNotifications}
         />
 
-        {loading || this.state.total > 0 ? (
+        {this.state.loading || this.state.total > 0 ? (
           <>
-            <EuiSpacer />
+            {/* <EuiSpacer />
             <NotificationsHistogram
               histogramType={this.state.histogramType}
               setHistogramType={this.setHistogramType}
               histogramData={this.state.histogramData}
-            />
+            /> */}
 
             <EuiSpacer />
             <NotificationsTable
-              items={items}
+              items={this.state.items}
               onTableChange={this.onTableChange}
               pagination={pagination}
               sorting={sorting}
-              loading={loading}
+              loading={this.state.loading}
             />
           </>
         ) : (
