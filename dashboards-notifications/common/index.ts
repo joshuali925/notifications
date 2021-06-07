@@ -42,13 +42,16 @@ export const NODE_API = Object.freeze({
   CREATE_CONFIG: `${NODE_API_BASE_PATH}/create_config`,
   DELETE_CONFIGS: `${NODE_API_BASE_PATH}/delete_configs`,
   UPDATE_CONFIG: `${NODE_API_BASE_PATH}/update_config`,
+  GET_EVENTS: `${NODE_API_BASE_PATH}/get_events`,
+  GET_EVENT: `${NODE_API_BASE_PATH}/get_event`,
 });
 
 // TODO change to _plugins when backend updates
-const OPENSEARCH_API_BASE_PATH = '/_opensearch/_notifications'
+const OPENSEARCH_API_BASE_PATH = '/_opensearch/_notifications';
 export const OPENSEARCH_API = Object.freeze({
-  CONFIGS: `${OPENSEARCH_API_BASE_PATH}/configs`
-})
+  CONFIGS: `${OPENSEARCH_API_BASE_PATH}/configs`,
+  EVENTS: `${OPENSEARCH_API_BASE_PATH}/events`,
+});
 
 export const REQUEST = Object.freeze({
   PUT: 'PUT',
