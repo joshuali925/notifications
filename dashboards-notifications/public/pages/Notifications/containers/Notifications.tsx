@@ -25,6 +25,7 @@
  */
 
 import { Datum } from '@elastic/charts';
+import dateMath from '@elastic/datemath';
 import {
   EuiButton,
   EuiFlexGroup,
@@ -55,6 +56,7 @@ import { EmptyState } from '../components/EmptyState/EmptyState';
 import { NotificationsTable } from '../components/NotificationsTable/NotificationsTable';
 import { FilterType } from '../components/SearchBar/Filter/Filters';
 import { NotificationsSearchBar } from '../components/SearchBar/NotificationsSearchBar';
+import { filtersToQueryParams } from '../components/SearchBar/utils/filterHelpers';
 import { DEFAULT_PAGE_SIZE_OPTIONS } from '../utils/constants';
 import { getURLQueryParams } from '../utils/helpers';
 
@@ -114,9 +116,7 @@ export default class Notifications extends Component<
       histogramData: [],
     };
 
-    this.getNotifications = _.debounce(this.getNotifications, 500, {
-      leading: true,
-    });
+    this.getNotifications = _.debounce(this.getNotifications, 200);
   }
 
   async componentDidMount() {
@@ -132,24 +132,39 @@ export default class Notifications extends Component<
     prevProps: NotificationsProps,
     prevState: NotificationsState
   ) {
-    const prevQuery = Notifications.getQueryObjectFromState(prevState);
-    const currQuery = Notifications.getQueryObjectFromState(this.state);
+    const prevQuery = Notifications.serializeSearchParams(prevState);
+    const currQuery = Notifications.serializeSearchParams(this.state);
     if (!_.isEqual(prevQuery, currQuery)) {
       await this.getNotifications();
     }
   }
 
-  static getQueryObjectFromState(state: NotificationsState) {
+  static serializeSearchParams(state: NotificationsState) {
     return {
       from_index: state.from,
       max_items: state.size,
       query: state.search,
       sort_field: state.sortField,
       sort_order: state.sortDirection,
-      // startTime: state.startTime,
-      // endTime: state.endTime,
-      // filters: JSON.stringify(state.filters),
+      startTime: state.startTime,
+      endTime: state.endTime,
+      filters: JSON.stringify(state.filters),
       // histogramType: state.histogramType,
+    };
+  }
+
+  static getQueryObjectFromState(state: NotificationsState) {
+    const filterParams = filtersToQueryParams(state.filters);
+    return {
+      from_index: state.from,
+      max_items: state.size,
+      query: state.search,
+      sort_field: state.sortField,
+      sort_order: state.sortDirection,
+      last_updated_time_ms: `${dateMath
+        .parse(state.startTime)
+        ?.valueOf()}..${dateMath.parse(state.endTime)?.valueOf()}`,
+      ...filterParams,
     };
   }
 
@@ -157,10 +172,12 @@ export default class Notifications extends Component<
     this.setState({ loading: true });
     try {
       const { services, history } = this.props;
-      const queryObject = Notifications.getQueryObjectFromState(this.state);
-      const queryParamsString = queryString.stringify(queryObject);
+      const searchParams = Notifications.serializeSearchParams(this.state);
+      const queryParamsString = queryString.stringify(searchParams);
       history.replace({ ...this.props.location, search: queryParamsString });
       sessionStorage.setItem('NotificationsQueryParams', queryParamsString);
+
+      const queryObject = Notifications.getQueryObjectFromState(this.state);
       const getNotificationsResponse = await services.eventService.getNotifications(
         queryObject
       );

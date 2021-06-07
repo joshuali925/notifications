@@ -97,8 +97,29 @@ export const getURLQueryParams = (
   };
 };
 
-export const navigateToChannelDetail = (item: NotificationItem) => {
-  // const { id, referenceId } = item;
-  // TODO: need a dict here to map source to it's pages identifier. e.g. reporting -> report detail page
-  // window.location.assign(`opendistro_something#/type${type}/${id}`);
+export const getReferenceURL = (item: NotificationItem) => {
+  const id = item.event_source.reference_id;
+  switch (item.event_source.feature) {
+    case 'alerting':
+      return `alerting#/monitors/${id}`;
+    case 'index_management':
+      return `opensearch_index_management_dashboards#/index-policies?search=${id}`;
+    case 'reports':
+      return `reports-dashboards#/report_details/${id}`;
+    default:
+      return '#';
+  }
+};
+
+export const getReferenceText = (item: NotificationItem) => {
+  switch (item.event_source.feature) {
+    case 'alerting':
+      return 'Monitor';
+    case 'index_management':
+      return 'Index Management';
+    case 'reports':
+      return 'Report';
+    default:
+      return '-';
+  }
 };

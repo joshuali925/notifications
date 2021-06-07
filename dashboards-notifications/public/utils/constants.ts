@@ -59,11 +59,6 @@ export const BREADCRUMBS = Object.freeze({
   EDIT_RECIPIENT_GROUP: { text: 'Edit recipient group' },
 });
 
-export const NOTIFICATION_STATUS = Object.freeze({
-  SENT: 'Sent',
-  ERROR: 'Error',
-});
-
 export const NOTIFICATION_SOURCE = Object.freeze({
   alerting: 'Alerting',
   index_management: 'ISM',

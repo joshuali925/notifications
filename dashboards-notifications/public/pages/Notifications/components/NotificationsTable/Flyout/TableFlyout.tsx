@@ -43,6 +43,7 @@ import { NotificationItem } from '../../../../../../models/interfaces';
 import { ModalRootProps } from '../../../../../components/Modal/ModalRoot';
 import { NOTIFICATION_SOURCE } from '../../../../../utils/constants';
 import { renderTime } from '../../../../../utils/helpers';
+import { getReferenceText, getReferenceURL } from '../../../utils/helpers';
 import { ChannelCard } from './ChannelCard';
 
 interface TableFlyoutProps extends ModalRootProps {
@@ -75,10 +76,13 @@ export function TableFlyout(props: TableFlyoutProps) {
                 listItems={[
                   {
                     title: 'Source',
-                    // TODO source plugin link
                     description: (
-                      <EuiLink href="#" target="_blank" external>
-                        new monitor
+                      <EuiLink
+                        href={getReferenceURL(props.notificationItem)}
+                        target="_blank"
+                        external
+                      >
+                        {getReferenceText(props.notificationItem)}
                       </EuiLink>
                     ),
                   },
@@ -105,7 +109,9 @@ export function TableFlyout(props: TableFlyoutProps) {
             listItems={[
               {
                 title: 'Time sent',
-                description: renderTime(props.notificationItem.last_updated_time_ms),
+                description: renderTime(
+                  props.notificationItem.last_updated_time_ms
+                ),
               },
             ]}
           />
