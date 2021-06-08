@@ -18,6 +18,12 @@ exports[`<DetailsListModal /> spec renders the component 1`] = `
   onClose={[MockFunction]}
   services={
     Object {
+      "eventService": EventService {
+        "getHistogram": [Function],
+        "getNotification": [Function],
+        "getNotifications": [Function],
+        "httpClient": [MockFunction],
+      },
       "notificationService": NotificationService {
         "createConfig": [Function],
         "deleteConfigs": [Function],
@@ -26,8 +32,6 @@ exports[`<DetailsListModal /> spec renders the component 1`] = `
         "getConfig": [Function],
         "getConfigs": [Function],
         "getEmailConfigDetails": [Function],
-        "getHistogram": [Function],
-        "getNotifications": [Function],
         "getRecipientGroup": [Function],
         "getRecipientGroups": [Function],
         "getSender": [Function],

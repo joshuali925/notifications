@@ -17,7 +17,6 @@ exports[`<NotificationsSearchBar /> spec renders the component 1`] = `
           class="euiFieldSearch euiFieldSearch--fullWidth"
           placeholder="Search"
           type="search"
-          value="test"
         />
         <div
           class="euiFormControlLayoutIcons"

@@ -13,7 +13,7 @@ import { render, waitFor } from '@testing-library/react';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import React from 'react';
-import { MOCK_CONFIG } from '../../../../test/mocks/mockData';
+import { MOCK_DATA } from '../../../../test/mocks/mockData';
 import { coreServicesMock } from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { ServicesContext } from '../../../services';
@@ -26,10 +26,10 @@ describe('<EmailSettings /> spec', () => {
   it('renders the component', async () => {
     const notificationServiceMock = jest.fn() as any;
     const getSenders = jest.fn(
-      async (queryObject: object) => MOCK_CONFIG.senders
+      async (queryObject: object) => MOCK_DATA.senders
     );
     const getRecipientGroups = jest.fn(
-      async (queryObject: object) => MOCK_CONFIG.recipientGroups
+      async (queryObject: object) => MOCK_DATA.recipientGroups
     );
     notificationServiceMock.notificationService = {
       getSenders,

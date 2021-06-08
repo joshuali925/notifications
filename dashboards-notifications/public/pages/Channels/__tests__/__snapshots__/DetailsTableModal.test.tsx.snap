@@ -19,6 +19,12 @@ exports[`<DetailsTableModal /> spec renders headers 1`] = `
   onClose={[MockFunction]}
   services={
     Object {
+      "eventService": EventService {
+        "getHistogram": [Function],
+        "getNotification": [Function],
+        "getNotifications": [Function],
+        "httpClient": [MockFunction],
+      },
       "notificationService": NotificationService {
         "createConfig": [Function],
         "deleteConfigs": [Function],
@@ -27,8 +33,6 @@ exports[`<DetailsTableModal /> spec renders headers 1`] = `
         "getConfig": [Function],
         "getConfigs": [Function],
         "getEmailConfigDetails": [Function],
-        "getHistogram": [Function],
-        "getNotifications": [Function],
         "getRecipientGroup": [Function],
         "getRecipientGroups": [Function],
         "getSender": [Function],
@@ -1846,6 +1850,12 @@ exports[`<DetailsTableModal /> spec renders parameters 1`] = `
   onClose={[MockFunction]}
   services={
     Object {
+      "eventService": EventService {
+        "getHistogram": [Function],
+        "getNotification": [Function],
+        "getNotifications": [Function],
+        "httpClient": [MockFunction],
+      },
       "notificationService": NotificationService {
         "createConfig": [Function],
         "deleteConfigs": [Function],
@@ -1854,8 +1864,6 @@ exports[`<DetailsTableModal /> spec renders parameters 1`] = `
         "getConfig": [Function],
         "getConfigs": [Function],
         "getEmailConfigDetails": [Function],
-        "getHistogram": [Function],
-        "getNotifications": [Function],
         "getRecipientGroup": [Function],
         "getRecipientGroups": [Function],
         "getSender": [Function],

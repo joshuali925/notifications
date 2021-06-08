@@ -36,6 +36,7 @@ export interface NotificationItem {
   event_id: string;
   created_time_ms: number;
   last_updated_time_ms: number;
+  tenant?: string;
   event_source: {
     title: string;
     reference_id: string;

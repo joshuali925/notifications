@@ -26,7 +26,7 @@
 
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
-import { MOCK_CONFIG } from '../../../../test/mocks/mockData';
+import { MOCK_DATA } from '../../../../test/mocks/mockData';
 import { routerComponentPropsMock } from '../../../../test/mocks/routerPropsMock';
 import { coreServicesMock } from '../../../../test/mocks/serviceMock';
 import { CoreServicesContext } from '../../../components/coreServices';
@@ -52,7 +52,7 @@ describe('<Channels/> spec', () => {
 
   it('renders the component', async () => {
     const getChannels = jest.fn(
-      async (queryObject: object) => MOCK_CONFIG.channels
+      async (queryObject: object) => MOCK_DATA.channels
     );
     const notificationService = jest.fn() as any;
     notificationService.getChannels = getChannels;
