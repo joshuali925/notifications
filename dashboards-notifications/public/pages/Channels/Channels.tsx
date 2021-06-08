@@ -33,13 +33,13 @@ import {
   EuiLink,
   EuiTableFieldDataColumnType,
   EuiTableSortingType,
+  SortDirection,
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { SORT_DIRECTION } from '../../../common';
 import { ChannelItemType, TableState } from '../../../models/interfaces';
 import {
   ContentPanel,
@@ -81,7 +81,7 @@ export class Channels extends Component<ChannelsProps, ChannelsState> {
       search: '',
       filters: {},
       sortField: 'name',
-      sortDirection: SORT_DIRECTION.ASC,
+      sortDirection: SortDirection.ASC,
       items: [],
       selectedItems: [],
       loading: true,

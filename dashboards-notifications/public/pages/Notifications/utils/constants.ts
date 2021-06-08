@@ -24,8 +24,8 @@
  * permissions and limitations under the License.
  */
 
+import { SortDirection } from '@elastic/eui';
 import { HISTOGRAM_TYPE } from '../../../utils/constants';
-import { SORT_DIRECTION } from '../../../../common';
 
 export const DEFAULT_PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 
@@ -33,10 +33,10 @@ export const DEFAULT_QUERY_PARAMS = {
   from: 0,
   search: '',
   size: 10,
-  sortDirection: SORT_DIRECTION.DESC,
+  sortDirection: SortDirection.ASC,
   sortField: 'last_updated_time_ms',
   startTime: 'now-7d',
   endTime: 'now',
   filters: [],
-  histogramType: Object.values(HISTOGRAM_TYPE)[0]
+  histogramType: Object.values(HISTOGRAM_TYPE)[0],
 };

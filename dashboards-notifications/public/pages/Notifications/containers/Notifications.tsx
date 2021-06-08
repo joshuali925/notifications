@@ -34,6 +34,7 @@ import {
   EuiTableSortingType,
   EuiTitle,
   ShortDate,
+  SortDirection,
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
@@ -41,7 +42,6 @@ import _ from 'lodash';
 import queryString from 'querystring';
 import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { SORT_DIRECTION } from '../../../../common';
 import { NotificationItem, TableState } from '../../../../models/interfaces';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { BrowserServices } from '../../../models/interfaces';
@@ -189,7 +189,7 @@ export default class Notifications extends Component<
         from_index: 0,
         max_items: 1,
         sort_field: 'name',
-        sort_order: SORT_DIRECTION.ASC,
+        sort_order: SortDirection.ASC,
       });
       this.setState({
         items: getNotificationsResponse.items,

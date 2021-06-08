@@ -27,11 +27,6 @@
 export const PLUGIN_ID = 'notificationsDashboards';
 export const PLUGIN_NAME = 'notifications-dashboards';
 
-export enum SORT_DIRECTION {
-  ASC = 'asc',
-  DESC = 'desc',
-}
-
 // after delete operation returns, a delay is needed before the change reflects in another request
 export const SERVER_DELAY = 1000;
 

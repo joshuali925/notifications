@@ -24,9 +24,8 @@
  * permissions and limitations under the License.
  */
 
-import { ShortDate } from '@elastic/eui';
+import { Direction, ShortDate } from '@elastic/eui';
 import queryString from 'query-string';
-import { SORT_DIRECTION } from '../../../../common';
 import { NotificationItem } from '../../../../models/interfaces';
 import { HISTOGRAM_TYPE } from '../../../utils/constants';
 import { FilterType } from '../components/SearchBar/Filter/Filters';
@@ -36,7 +35,7 @@ export type NotificationsQueryParams = {
   from: number;
   size: number;
   search: string;
-  sortDirection: SORT_DIRECTION;
+  sortDirection: Direction;
   sortField: string;
   startTime: ShortDate;
   endTime: ShortDate;

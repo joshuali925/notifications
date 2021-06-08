@@ -32,13 +32,13 @@ import {
   EuiHorizontalRule,
   EuiTableFieldDataColumnType,
   EuiTableSortingType,
+  SortDirection,
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { CoreStart } from '../../../../../../../src/core/public';
-import { SORT_DIRECTION } from '../../../../../common';
 import { SenderItemType, TableState } from '../../../../../models/interfaces';
 import {
   ContentPanel,
@@ -73,7 +73,7 @@ export class SendersTable extends Component<
       size: 5,
       search: '',
       sortField: 'name',
-      sortDirection: SORT_DIRECTION.ASC,
+      sortDirection: SortDirection.ASC,
       items: [],
       selectedItems: [],
       loading: true,

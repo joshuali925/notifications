@@ -33,9 +33,9 @@ import {
   EuiFlexItem,
   EuiFormRow,
   EuiSpacer,
+  SortDirection,
 } from '@elastic/eui';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { SORT_DIRECTION } from '../../../../common';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { ModalConsumer } from '../../../components/Modal';
 import { ServicesContext } from '../../../services';
@@ -79,7 +79,7 @@ export function EmailSettings(props: EmailSettingsProps) {
     max_items: 10000,
     config_type,
     sort_field: 'name',
-    sort_order: SORT_DIRECTION.ASC,
+    sort_order: SortDirection.ASC,
     ...(query ? { query } : {}),
   });
 
