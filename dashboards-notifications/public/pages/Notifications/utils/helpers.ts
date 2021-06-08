@@ -83,11 +83,13 @@ export const getURLQueryParams = (
         ? DEFAULT_QUERY_PARAMS.sortDirection
         : sortDirection,
     startTime:
-      typeof startTime !== 'string'
+      typeof startTime !== 'string' || startTime.length === 0
         ? DEFAULT_QUERY_PARAMS.startTime
         : startTime,
     endTime:
-      typeof endTime !== 'string' ? DEFAULT_QUERY_PARAMS.endTime : endTime,
+      typeof endTime !== 'string' || endTime.length === 0
+        ? DEFAULT_QUERY_PARAMS.endTime
+        : endTime,
     filters: parsedFilters,
     histogramType:
       typeof histogramType !== 'string'

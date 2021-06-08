@@ -66,6 +66,9 @@ describe('<EmailSettings /> spec', () => {
       </ServicesContext.Provider>
     );
 
+    utils.getByText('Create sender').click();
+    utils.getByText('Create recipient group').click();
+
     await waitFor(() => {
       expect(utils.container.firstChild).toMatchSnapshot();
       expect(getSenders).toBeCalled();

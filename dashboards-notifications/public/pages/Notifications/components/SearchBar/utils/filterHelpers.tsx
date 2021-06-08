@@ -179,7 +179,6 @@ const toBackendField = (field: FilterFieldType) => {
 };
 
 export const filtersToQueryParams = (filters: FilterType[]) => {
-  // TODO: need to map display names to field names (Channel type => CHANNEL_TYPE ?)
   const filterParams: FilterParamsType = {};
   filters
     .filter((filter) => !filter.disabled && filter.value != null)

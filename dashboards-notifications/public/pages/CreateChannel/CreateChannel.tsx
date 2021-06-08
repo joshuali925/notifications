@@ -404,6 +404,7 @@ export function CreateChannel(props: CreateChannelsProps) {
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
             <EuiButton
+              data-test-subj="create-channel-send-test-message-button"
               disabled={Object.values(sourceCheckboxIdToSelectedMap).every(
                 (enabled) => !enabled
               )}
@@ -414,7 +415,7 @@ export function CreateChannel(props: CreateChannelsProps) {
                   );
                   return;
                 }
-                if (Math.random() < 0.5) {
+                if (true) {
                   coreContext.notifications.toasts.addSuccess(
                     'Successfully sent a test message.'
                   );
@@ -439,6 +440,7 @@ export function CreateChannel(props: CreateChannelsProps) {
           <EuiFlexItem grow={false}>
             <EuiButton
               fill
+              data-test-subj="create-channel-create-button"
               onClick={async () => {
                 if (!isInputValid()) {
                   coreContext.notifications.toasts.addDanger(
