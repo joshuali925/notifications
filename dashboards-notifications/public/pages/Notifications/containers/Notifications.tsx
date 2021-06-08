@@ -34,7 +34,6 @@ import {
   EuiTableSortingType,
   EuiTitle,
   ShortDate,
-  SortDirection,
 } from '@elastic/eui';
 import { Criteria } from '@elastic/eui/src/components/basic_table/basic_table';
 import { Pagination } from '@elastic/eui/src/components/basic_table/pagination_bar';
@@ -45,13 +44,9 @@ import { RouteComponentProps } from 'react-router-dom';
 import { NotificationItem, TableState } from '../../../../models/interfaces';
 import { CoreServicesContext } from '../../../components/coreServices';
 import { BrowserServices } from '../../../models/interfaces';
-import {
-  BREADCRUMBS,
-  CHANNEL_TYPE,
-  HISTOGRAM_TYPE,
-  ROUTES,
-} from '../../../utils/constants';
+import { BREADCRUMBS, HISTOGRAM_TYPE, ROUTES } from '../../../utils/constants';
 import { getErrorMessage } from '../../../utils/helpers';
+import { MainState } from '../../Main/Main';
 import { EmptyState } from '../components/EmptyState/EmptyState';
 import { NotificationsTable } from '../components/NotificationsTable/NotificationsTable';
 import { FilterType } from '../components/SearchBar/Filter/Filters';
@@ -62,6 +57,7 @@ import { getURLQueryParams } from '../utils/helpers';
 
 interface NotificationsProps extends RouteComponentProps {
   services: BrowserServices;
+  mainProps: MainState;
 }
 
 interface NotificationsState extends TableState<NotificationItem> {
@@ -70,7 +66,6 @@ interface NotificationsState extends TableState<NotificationItem> {
   filters: Array<FilterType>;
   histogramType: keyof typeof HISTOGRAM_TYPE;
   histogramData: Array<Datum>;
-  channelsConfigured: boolean; // if no channels configured, show helper message
 }
 
 export default class Notifications extends Component<
@@ -108,7 +103,6 @@ export default class Notifications extends Component<
       items: [],
       selectedItems: [],
       loading: true,
-      channelsConfigured: true,
       startTime,
       endTime,
       filters,
@@ -184,18 +178,10 @@ export default class Notifications extends Component<
       const getHistogramResponse = await services.eventService.getHistogram(
         queryObject
       );
-      const channelsExist = await services.notificationService.getChannels({
-        config_type: Object.keys(CHANNEL_TYPE),
-        from_index: 0,
-        max_items: 1,
-        sort_field: 'name',
-        sort_order: SortDirection.ASC,
-      });
       this.setState({
         items: getNotificationsResponse.items,
         total: getNotificationsResponse.total,
         histogramData: getHistogramResponse,
-        channelsConfigured: channelsExist.total > 0,
       });
     } catch (err) {
       this.context.notifications.toasts.addDanger(
@@ -251,8 +237,8 @@ export default class Notifications extends Component<
 
     if (
       !this.state.loading &&
-      !this.state.channelsConfigured &&
-      this.state.total === 0
+      this.state.total === 0 &&
+      !this.props.mainProps.isChannelConfigured
     ) {
       return <EmptyState channels={false} />;
     }
