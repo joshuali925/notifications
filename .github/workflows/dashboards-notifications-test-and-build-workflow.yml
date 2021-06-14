@@ -23,7 +23,7 @@ jobs:
         with:
           repository: opensearch-project/Opensearch-Dashboards
           ref: ${{ env.OPENSEARCH_DASHBOARDS_VERSION }}
-          path: dashboards-notifications/OpenSearch-Dashboards
+          path: notifications/OpenSearch-Dashboards
 
       - name: Setup Node
         uses: actions/setup-node@v1
