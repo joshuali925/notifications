@@ -57,6 +57,7 @@ export function CreateSender(props: CreateSenderProps) {
   const coreContext = useContext(CoreServicesContext)!;
   const servicesContext = useContext(ServicesContext)!;
 
+  const [loading, setLoading] = useState(false);
   const [senderName, setSenderName] = useState('');
   const [email, setEmail] = useState('');
   const [host, setHost] = useState('');
@@ -155,6 +156,7 @@ export function CreateSender(props: CreateSenderProps) {
         <EuiFlexItem grow={false}>
           <EuiButton
             fill
+            isLoading={loading}
             onClick={async () => {
               if (!isInputValid()) {
                 coreContext.notifications.toasts.addDanger(
@@ -162,6 +164,7 @@ export function CreateSender(props: CreateSenderProps) {
                 );
                 return;
               }
+              setLoading(true);
               const config = createSenderConfigObject(
                 senderName,
                 host,
@@ -182,12 +185,13 @@ export function CreateSender(props: CreateSenderProps) {
                       props.edit ? 'updated' : 'created'
                     }.`
                   );
-                  setTimeout(
-                    () => location.assign(`#${ROUTES.EMAIL_GROUPS}`),
-                    SERVER_DELAY
-                  );
+                  setTimeout(() => {
+                    setLoading(false);
+                    location.assign(`#${ROUTES.EMAIL_GROUPS}`);
+                  }, SERVER_DELAY);
                 })
                 .catch((error) => {
+                  setLoading(false);
                   coreContext.notifications.toasts.addError(error, {
                     title: `Failed to ${
                       props.edit ? 'update' : 'create'
