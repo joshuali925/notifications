@@ -11,12 +11,6 @@
 
 import { getErrorMessage, renderTime } from '../helpers';
 
-jest.doMock('moment', () => {
-  const moment = jest.requireActual('moment-timezone');
-  moment.tz.setDefault('America/Los_Angeles');
-  return moment;
-});
-
 describe('test helper functions', () => {
   it('returns default message if error not valid', () => {
     const message = getErrorMessage({}, 'default message');

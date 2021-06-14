@@ -185,10 +185,10 @@ export function CreateSender(props: CreateSenderProps) {
                       props.edit ? 'updated' : 'created'
                     }.`
                   );
-                  setTimeout(() => {
-                    setLoading(false);
-                    location.assign(`#${ROUTES.EMAIL_GROUPS}`);
-                  }, SERVER_DELAY);
+                  setTimeout(
+                    () => location.assign(`#${ROUTES.EMAIL_GROUPS}`),
+                    SERVER_DELAY
+                  );
                 })
                 .catch((error) => {
                   setLoading(false);

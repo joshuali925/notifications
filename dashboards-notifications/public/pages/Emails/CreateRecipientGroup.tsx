@@ -105,9 +105,8 @@ export function CreateRecipientGroup(props: CreateRecipientGroupProps) {
     if (typeof id !== 'string') return;
 
     try {
-      const response = await servicesContext.notificationService.getRecipientGroup(
-        id
-      );
+      const response =
+        await servicesContext.notificationService.getRecipientGroup(id);
       setName(response.name);
       setDescription(response.description || '');
       setSelectedEmailOptions(
@@ -183,10 +182,10 @@ export function CreateRecipientGroup(props: CreateRecipientGroupProps) {
                       props.edit ? 'updated' : 'created'
                     }.`
                   );
-                  setTimeout(() => {
-                    setLoading(false);
-                    location.assign(`#${ROUTES.EMAIL_GROUPS}`);
-                  }, SERVER_DELAY);
+                  setTimeout(
+                    () => location.assign(`#${ROUTES.EMAIL_GROUPS}`),
+                    SERVER_DELAY
+                  );
                 })
                 .catch((error) => {
                   setLoading(false);

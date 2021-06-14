@@ -467,10 +467,7 @@ export function CreateChannel(props: CreateChannelsProps) {
                         props.edit ? 'updated' : 'created'
                       }.`
                     );
-                    setTimeout(() => {
-                      setLoading(false);
-                      location.assign(prevURL);
-                    }, SERVER_DELAY);
+                    setTimeout(() => location.assign(prevURL), SERVER_DELAY);
                   })
                   .catch((error) => {
                     setLoading(false);
