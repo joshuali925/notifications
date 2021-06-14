@@ -11,13 +11,10 @@
 
 import { getErrorMessage, renderTime } from '../helpers';
 
-jest.mock('moment', () => {
-  const tz = jest.fn(() => ({ zoneAbbr: jest.fn() })) as any;
-  tz.guess = jest.fn();
-  return {
-    unix: () => ({ local: jest.fn() }),
-    tz,
-  };
+jest.doMock('moment', () => {
+  const moment = jest.requireActual('moment-timezone');
+  moment.tz.setDefault('America/Los_Angeles');
+  return moment;
 });
 
 describe('test helper functions', () => {

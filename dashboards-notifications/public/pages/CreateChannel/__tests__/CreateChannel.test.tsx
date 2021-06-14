@@ -136,6 +136,8 @@ describe('<CreateChannel/> spec', () => {
     );
     notificationServiceMockEmail.notificationService = {
       getChannel: getEmailChannel,
+      getSenders: jest.fn(async (query) => MOCK_DATA.senders),
+      getEmailConfigDetails: jest.fn(async (channel) => Promise.resolve(channel))
     };
     const props = {
       location: { search: '' },
