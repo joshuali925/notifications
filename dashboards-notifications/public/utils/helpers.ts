@@ -13,7 +13,6 @@ import moment from 'moment';
 import 'moment-timezone';
 
 export function getErrorMessage(err: any, defaultMessage: string) {
-  if (err && err.message) console.error(defaultMessage, err);
   return defaultMessage;
 }
 
