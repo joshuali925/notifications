@@ -12,8 +12,10 @@
 import moment from 'moment';
 import 'moment-timezone';
 
-export function getErrorMessage(err: any, defaultMessage: string) {
-  return defaultMessage;
+export function getErrorMessage(err: any, defaultMessage?: string) {
+  if (defaultMessage) return defaultMessage;
+  if (err && err.message) console.error(defaultMessage, err);
+  return '';
 }
 
 export const renderTime = (time: number): string => {

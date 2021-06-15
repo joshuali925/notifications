@@ -80,7 +80,6 @@ describe('<CreateChannel/> spec', () => {
     );
 
     await waitFor(() => {
-      expect(utilsSlack.container.firstChild).toMatchSnapshot();
       expect(getSlackChannel).toBeCalled();
     });
 
@@ -119,7 +118,6 @@ describe('<CreateChannel/> spec', () => {
     );
 
     await waitFor(() => {
-      expect(utilsChime.container.firstChild).toMatchSnapshot();
       expect(getChimeChannel).toBeCalled();
     });
 
@@ -155,7 +153,6 @@ describe('<CreateChannel/> spec', () => {
     );
 
     await waitFor(() => {
-      expect(utilsEmail.container.firstChild).toMatchSnapshot();
       expect(getEmailChannel).toBeCalled();
     });
   });
@@ -184,7 +181,6 @@ describe('<CreateChannel/> spec', () => {
     );
 
     await waitFor(() => {
-      expect(utilsWebhook.container.firstChild).toMatchSnapshot();
       expect(getWebhookChannel).toBeCalled();
     });
   });
